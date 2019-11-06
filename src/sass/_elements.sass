@@ -1,0 +1,49 @@
+@import "./_variables.sass"
+
+.form
+  padding: 0.5px
+  // border: 0.5px solid orange
+  &__items
+    display: block
+    padding: 5px
+    &__title
+      width: 5rem
+      padding-right: 0.4rem
+      display: inline-block
+      text-align: right
+    &__input
+      width: 11rem
+      padding: 4px 0 4px 0.4rem
+      border: 0.5px solid $bd_light_grey
+      &:hover
+        border: 0.5px solid $light_blue
+        background-color: $bg_light_yellow
+      &__disabled
+        padding: 4px 0 4px 0.4rem
+        border: 0.5px solid $bd_light_grey
+    &__footer
+      margin-top: 1.5rem
+  &__btn--submit
+    margin: 0 5px
+    padding: 4px 8px
+    display: inline-block
+    font-size: 0.8rem
+    color: $light_green
+    background-color: #fff
+    border: 0.5px solid $bd_light_grey
+    cursor: pointer
+    &:hover
+      background-color: rgba($light_blue, 0.1)
+  &__btn--cancel
+    @extend .form__btn--submit
+    color: $red_warning
+    &:hover
+      background-color: rgba($red_warning, 0.1)
+
+.list
+  background-color: rgba(pink, 0.3)
+  &__item
+    padding: 5px
+    cursor: pointer
+    &:hover
+      background-color: rgba(blue, 0.1)
