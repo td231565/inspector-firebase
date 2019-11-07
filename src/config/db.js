@@ -3,6 +3,7 @@ import "firebase/auth"
 import "firebase/firestore"
 // import "firebase/storage"
 import { format } from 'date-fns'
+import Store from '../store/index'
 
 firebase.initializeApp({
   apiKey: "AIzaSyBhiRNvb_UrK-IQCaXBO0WT7dQ-lXU6lQk",
@@ -15,7 +16,6 @@ firebase.initializeApp({
 const db = firebase.firestore()
 const fireAuth = firebase.auth()
 // const storageRef = firebase.storage()
-// const { TimeStamp, GeoPoint } = firebase.firestore
 
 const fireAuthSignUp = (email, pwd) => {
   fireAuth.createUserWithEmailAndPassword(email, pwd).then(user => {
@@ -38,4 +38,17 @@ const fireAuthSignUp = (email, pwd) => {
   })
 }
 
-export { db, fireAuth, fireAuthSignUp }
+const watchUserState = () => {
+  fireAuth.onAuthStateChanged(userAuth => {
+    if (userAuth) {
+      console.log(userAuth)
+      Store.commit('setUserAuth', userAuth)
+      Store.dispatch('detectUserGroup')
+    } else {
+      Store.commit('setUserAuth', null)
+      Store.commit('setUserInfo', null)
+    }
+  })
+}
+
+export { db, fireAuth, fireAuthSignUp, watchUserState }

@@ -9,9 +9,11 @@
 </template>
 
 <script>
+import { watchUserState } from './config/db'
+
 export default {
   mounted () {
-    this.$store.dispatch('watchUserState')
+    watchUserState()
   }
 }
 </script>
