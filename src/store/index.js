@@ -31,6 +31,7 @@ export default new Vuex.Store({
     watchUserState ({ commit, dispatch }) {
       return fireAuth.onAuthStateChanged(userAuth => {
         if (userAuth) {
+          console.log(userAuth)
           commit('setUserAuth', userAuth)
           dispatch('detectUserGroup')
         } else {

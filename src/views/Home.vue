@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <SignIn msg="Welcome to Your Vue.js App"/>
+    <SignIn />
   </div>
 </template>
 
@@ -18,5 +18,10 @@ export default {
 
 <style lang="sass" scoped>
 .home
+  height: calc(100vh - 20px)
+  display: flex
+  justify-content: center
+  align-items: center
+  background-size: cover
   background-image: url(../assets/contact_bg.jpg)
 </style>
