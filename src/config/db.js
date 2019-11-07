@@ -3,7 +3,6 @@ import "firebase/auth"
 import "firebase/firestore"
 // import "firebase/storage"
 import { format } from 'date-fns'
-import Store from '../store/index'
 
 firebase.initializeApp({
   apiKey: "AIzaSyBhiRNvb_UrK-IQCaXBO0WT7dQ-lXU6lQk",
@@ -38,17 +37,4 @@ const fireAuthSignUp = (email, pwd) => {
   })
 }
 
-const watchUserState = () => {
-  fireAuth.onAuthStateChanged(userAuth => {
-    if (userAuth) {
-      console.log(userAuth)
-      Store.commit('setUserAuth', userAuth)
-      Store.dispatch('detectUserGroup')
-    } else {
-      Store.commit('setUserAuth', null)
-      Store.commit('setUserInfo', null)
-    }
-  })
-}
-
-export { db, fireAuth, fireAuthSignUp, watchUserState }
+export { db, fireAuth, fireAuthSignUp }

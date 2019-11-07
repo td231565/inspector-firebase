@@ -1,19 +1,51 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
+    <!-- <div id="nav">
+      <router-link to="/">Landing</router-link> |
       <router-link to="/about">About</router-link>
-    </div>
+    </div> -->
     <router-view/>
   </div>
 </template>
 
 <script>
-import { watchUserState } from './config/db'
+import { fireAuth } from './config/db'
+import { mapState } from 'vuex'
 
 export default {
-  mounted () {
-    watchUserState()
+  computed: {
+    ...mapState({
+      userAuth: state => state.userAuth
+    })
+  },
+  methods: {
+    gotoHome () {
+      this.$router.push('/home')
+    },
+    gotoLanding () {
+      this.$router.push('/landing')
+    },
+    watchState () {
+      let vm = this
+      let store = vm.$store
+
+      fireAuth.onAuthStateChanged(userAuth => {
+        if (userAuth) {
+          console.log(userAuth)
+          store.commit('setUserAuth', userAuth)
+          store.dispatch('detectUserGroup')
+          vm.gotoHome()
+        } else {
+          store.commit('setUserAuth', null)
+          store.commit('setUserInfo', null)
+          vm.gotoLanding()
+        }
+        return userAuth
+      })
+    }
+  },
+  created () {
+    this.watchState()
   }
 }
 </script>
@@ -29,6 +61,12 @@ export default {
   -moz-osx-font-smoothing: grayscale
   text-align: center
   color: $dark_blue_defalt
+  height: 100vh
+  display: flex
+  justify-content: center
+  align-items: center
+  background-size: cover
+  background-image: url(./assets/contact_bg.jpg)
 
 #nav
   // padding: 30px
