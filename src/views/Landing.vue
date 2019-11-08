@@ -1,5 +1,5 @@
 <template>
-  <div class="landing">
+  <div class="landing flex--center">
     <SignIn />
   </div>
 </template>
@@ -17,5 +17,6 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-
+.landing
+  height: 100vh
 </style>

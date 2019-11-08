@@ -34,7 +34,9 @@ export default {
           console.log(userAuth)
           store.commit('setUserAuth', userAuth)
           store.dispatch('detectUserGroup')
-          vm.gotoHome()
+          if (userAuth.displayName) {
+            vm.gotoHome()
+          }
         } else {
           store.commit('setUserAuth', null)
           store.commit('setUserInfo', null)
@@ -62,9 +64,6 @@ export default {
   text-align: center
   color: $dark_blue_defalt
   height: 100vh
-  display: flex
-  justify-content: center
-  align-items: center
   background-size: cover
   background-image: url(./assets/contact_bg.jpg)
 

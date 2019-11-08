@@ -8,6 +8,8 @@ module.exports = {
       sass: {
         prependData: `
           @import "@/sass/_variables.sass"
+          @import "@/sass/_elements.sass"
+          @import "@/sass/_base.sass"
         `
       }
     }
