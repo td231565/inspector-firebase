@@ -4,7 +4,9 @@
       <button class="step__column__controls step__column__controls--prev">上一步</button>
     </section>
 
-    <section class="step__column step__right"></section>
+    <section class="step__column step__right">
+      <button class="step__column__controls step__column__controls--backToFirst">回列表</button>
+    </section>
   </div>
 </template>
 
@@ -29,4 +31,15 @@ export default {
     border: 1px solid red
     &__controls
       height: 2rem
+      padding: 0 0.8rem
+      font-weight: 600
+      color: #fff
+      background-color: transparent
+      border: 0.5px solid #fff
+      border-radius: 10px
+      box-shadow: 0 1px 1px #fff
+      cursor: pointer
+      &:hover
+        transform: translateY(1px)
+        box-shadow: none
 </style>
