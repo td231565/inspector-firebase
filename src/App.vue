@@ -1,9 +1,8 @@
 <template>
   <div id="app">
-    <!-- <div id="nav">
-      <router-link to="/">Landing</router-link> |
-      <router-link to="/about">About</router-link>
-    </div> -->
+    <!-- <Loading v-if="isLoading" /> -->
+    <!-- <Home v-else-if="isSignIn" /> -->
+    <!-- <Landing v-else /> -->
     <router-view/>
   </div>
 </template>
@@ -13,9 +12,15 @@ import { fireAuth } from './config/db'
 import { mapState } from 'vuex'
 
 export default {
+  name: 'app',
+  data () {
+    return {
+      
+    }
+  },
   computed: {
     ...mapState({
-      userAuth: state => state.userAuth
+      userAuth: state => state.userState.userAuth
     })
   },
   methods: {
@@ -54,7 +59,7 @@ export default {
 
 <style lang="sass">
 @import './sass/_variables'
-@import './sass/_elements'
+// @import './sass/_elements'
 @import './sass/_base'
 
 #app
@@ -62,18 +67,16 @@ export default {
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   text-align: center
-  color: $dark_blue_defalt
+  color: $text_defalt
   height: 100vh
   background-size: cover
   background-image: url(./assets/contact_bg.jpg)
 
 #nav
-  // padding: 30px
-  border-bottom: 1px solid $grey
   a
     font-weight: bold
-    color: $dark_blue_defalt
+    color: $text_defalt
     &.router-link-exact-active
-      color: $light_green
+      color: $text_link
 
 </style>

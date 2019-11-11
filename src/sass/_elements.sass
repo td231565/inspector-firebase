@@ -14,13 +14,13 @@
     &__input
       width: 11rem
       padding: 4px 0 4px 0.4rem
-      border: 0.5px solid $bd_light_grey
+      border: 0.5px solid $bd_input_default
       &:hover
-        border: 0.5px solid $light_blue
-        background-color: $bg_light_yellow
+        border: 0.5px solid $bd_input_focus
+        background-color: $bg_input_focus
       &__disabled
         padding: 4px 0 4px 0.4rem
-        border: 0.5px solid $bd_light_grey
+        border: 0.5px solid $bd_input_default
     &__footer
       margin-top: 1.5rem
   &__btn--submit
@@ -28,17 +28,17 @@
     padding: 4px 8px
     display: inline-block
     font-size: 0.8rem
-    color: $light_green
+    color: $text_link
     background-color: #fff
-    border: 0.5px solid $bd_light_grey
+    border: 0.5px solid $bd_input_default
     cursor: pointer
     &:hover
-      background-color: rgba($light_blue, 0.1)
+      background-color: rgba($bg_stepBar, 0.1)
   &__btn--cancel
     @extend .form__btn--submit
-    color: $red_warning
+    color: $text_warning
     &:hover
-      background-color: rgba($red_warning, 0.1)
+      background-color: rgba($text_warning, 0.1)
 
 .list
   background-color: rgba(pink, 0.3)
