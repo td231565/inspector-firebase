@@ -2,7 +2,8 @@
   <div class="home">
     <div class="home__top" ref="top">
       <StateBar />
-      <Viewer />
+      <!-- <Viewer /> -->
+      <PdfViewer @pdfLoaded="detectTopHeight"/>
       <StepBar />
     </div>
 
@@ -15,6 +16,7 @@
 
 <script>
 import Viewer from '../components/HomeViewer.vue'
+import PdfViewer from '../components/HomePdfViewer.vue'
 import StateBar from '../components/HomeStateBar.vue'
 import StepBar from '../components/HomeStepBar.vue'
 import Missions from '../components/HomeMissions.vue'
@@ -28,6 +30,7 @@ export default {
   },
   components: {
     Viewer,
+    PdfViewer,
     StateBar,
     StepBar
   },
@@ -35,18 +38,16 @@ export default {
     detectTopHeight () {
       let topHeight = this.$refs.top.offsetHeight
       let bottom = this.$refs.bottom
+      console.log(topHeight)
       bottom.style.marginTop = topHeight + 'px'
     }
-  },
-  mounted () {
-    this.detectTopHeight()
   }
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 .home
-  width: 75%
+  width: 60%
   height: 100%
   margin: auto
   padding: 10px
@@ -55,8 +56,15 @@ export default {
   background-color: $bg_default
   box-shadow: 0 0 1rem #000
   overflow: hidden
+
+  @include ae1100
+    width: 75%
+  @include ae768
+    width: 100%
+
   &__top
     width: 100%
+    // height: 50vh
     position: absolute
     top: 0
     left: 0

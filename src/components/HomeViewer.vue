@@ -207,10 +207,12 @@ export default {
 
 <style lang="sass" scoped>
 .viewer
-  // border: 0.5px solid $bd_viewer
   overflow: hidden
 
 #viewerIframe
   width: 100%
   height: 50vh
+
+  @include ae768
+    height: 40vh
 </style>

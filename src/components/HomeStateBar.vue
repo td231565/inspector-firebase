@@ -3,7 +3,7 @@
     <div class="state__column state__column__left"></div>
 
     <div class="state__column state__column__middle state__model">
-      <span>請選擇查驗目標</span>
+      <span v-if="!isSmallScreen">請選擇查驗目標</span>
       <select class="state__model__select" @change="selectModel" v-model="currentModelName">
         <option class="state__model__select__option"
           v-for="model in modelList.models" :key="modelList.models.indexOf(model)"
@@ -29,7 +29,8 @@ export default {
   data () {
     return {
       modelList: [],
-      currentModelName: ''
+      currentModelName: '',
+      isSmallScreen: false
     }
   },
   computed: {
@@ -61,6 +62,9 @@ export default {
           vm.$store.commit('setModelPath', modelPath)
           vm.$store.commit('setModelName', modelName)
         })
+    },
+    detectDeviceWidth () {
+      if (screen.width < 768) this.isSmallScreen = true
     }
   },
   watch: {
@@ -70,6 +74,7 @@ export default {
   },
   created () {
     this.$bind('modelList', db.collection('markersData').doc('gugci_d'))
+    this.detectDeviceWidth()
   }
 }
 </script>
@@ -80,9 +85,15 @@ export default {
   display: flex
   &__column
     flex: 1
+    display: flex
     align-items: center
+    &__left
+      @include ae768
+        flex: 0
+    &__middle
+      @include ae768
+        justify-content: flex-start
     &__right
-      display: flex
       justify-content: flex-end
   &__user
     &__name
