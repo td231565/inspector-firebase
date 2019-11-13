@@ -23,10 +23,7 @@ export default {
   },
   data () {
     return {
-      date: '',
-      issue: '',
-      name: '',
-      floor: ''
+
     }
   },
   
@@ -46,8 +43,9 @@ export default {
     width: 100%
   &__item
     width: 32%
+    max-width: 265px
     margin: 0.66%
-    border: 1px solid $bdcolor_lightGrey
+    border: 1px solid $bd_input_default
     border-radius: 10px
     overflow: hidden
     cursor: pointer

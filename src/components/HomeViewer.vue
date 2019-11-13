@@ -207,7 +207,7 @@ export default {
 
 <style lang="sass" scoped>
 .viewer
-  border: 0.5px solid $bd_viewer
+  // border: 0.5px solid $bd_viewer
   overflow: hidden
 
 #viewerIframe

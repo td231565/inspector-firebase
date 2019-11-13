@@ -1,16 +1,22 @@
 <template>
   <div class="state">
-    <span>請選擇查驗目標</span>
-    <select class="select" @change="selectModel" v-model="currentModelName">
-      <option class="select__option"
-        v-for="model in modelList.models" :key="modelList.models.indexOf(model)"
-        :value="model">{{ model }}</option>
-    </select>
-    <div class="user flex--right">
+    <div class="state__column state__column__left"></div>
+
+    <div class="state__column state__column__middle state__model">
+      <span>請選擇查驗目標</span>
+      <select class="state__model__select" @change="selectModel" v-model="currentModelName">
+        <option class="state__model__select__option"
+          v-for="model in modelList.models" :key="modelList.models.indexOf(model)"
+          :value="model">{{ model }}</option>
+      </select>
+    </div>
+
+    <div class="state__column state__column__right state__user">
       <span>您好，</span>
-      <span class="user__name">{{ username }}</span>
+      <span class="state__user__name">{{ username }}</span>
       <button class="form__btn--submit" @click="signout">登出</button>
     </div>
+    
   </div>
 </template>
 
@@ -69,10 +75,21 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.select
-  margin-left: 8px
+.state
   padding: 4px
-
-.user__name
-  cursor: pointer
+  display: flex
+  &__column
+    flex: 1
+    align-items: center
+    &__right
+      display: flex
+      justify-content: flex-end
+  &__user
+    &__name
+      color: $text_link
+      cursor: pointer
+  &__model
+    &__select
+      margin-left: 8px
+      padding: 4px
 </style>

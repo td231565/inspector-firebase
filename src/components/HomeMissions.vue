@@ -44,6 +44,7 @@ export default {
         .collection(vm.modelName).get().then(docs => {
           docs.forEach(doc => {
             let docData = doc.data()
+            if (!docData.name) return
             vm.missionList.push(docData)
           })
         })

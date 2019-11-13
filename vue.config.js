@@ -1,4 +1,4 @@
-const path = require('path')
+// const path = require('path')
 
 module.exports = {
   publicPath: './',
@@ -11,18 +11,17 @@ module.exports = {
           @import "@/sass/_breakpoint.sass"
           @import "@/sass/_elements.sass"
           @import "@/sass/_base.sass"
-          @import "@/sass/_all.sass"
         `
       }
     }
   },
 
-  pluginOptions: {
-    'style-resources-loader': {
-      preProcessor: 'sass',
-      patterns: [
-        path.resolve(__dirname, 'src/sass/*.sass'),
-      ]
-    }
-  }
+  // pluginOptions: {
+  //   'style-resources-loader': {
+  //     preProcessor: 'sass',
+  //     patterns: [
+  //       path.resolve(__dirname, 'src/sass/*.sass'),
+  //     ]
+  //   }
+  // }
 }

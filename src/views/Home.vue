@@ -1,9 +1,15 @@
 <template>
   <div class="home">
-    <StateBar />
-    <Viewer />
-    <StepBar />
-    <component :is="stepNow" />
+    <div class="home__top" ref="top">
+      <StateBar />
+      <Viewer />
+      <StepBar />
+    </div>
+
+    <div class="home__bottom" ref="bottom">
+      <component :is="stepNow" />
+    </div>
+
   </div>
 </template>
 
@@ -24,6 +30,16 @@ export default {
     Viewer,
     StateBar,
     StepBar
+  },
+  methods: {
+    detectTopHeight () {
+      let topHeight = this.$refs.top.offsetHeight
+      let bottom = this.$refs.bottom
+      bottom.style.marginTop = topHeight + 'px'
+    }
+  },
+  mounted () {
+    this.detectTopHeight()
   }
 }
 </script>
@@ -34,11 +50,17 @@ export default {
   height: 100%
   margin: auto
   padding: 10px
+  padding-top: 0
+  position: relative
   background-color: $bg_default
   box-shadow: 0 0 1rem #000
-  overflow: auto
-
-// .viewer
-//   width: 100%
-//   height: 50vh
+  overflow: hidden
+  &__top
+    width: 100%
+    position: absolute
+    top: 0
+    left: 0
+  &__bottom
+    padding-top: 10px
+    overflow: auto
 </style>

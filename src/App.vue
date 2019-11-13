@@ -58,8 +58,6 @@ export default {
 </script>
 
 <style lang="sass">
-@import './sass/_all'
-
 #app
   font-family: 'Avenir', Helvetica, Arial, sans-serif
   -webkit-font-smoothing: antialiased
@@ -76,5 +74,4 @@ export default {
     color: $text_defalt
     &.router-link-exact-active
       color: $text_link
-
 </style>
