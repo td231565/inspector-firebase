@@ -3,6 +3,7 @@
     <StateBar />
     <Viewer />
     <StepBar />
+    <component :is="stepNow" />
   </div>
 </template>
 
@@ -10,9 +11,15 @@
 import Viewer from '../components/HomeViewer.vue'
 import StateBar from '../components/HomeStateBar.vue'
 import StepBar from '../components/HomeStepBar.vue'
+import Missions from '../components/HomeMissions.vue'
 
 export default {
   name: 'home',
+  data () {
+    return {
+      stepNow: Missions
+    }
+  },
   components: {
     Viewer,
     StateBar,

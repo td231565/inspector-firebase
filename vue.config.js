@@ -8,8 +8,10 @@ module.exports = {
       sass: {
         prependData: `
           @import "@/sass/_variables.sass"
+          @import "@/sass/_breakpoint.sass"
           @import "@/sass/_elements.sass"
           @import "@/sass/_base.sass"
+          @import "@/sass/_all.sass"
         `
       }
     }

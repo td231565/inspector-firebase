@@ -58,9 +58,7 @@ export default {
 </script>
 
 <style lang="sass">
-@import './sass/_variables'
-// @import './sass/_elements'
-@import './sass/_base'
+@import './sass/_all'
 
 #app
   font-family: 'Avenir', Helvetica, Arial, sans-serif

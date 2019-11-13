@@ -29,7 +29,8 @@ export default {
   computed: {
     ...mapState({
       userInfo: state => state.userState.userInfo,
-      modelPath: state => state.userState.modelPath,
+      modelName: state => state.modelState.modelName,
+      modelPath: state => state.modelState.modelPath
     }),
     username () {
       let name = '訪客'
@@ -52,6 +53,7 @@ export default {
         .collection(modelName).doc('modelInfo').get().then(doc => {
           let modelPath = doc.data().modelPath
           vm.$store.commit('setModelPath', modelPath)
+          vm.$store.commit('setModelName', modelName)
         })
     }
   },
