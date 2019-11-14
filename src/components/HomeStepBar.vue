@@ -1,8 +1,8 @@
 <template>
   <div class="step">
     <section class="step__column step__left">
-      <a class="step__column__controls step__column__controls--prev">上一步</a>
-      <a class="step__column__controls step__column__controls--next">下一步</a>
+      <a class="step__column__controls step__column__controls--prev" @click="stepPrev">上一步</a>
+      <a class="step__column__controls step__column__controls--next" @click="stepNext">下一步</a>
     </section>
 
     <section class="step__column step__right">
@@ -13,7 +13,15 @@
 
 <script>
 export default {
-  name: 'StepBar'
+  name: 'StepBar',
+  methods: {
+    stepPrev () {
+      this.$emit('stepPrev')
+    },
+    stepNext () {
+      this.$emit('stepNext')
+    }
+  }
 }
 </script>
 
