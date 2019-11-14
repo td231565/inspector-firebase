@@ -8,7 +8,7 @@
     </div>
 
     <div class="home__bottom" ref="bottom">
-      <component :is="stepNow" />
+      <component :is="stepNow" @FromSon="getMsg" @toNextStep="toStep" />
     </div>
 
   </div>
@@ -19,27 +19,42 @@ import Viewer from '../components/HomeViewer.vue'
 import PdfViewer from '../components/HomePdfViewer.vue'
 import StateBar from '../components/HomeStateBar.vue'
 import StepBar from '../components/HomeStepBar.vue'
-import Missions from '../components/HomeMissions.vue'
+import Missions from '../components/SectionMissions.vue'
+import Plans from '../components/SectionPlans.vue'
 
 export default {
   name: 'home',
-  data () {
-    return {
-      stepNow: Missions
-    }
-  },
   components: {
     Viewer,
     PdfViewer,
     StateBar,
     StepBar
   },
+  data () {
+    return {
+      stepNow: Missions,
+      steps: [Missions, Plans],
+      selectedMissionPlanList: [],
+      selectedMissionPhotoList: [],
+    }
+  },
   methods: {
     detectTopHeight () {
       let topHeight = this.$refs.top.offsetHeight
       let bottom = this.$refs.bottom
-      console.log(topHeight)
+      // console.log(topHeight)
       bottom.style.marginTop = topHeight + 'px'
+    },
+    getMsg (e) {
+      console.log(e)
+    },
+    toStep (num) {
+      this.stepNow = this.steps[num-1]
+      this.getMarkerDataFromDB()
+    },
+    // 讀取 DB 圖片資訊
+    getMarkerDataFromDB () {
+      this.$store.dispatch('getModelMarkersData')
     }
   }
 }

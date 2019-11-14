@@ -13,6 +13,7 @@ firebase.initializeApp({
 })
 
 const db = firebase.firestore()
+const markersDB = db.collection('markersData')
 const fireAuth = firebase.auth()
 // const storageRef = firebase.storage()
 
@@ -37,4 +38,4 @@ const fireAuthSignUp = (email, pwd) => {
   })
 }
 
-export { db, fireAuth, fireAuthSignUp }
+export { db, fireAuth, fireAuthSignUp, markersDB }

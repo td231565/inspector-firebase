@@ -2,6 +2,7 @@
   <div class="step">
     <section class="step__column step__left">
       <a class="step__column__controls step__column__controls--prev">上一步</a>
+      <a class="step__column__controls step__column__controls--next">下一步</a>
     </section>
 
     <section class="step__column step__right">
@@ -30,6 +31,7 @@ export default {
     // border: 1px solid red
     &__controls
       height: 2rem
+      margin: 0 3px
       padding: 0.5rem 0.8rem
       font-size: 0.8rem
       font-weight: 600

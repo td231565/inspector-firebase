@@ -2,14 +2,14 @@
   <ul class="form__item missionList">
     <li class="form__item missionList__item"
       v-for="mission in missionList"
-      :key="missionList.indexOf(mission)">
+      :key="missionList.indexOf(mission)"
+      @click="selectMission(mission.id)">
       <div class="missionList__item__pic">
-        <img :src="mission.image" :alt="mission">
+        <img :src="mission.data().image" :alt="mission.name">
       </div>
       <div class="missionList__item__textArea">
-        <p class="missionList__item__textArea__date">{{ mission.date }}</p>
-        <p class="missionList__item__textArea__name">{{ mission.floor }}_{{ mission.issue }}_{{ mission.name }}</p>
-        <!-- <p class="missionList__item__textArea__floor">{{ mission.floor }}</p> -->
+        <p class="missionList__item__textArea__date">{{ mission.data().date }}</p>
+        <p class="missionList__item__textArea__name">{{ mission.data().floor }}_{{ mission.data().issue }}_{{ mission.data().name }}</p>
       </div>
     </li>
   </ul>
@@ -26,7 +26,19 @@ export default {
 
     }
   },
-  
+  computed: {
+    missionDataList () {
+      return this.missionList.map(item => item.data())
+    }
+  },
+  methods: {
+    selectMission (id) {
+      // console.log(id)
+      this.$store.commit('setSelectedMarker', id)
+      this.$emit('toNextStep', 2)
+      console.log(this.$store.state.modelState.selectedMarker)
+    }
+  }
 }
 </script>
 

@@ -56,3 +56,49 @@
   &--right
     display: flex
     justify-content: flex-end
+
+// 絕對位置置中
+.absolute--center
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+
+.btn
+  margin: 0
+  padding: 0
+  &::before
+    opacity: 0.7
+    &:hover
+      opacity: 1
+    @include ae768
+      opacity: 1
+
+  &__close
+    width: 20px
+    height: 20px
+    &::before
+      width: 20px
+      height: 3px
+      content: '❌'
+      color: #fff
+      @extend .absolute--center
+
+  &__delete
+    width: 20px
+    height: 20px
+    background-color: red
+    border-radius: 99rem
+    &::before
+      @extend .absolute--center
+      width: 12px
+      height: 3px
+      background-color: #fff
+
+  &__square
+    padding: 4px 8px
+    display: flex
+    justify-content: center
+    color: #fff
+    border: 1px solid #fff
+    border-radius: 5px

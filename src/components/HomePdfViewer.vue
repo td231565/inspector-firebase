@@ -26,8 +26,8 @@ export default {
   },
   mounted () {
     let vm = this
-    pdf.createLoadingTask(this.sourcePath).then(data => {
-      console.log(data.numPages)
+    pdf.createLoadingTask(this.sourcePath).then(() => {
+      // console.log(data.numPages)
       vm.pageLoaded()
       // TODO: 載入 PDF 完成，轉成圖片
     })

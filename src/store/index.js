@@ -34,7 +34,9 @@ const userState = {
 const modelState = {
   state: {
     modelPath: 'dxbim/fb8da11f09f542b4b344338aea29d771/83ce08590d0844ed8e171ae8a44a596f/1771ca6b1cc54dfb955fad322a23f23d.asm',
-    modelName: 'gugci_d_2f'
+    modelName: 'gugci_d_22f',
+    selectedMarker: '',
+    selectedMarkerData: null
   },
   mutations: {
     setModelPath (state, modelPath) {
@@ -42,10 +44,26 @@ const modelState = {
     },
     setModelName (state, modelName) {
       return state.modelName = modelName
+    },
+    setSelectedMarker (state, selectedMarkerId) {
+      return state.selectedMarker = selectedMarkerId
+    },
+    setSelectedMarkerData (state, data) {
+      return state.selectedMarkerData = data
     }
   },
   actions: {
-
+    getModelMarkersData ({ state, commit }) {
+      console.log(state.selectedMarker)
+      let modelName = state.modelName
+      let markerId = state.selectedMarker
+      db.collection('markersData').doc('gugci_d')
+        .collection(modelName).doc(markerId).get().then(doc => {
+          let docData = doc.data()
+          commit('setSelectedMarkerData', docData)
+          // console.log(state.selectedMarkerData)
+        })
+    }
   }
 }
 

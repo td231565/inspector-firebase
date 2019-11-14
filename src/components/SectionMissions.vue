@@ -1,5 +1,5 @@
 <template>
-  <div class="missions">
+  <section class="home__bottom__section missions">
     <div class="mission__info">
       <span>請調整畫面至查驗位置或構件，再建立 BIM 視點，並依操作步驟執行。</span>
       <button type="button" class="btn btn__square btn__step" onclick="">建立BIM視點</button>
@@ -10,9 +10,10 @@
       <img class="missions__header__icon" src="../assets/camera_marker.png" alt="模型標記">
     </h3>
 
-    <MissionsList :missionList="missionList" />
+    <MissionsList :missionList="missionList" @toNextStep="toNextStep" />
 
-  </div>
+    <button @click="tellFather">TRY</button>
+  </section>
 </template>
 
 <script>
@@ -37,7 +38,7 @@ export default {
     }),
   },
   methods: {
-    getLogFromDB () {
+    getModelMissionsFromDB () {
       let vm = this
       vm.missionList = []
       db.collection('markersData').doc('gugci_d')
@@ -45,18 +46,25 @@ export default {
           docs.forEach(doc => {
             let docData = doc.data()
             if (!docData.name) return
-            vm.missionList.push(docData)
+            // vm.missionList.push(docData)
+            vm.missionList.push(doc)
           })
         })
+    },
+    toNextStep (num) {
+      this.$emit('toNextStep', num)
+    },
+    tellFather () {
+      this.$emit('FromSon', 'missions')
     }
   },
   watch: {
     modelName () {
-      this.getLogFromDB()
+      this.getModelMissionsFromDB()
     }
   },
   created () {
-    this.getLogFromDB()
+    this.getModelMissionsFromDB()
   }
 }
 </script>
