@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import Viewer from '../components/HomeViewer.vue'
 import PdfViewer from '../components/HomePdfViewer.vue'
 import StateBar from '../components/HomeStateBar.vue'
@@ -49,13 +50,12 @@ export default {
       console.log(e)
     },
     toStep (num) {
-      this.stepNow = this.steps[num-1]
       this.getMarkerDataFromDB()
+      this.stepNow = this.steps[num-1]
     },
-    // 讀取 DB 圖片資訊
-    getMarkerDataFromDB () {
-      this.$store.dispatch('getModelMarkersData')
-    }
+    ...mapActions({
+      getMarkerDataFromDB: 'getModelMarkersData'
+    })
   }
 }
 </script>

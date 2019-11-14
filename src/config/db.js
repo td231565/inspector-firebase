@@ -13,7 +13,7 @@ firebase.initializeApp({
 })
 
 const db = firebase.firestore()
-const markersDB = db.collection('markersData')
+const markersDB = db.collection('markersData').doc('gugci_d')
 const fireAuth = firebase.auth()
 // const storageRef = firebase.storage()
 

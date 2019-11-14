@@ -61,7 +61,7 @@ const modelState = {
         .collection(modelName).doc(markerId).get().then(doc => {
           let docData = doc.data()
           commit('setSelectedMarkerData', docData)
-          // console.log(state.selectedMarkerData)
+          console.log(state.selectedMarkerData)
         })
     }
   }

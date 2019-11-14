@@ -33,10 +33,9 @@ export default {
   },
   methods: {
     selectMission (id) {
-      // console.log(id)
       this.$store.commit('setSelectedMarker', id)
       this.$emit('toNextStep', 2)
-      console.log(this.$store.state.modelState.selectedMarker)
+      // console.log(this.$store.state.modelState.selectedMarker)
     }
   }
 }
