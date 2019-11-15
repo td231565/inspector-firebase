@@ -54,6 +54,8 @@ export default {
   @include ae1100
     width: 88%
   @include ae768
+    width: 76%
+  @include ae480
     width: 100%
 
   &__item
@@ -69,8 +71,9 @@ export default {
       opacity: 1
 
     @include ae1100
-      margin: 0.66%
       opacity: 1
+    @include ae768
+      max-width: 174px
 
     &__pic
       width: 100%

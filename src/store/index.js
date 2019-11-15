@@ -67,7 +67,7 @@ const modelState = {
         .collection(modelName).doc(markerId).get().then(doc => {
           let docData = doc.data()
           commit('setSelectedMarkerData', docData)
-          console.log(state.selectedMarkerData)
+          // console.log(state.selectedMarkerData)
         })
     },
     updateModelMarkersData ({ state }) {
@@ -127,9 +127,21 @@ const modelState = {
   }
 }
 
+const systemState = {
+  state: {
+    choosedPhoto: ''
+  },
+  mutations: {
+    setChoosedPhoto (state, img) {
+      return state.choosedPhoto = img
+    }
+  }
+}
+
 export default new Vuex.Store({
   modules: {
     userState,
-    modelState
+    modelState,
+    systemState
   }
 })

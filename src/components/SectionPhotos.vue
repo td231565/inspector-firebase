@@ -1,8 +1,8 @@
 <template>
-  <section class="home__bottom__section plans">
-    <h3>步驟2：請選擇或拍攝-施工圖</h3>
+  <section class="home__bottom__section photos">
+    <h3>步驟3：請選擇或拍攝-現場查驗項目</h3>
 
-    <PictureList :pictures="plans"/>
+    <PictureList :pictures="photos"/>
   </section>
 </template>
 
@@ -11,7 +11,7 @@ import { mapState } from 'vuex'
 import PictureList from './PictureList'
 
 export default {
-  name: 'SectionPlans',
+  name: 'SectionPhotos',
   components: {
     PictureList
   },
@@ -24,9 +24,9 @@ export default {
     ...mapState({
       selectedMarkerData: state => state.modelState.selectedMarkerData
     }),
-    plans () {
+    photos () {
       if (!this.selectedMarkerData) return
-      return this.selectedMarkerData.plans
+      return this.selectedMarkerData.photos
     }
   },
   methods: {

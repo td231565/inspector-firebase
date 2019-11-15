@@ -4,11 +4,14 @@
       <StateBar />
       <!-- <Viewer /> -->
       <PdfViewer @pdfLoaded="detectTopHeight"/>
-      <StepBar @stepPrev="stepPrev" @stepNext="stepNext" />
+      <StepBar @stepPrev="stepPrev" @stepNext="stepNext" :stepNow="stepNow" />
     </div>
 
     <div class="home__bottom" ref="bottom">
-      <component :is="steps[stepNow-1]" @FromSon="getMsg" @toNextStep="toStep" />
+      <keep-alive :include="aliveInclude">
+      <component :is="steps[stepNow-1]" @toNextStep="toStep" />
+      </keep-alive>
+      <!-- <router-view /> -->
     </div>
 
   </div>
@@ -22,6 +25,7 @@ import StateBar from '../components/HomeStateBar.vue'
 import StepBar from '../components/HomeStepBar.vue'
 import Missions from '../components/SectionMissions.vue'
 import Plans from '../components/SectionPlans.vue'
+import Photos from '../components/SectionPhotos.vue'
 
 export default {
   name: 'home',
@@ -34,9 +38,15 @@ export default {
   data () {
     return {
       stepNow: 1,
-      steps: [Missions, Plans],
+      steps: [Missions, Plans, Photos],
       selectedMissionPlanList: [],
       selectedMissionPhotoList: [],
+    }
+  },
+  computed: {
+    aliveInclude () {
+      let cachedSteps = (this.stepNow === 1) ? [] : this.steps.filter((step, index) => index !== 0)
+      return cachedSteps.map(component => component.name)
     }
   },
   methods: {
@@ -44,22 +54,21 @@ export default {
       let topHeight = this.$refs.top.offsetHeight
       let bottom = this.$refs.bottom
       // console.log(topHeight)
-      bottom.style.marginTop = topHeight + 'px'
-    },
-    getMsg (e) {
-      console.log(e)
-    },
-    toStep (num) {
-      this.getMarkerDataFromDB()
-      this.stepNow = num
+      bottom.style.paddingTop = topHeight + 'px'
     },
     ...mapActions({
       getMarkerDataFromDB: 'getModelMarkersData'
     }),
+    toStep (num) {
+      this.getMarkerDataFromDB()
+      this.stepNow = num
+    },
     stepPrev () {
+      if (this.stepNow === 1) return
       return this.stepNow--
     },
     stepNext () {
+      if (this.stepNow === this.steps.length) return
       return this.stepNow++
     }
   }
@@ -71,12 +80,10 @@ export default {
   width: 60%
   height: 100%
   margin: auto
-  padding: 10px
-  padding-top: 0
+  padding: 0 10px
   position: relative
   background-color: $bg_default
   box-shadow: 0 0 1rem #000
-  overflow: hidden
 
   @include ae1100
     width: 75%
@@ -85,7 +92,7 @@ export default {
 
   &__top
     width: 100%
-    // height: 50vh
+    min-height: 45vh
     position: absolute
     top: 0
     left: 0

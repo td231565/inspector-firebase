@@ -1,9 +1,9 @@
 <template>
   <section class="home__bottom__section missions">
-    <div class="mission__info">
+    <!-- <div class="mission__info">
       <span>請調整畫面至查驗位置或構件，再建立 BIM 視點，並依操作步驟執行。</span>
       <button type="button" class="btn btn__square btn__step" onclick="">建立BIM視點</button>
-    </div>
+    </div> -->
 
     <h3 class="missions__header">
       <span>步驟1：請選擇下列視點、或 BIM 模型上標記</span>
@@ -11,8 +11,6 @@
     </h3>
 
     <MissionsList :missionList="missionList" @toNextStep="toNextStep" />
-
-    <button @click="tellFather">TRY</button>
   </section>
 </template>
 
@@ -53,9 +51,6 @@ export default {
     },
     toNextStep (num) {
       this.$emit('toNextStep', num)
-    },
-    tellFather () {
-      this.$emit('FromSon', 'missions')
     }
   },
   watch: {

@@ -4,15 +4,20 @@
     <!-- <Home v-else-if="isSignIn" /> -->
     <!-- <Landing v-else /> -->
     <router-view/>
+    <PopFrame :photo="choosedPhoto" v-if="isChoosed" />
   </div>
 </template>
 
 <script>
 import { fireAuth } from './config/db'
 import { mapState } from 'vuex'
+import PopFrame from './components/PopFrame'
 
 export default {
   name: 'app',
+  components: {
+    PopFrame
+  },
   data () {
     return {
       
@@ -20,8 +25,12 @@ export default {
   },
   computed: {
     ...mapState({
-      userAuth: state => state.userState.userAuth
-    })
+      userAuth: state => state.userState.userAuth,
+      choosedPhoto: state => state.systemState.choosedPhoto
+    }),
+    isChoosed () {
+      return (this.choosedPhoto) ? true : false
+    }
   },
   methods: {
     gotoHome () {

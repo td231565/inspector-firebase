@@ -64,10 +64,14 @@
   left: 50%
   transform: translate(-50%, -50%)
 
+.pseudo
+  content: ''
+  display: block
+
 .btn
   margin: 0
   padding: 0
-  &::before
+  &__opacity
     opacity: 0.7
     &:hover
       opacity: 1
@@ -78,11 +82,13 @@
     width: 20px
     height: 20px
     &::before
+      @extend .pseudo
+      @extend .btn__opacity
+      @extend .absolute--center
       width: 20px
       height: 3px
       content: '❌'
       color: #fff
-      @extend .absolute--center
 
   &__delete
     width: 20px
@@ -90,6 +96,8 @@
     background-color: red
     border-radius: 99rem
     &::before
+      @extend .pseudo
+      @extend .btn__opacity
       @extend .absolute--center
       width: 12px
       height: 3px
@@ -102,55 +110,3 @@
     color: #fff
     border: 1px solid #fff
     border-radius: 5px
-
-.photos
-  width: 100%
-  // margin: auto
-  display: flex
-  flex-wrap: wrap
-  &__item
-    width: 31%
-    height: auto
-    margin: 3px
-    &__block
-      width: 100%
-      height: 200px
-      padding: 0
-      position: relative
-      background-color: rgba(#000, 0.1)
-      border: 1px solid $bd_input_default
-      border-radius: 10px
-      overflow: hidden
-      cursor: pointer
-      opacity: 0.7
-      &:hover
-        opacity: 1
-
-      @include ae768
-        height: 100px
-        opacity: 1
-
-      &--camera
-        display: block
-        // 相機 svg 圖案
-        &::after
-          width: 3rem
-          height: 3rem
-          @extend .absolute--center
-          background-image: url('~@/assets/camera.svg')
-          background-size: cover
-      &--picture
-        flex-wrap: wrap
-        img
-          max-width: 100%
-          display: block // 消除 img 底部與 div 間的空白
-        .btn__delete
-          position: absolute
-          top: 5px
-          right: 5px
-    &__text
-      width: 100%
-      height: 60px
-      margin-top: 8px
-      padding: 6px
-      border-radius: 10px
