@@ -38,8 +38,8 @@ const modelState = {
     modelName: 'gugci_d_22f',
     selectedMarker: '',
     selectedMarkerData: null,
-    uploadPlan: [],
-    uploadPhoto: []
+    plans: [],
+    photos: [],
   },
   mutations: {
     setModelPath (state, modelPath) {
@@ -54,8 +54,11 @@ const modelState = {
     setSelectedMarkerData (state, data) {
       return state.selectedMarkerData = data
     },
-    setUploadPlan (state, data) {
-      return state.uploadPlan.push(data[0] + ';' + data[1])
+    setPlans (state, data) {
+      return state.plans = data
+    },
+    setPhotos (state, data) {
+      return state.photos = data
     }
   },
   actions: {

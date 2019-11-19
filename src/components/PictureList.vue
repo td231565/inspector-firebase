@@ -8,10 +8,12 @@
     <!-- insert new itemBox -->
     <PictureItem v-for="(picture, index) in pictures"
       :key="'p' + index+1"
-      :picture="picture" />
+      :picture="picture"
+      @savePhotoText="saveToList" />
     <PictureItem v-for="(img, index) in imgUploadList"
       :key="'u' + index+1"
-      :picture="img" />
+      :picture="img"
+      @savePhotoText="saveToList" />
   </ul>
 </template>
 
@@ -28,8 +30,8 @@ export default {
   },
   data () {
     return {
-      uploadImg: '',
-      imgUploadList: []
+      imgUploadList: [],
+      allPhotoTextList: []
     }
   },
   computed: {
@@ -46,7 +48,22 @@ export default {
         let uploadImg = ev.target.result
         this.imgUploadList.push(uploadImg)
       }
+    },
+    clearExistList () {
+      this.allPhotoTextList = []
+    },
+    saveToList (combinedPhotoText) {
+      this.allPhotoTextList.push(combinedPhotoText)
+    },
+    saveAllPhotoTextList () {
+      this.$emit('saveAllPhotoTextList', this.allPhotoTextList)
     }
+  },
+  activated () {
+    this.clearExistList()
+  },
+  deactivated () {
+    this.saveAllPhotoTextList()
   }
 }
 </script>

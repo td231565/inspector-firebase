@@ -76,6 +76,7 @@ export default {
   height: 100vh
   background-size: cover
   background-image: url(./assets/contact_bg.jpg)
+  overflow: hidden
 
 #nav
   a

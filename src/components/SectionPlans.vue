@@ -1,13 +1,13 @@
 <template>
-  <section class="home__bottom__section plans">
+  <section class="home__bottom__section home__bottom__section__plans">
     <h3>步驟2：請選擇或拍攝-施工圖</h3>
 
-    <PictureList :pictures="plans"/>
+    <PictureList :pictures="plans" @saveAllPhotoTextList="savePlanListToVuex" />
   </section>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import PictureList from './PictureList'
 
 export default {
@@ -17,7 +17,7 @@ export default {
   },
   data () {
     return {
-
+      
     }
   },
   computed: {
@@ -30,7 +30,12 @@ export default {
     }
   },
   methods: {
-
+    ...mapMutations({
+      updatePlans: 'setPlans'
+    }),
+    savePlanListToVuex (data) {
+      this.updatePlans(data)
+    }
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <li class="photos__item">
     <div class="photos__item__block photos__item__block--picture flex--center" @click="choosePhoto">
-      <img :src="pictureImg" alt="">
+      <img class="photos__item__block__img" :src="pictureImg" alt="">
       <button class="btn btn__delete" title="刪除圖片"></button>
     </div>
     <textarea class="photos__item__text" placeholder="請輸入抽查意見"
@@ -39,13 +39,16 @@ export default {
     choosePhoto (e) {
       if (e.target.className.match('btn__delete')) return
       this.$store.commit('setChoosedPhoto', this.pictureImg)
+    },
+    savePhotoText () {
+      this.$emit('savePhotoText', this.combinePhotoText)
     }
   },
   mounted () {
     this.loadPicture()
   },
-  beforeDestroy () {
-    this.$emit('uploadPlanArray', this.combinePhotoText)
+  deactivated () {
+    this.savePhotoText()
   }
 }
 </script>

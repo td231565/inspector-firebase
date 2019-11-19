@@ -26,6 +26,7 @@ import StepBar from '../components/HomeStepBar.vue'
 import Missions from '../components/SectionMissions.vue'
 import Plans from '../components/SectionPlans.vue'
 import Photos from '../components/SectionPhotos.vue'
+import Form from '../components/SectionForm.vue'
 
 export default {
   name: 'home',
@@ -38,7 +39,7 @@ export default {
   data () {
     return {
       stepNow: 1,
-      steps: [Missions, Plans, Photos],
+      steps: [Missions, Plans, Photos, Form],
       selectedMissionPlanList: [],
       selectedMissionPhotoList: [],
     }
@@ -84,6 +85,7 @@ export default {
   position: relative
   background-color: $bg_default
   box-shadow: 0 0 1rem #000
+  // overflow: auto
 
   @include ae1100
     width: 75%
@@ -96,7 +98,10 @@ export default {
     position: absolute
     top: 0
     left: 0
+    background-color: $bg_default
+    z-index: 1
   &__bottom
+    height: 100%
     padding-top: 10px
     overflow: auto
 </style>
