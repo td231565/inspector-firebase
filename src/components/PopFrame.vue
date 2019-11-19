@@ -1,6 +1,8 @@
 <template>
   <div class="popframe popframe--picture flex--center" @click="closePopFrame">
-    <img class="popframe__item" :src="photo" alt="現場照片">
+    <div class="popframe__item">
+      <img class="popframe__item__image" :src="photo" alt="現場照片">
+    </div>
     <div class="btn btn__close" title="關閉圖片"></div>
   </div>
 </template>
@@ -29,10 +31,22 @@ export default {
   left: 0
   background-color: rgba(0,0,0,0.6)
   box-shadow: inset 0 0 50px #000
-  overflow: auto
+  z-index: 9
+  &__item
+    max-width: 80%
+    max-height: 80%
+    overflow: auto
+
+    @include ae768
+      max-width: 100vw
+      max-height: 90vh
 
 .btn__close
   position: absolute
   top: 10%
-  right: 10%
+  left: 90%
+
+  @include ae768
+    top: 0
+    left: calc(100vw - 30px)
 </style>

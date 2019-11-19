@@ -83,6 +83,11 @@ export default {
 .state
   padding: 4px
   display: flex
+
+  @include ae768
+    box-shadow: 0 1px 6px #000
+    z-index: 3
+
   &__column
     flex: 1
     display: flex

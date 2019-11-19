@@ -37,6 +37,10 @@ export default {
 
 <style lang="sass" scoped>
 .pdfviewer__pdf
-  // width: 100%
+  width: 100%
+  height: 45vh
   overflow: auto
+
+  @include ae768
+    height: 40vh
 </style>

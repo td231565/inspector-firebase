@@ -41,6 +41,10 @@ export default {
   height: 50px
   display: flex
   background-color: $bg_stepBar
+
+  @include ae768
+    font-size: 0.8rem
+
   &__column
     flex: 1
     padding: 10px

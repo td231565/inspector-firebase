@@ -10,7 +10,7 @@
   "dependencies": {
     "babel-runtime": "^6.26.0",
     "core-js": "^3.3.2",
-    "date-fns": "^2.6.0",
+    "date-fns": "^2.7.0",
     "firebase": "^7.3.0",
     "vue": "^2.6.10",
     "vue-pdf": "^4.0.7",
