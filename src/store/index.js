@@ -38,6 +38,7 @@ const modelState = {
     modelName: 'gugci_d_22f',
     selectedMarker: '',
     selectedMarkerData: null,
+    changedMarkerData: null,
     plans: [],
     photos: [],
   },
@@ -59,6 +60,11 @@ const modelState = {
     },
     setPhotos (state, data) {
       return state.photos = data
+    },
+    setUploadPictureToArray (state, data) {
+      console.log(data)
+      state[data.picArray][data.index] = data.url + ';' + data.text
+      // return picArray[index] = url + ';' + text
     }
   },
   actions: {
@@ -98,34 +104,66 @@ const modelState = {
 
         })
     },
+    updateMissionData ({ state, dispatch, commit}) {
+      ['plans', 'photos'].forEach(picArray => {
+        state[picArray].forEach((item, index) => {
+          let payload = {
+            url: item[0],
+            text: item[1],
+            index,
+            picArray
+          }
+          if (item[0].match('base64')) {
+            // let payload = {
+            //   item,
+            //   index,
+            //   picArray
+            // }
+            dispatch('uploadImgToServer', payload)
+          } else {
+            // let payload = {
+            //   url: item[0],
+            //   text: item[1],
+            //   index,
+            //   picArray
+            // }
+            commit('setUploadPictureToArray',payload)
+          }
+        })
+      })
+    },
     // 上傳圖片到雲端: 使用第三方服務 Cloudinary
-    uploadImgToServer ({ commit }, data) {
-      if (data[0].match('base64')) {
-        let timestamp = Math.floor(Date.now() / 1000)
-        let api_secret = 'yynjtJYNqqHy2XWvBh7x4taVNjI'
-        let str = `timestamp=${timestamp}${api_secret}` // 規定最後須加上 api_secret
-        // 將 base64:image 上傳到 cloudinary 轉換成真正的圖片
-        return fetch('https://api.cloudinary.com/v1_1/ctcimage/image/upload', {
-          method: 'POST',
-          headers: new Headers({
-            'Content-Type': 'application/json'
-          }),
-          body: JSON.stringify({
-            timestamp: timestamp, // 時間戳記 required
-            file: data[0], // 欲轉換的 base64 編碼
-            api_key: '653999464428459',
-            signature: SHA1(str) // 轉換後的 SHA1 字串
-          })
+    uploadImgToServer ({ commit,/* dispatch */}, data) {
+      let timestamp = Math.floor(Date.now() / 1000)
+      let api_secret = 'yynjtJYNqqHy2XWvBh7x4taVNjI'
+      let str = `timestamp=${timestamp}${api_secret}` // 規定最後須加上 api_secret
+      // 將 base64:image 上傳到 cloudinary 轉換成實體圖片
+      return fetch('https://api.cloudinary.com/v1_1/ctcimage/image/upload', {
+        method: 'POST',
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify({
+          timestamp: timestamp, // 時間戳記 required
+          file: data.url, // 欲轉換的 base64 編碼
+          api_key: '653999464428459',
+          signature: SHA1(str) // 轉換後的 SHA1 字串
         })
-        .catch(err => console.log(err))
-        .then(res => res.json())
-        .then(res => {
-          console.log('image uploaded: ' + res.url)
-          commit('setUploadPlan', [res.url, data[1]])
-        })
-      } else {
-        commit('setUploadPlan', data)
-      }
+      })
+      .catch(err => console.log(err))
+      .then(res => res.json())
+      .then(res => {
+        let payload = {
+          picArray: data.picArray,
+          index: data.index,
+          url: res.url,
+          text: data.text
+        }
+        console.log('image uploaded: ' + res.url)
+        commit('setUploadPictureToArray',payload)
+      }).then(() => {
+        // dispatch('updateModelMarkersData')
+      })
     }
   }
 }

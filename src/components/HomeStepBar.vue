@@ -8,7 +8,7 @@
     <div class="step" v-else>
       <section class="step__column flex--left">
         <a class="btn btn__square step__column__controls" @click="stepPrev">上一步</a>
-        <a class="btn btn__square step__column__controls" @click="stepNext">下一步</a>
+        <a class="btn btn__square step__column__controls" @click="stepNext"  v-if="stepNow !== 4">下一步</a>
       </section>
 
       <section class="step__column flex--right">
@@ -58,11 +58,22 @@ export default {
       color: #fff
       background-color: transparent
       border-color: #fff
-      box-shadow: 0 1px 1px #fff
       &:hover
-        transform: translateY(1px)
-        box-shadow: none
+        animation: borderTransition 0.3s ease-in
+        border-color: #fff
       &:active
         color: rgba(#000, 0.7)
         background-color: rgba(#000, 0.2)
+
+@keyframes borderTransition
+  0%
+    border-color: $bg_stepBar
+  25%
+    border-color: #fff $bg_stepBar $bg_stepBar $bg_stepBar
+  50%
+    border-color: #fff #fff $bg_stepBar $bg_stepBar
+  75%
+    border-color: #fff #fff #fff $bg_stepBar
+  100%
+    border-color: #fff
 </style>

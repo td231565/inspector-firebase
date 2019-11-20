@@ -56,7 +56,7 @@
         <div class="form__result flex--center">
           <p class="form__result__text">上傳完成！</p>
         </div>
-        <button type="button" class="btn btn__square btn__square--success" onclick="updateLogToDB(selectedMarkId)">送出表單</button>
+        <button type="button" class="btn btn__square btn__square--success" @click="updateMissionData">送出表單</button>
         <button type="button" class="btn btn__square btn__square--danger" v-if="isAdmin" onclick="controlPopframeWarning.reveal()">刪除表單</button>
       </li>
     </ul>
@@ -65,7 +65,7 @@
 
 <script>
 import { format } from 'date-fns'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'SectionForm',
@@ -92,6 +92,9 @@ export default {
     })
   },
   methods: {
+    ...mapActions({
+      updateMissionData: 'updateMissionData'
+    }),
     getMissionData () {
       this.name = this.missionData.name
       this.floor = this.missionData.floor

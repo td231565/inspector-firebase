@@ -103,7 +103,7 @@ export default {
   &__user
     &__name
       color: $text_link
-      cursor: pointer
+      // cursor: pointer
 
 .form__items
   &__title, &__cells
