@@ -3,18 +3,19 @@
     <div class="state__column state__column__left"></div>
 
     <div class="state__column state__column__middle state__model">
-      <span v-if="!isSmallScreen">請選擇查驗目標</span>
-      <select class="state__model__select" @change="selectModel" v-model="currentModelName">
-        <option class="state__model__select__option"
-          v-for="model in modelList.models" :key="modelList.models.indexOf(model)"
-          :value="model">{{ model }}</option>
+      <label class="form__items__title" v-if="!isSmallScreen">請選擇查驗目標</label>
+      <select class="form__items__cells" @change="selectModel" v-model="currentModelName">
+        <option :value="model"
+          v-for="model in modelList.models"
+          :key="modelList.models.indexOf(model)"
+          >{{ model }}</option>
       </select>
     </div>
 
     <div class="state__column state__column__right state__user">
       <span>您好，</span>
       <span class="state__user__name">{{ username }}</span>
-      <button class="form__btn--submit" @click="signout">登出</button>
+      <button class="btn btn__square" @click="signout">登出</button>
     </div>
     
   </div>
@@ -85,8 +86,7 @@ export default {
   display: flex
 
   @include ae768
-    box-shadow: 0 1px 6px #000
-    z-index: 3
+    font-size: 0.8rem
 
   &__column
     flex: 1
@@ -104,8 +104,12 @@ export default {
     &__name
       color: $text_link
       cursor: pointer
-  &__model
-    &__select
-      margin-left: 8px
-      padding: 4px
+
+.form__items
+  &__title, &__cells
+    width: 50%
+
+.btn
+  &:hover
+    border-color: $bd_input_focus
 </style>

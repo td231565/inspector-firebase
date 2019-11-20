@@ -52,15 +52,12 @@
         <label class="form__items__title">檢核結果說明</label>
         <textarea class="form__items__cells log__problem" v-model="problem"></textarea>
       </li>
-      <li class="form__items form__items__footer">
-        <label class="form__items__title"></label>
-        <div class="form__items__cells flex--right">
-          <div class="form__result">
-            <p class="form__result__text">上傳完成！</p>
-          </div>
-          <button type="button" class="btn btn__square btn__square--success" onclick="updateLogToDB(selectedMarkId)">送出表單</button>
-          <button type="button" class="btn btn__square btn__square--danger" onclick="controlPopframeWarning.reveal()">刪除表單</button>
+      <li class="form__items form__items__footer flex--right">
+        <div class="form__result flex--center">
+          <p class="form__result__text">上傳完成！</p>
         </div>
+        <button type="button" class="btn btn__square btn__square--success" onclick="updateLogToDB(selectedMarkId)">送出表單</button>
+        <button type="button" class="btn btn__square btn__square--danger" v-if="isAdmin" onclick="controlPopframeWarning.reveal()">刪除表單</button>
       </li>
     </ul>
   </section>
@@ -84,12 +81,14 @@ export default {
       selfCheckState: '符合',
       status: '符合',
       problem: 'OK',
-      isUploadSuccess: null
+      isUploadSuccess: null,
+      isAdmin: true
     }
   },
   computed: {
     ...mapState({
-      missionData: state => state.modelState.selectedMarkerData
+      missionData: state => state.modelState.selectedMarkerData,
+      userInfo: state => state.userState.userInfo
     })
   },
   methods: {
@@ -103,7 +102,13 @@ export default {
       this.selfCheckState = this.missionData.selfCheckState
       this.status = this.missionData.status
       this.problem = this.missionData.problem
+    },
+    isAdminGroup () {
+      this.isAdmin = (this.userInfo.group === 'admin') ? true : false
     }
+  },
+  created () {
+    // this.isAdminGroup()
   },
   mounted () {
     this.getMissionData()
@@ -124,7 +129,8 @@ export default {
     width: 100%
 
   &__result
-    margin: 0 4px
+    &__text
+      margin: 0
 
 .log
   &__problem

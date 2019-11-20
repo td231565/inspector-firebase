@@ -55,7 +55,9 @@ export default {
     align-items: center
     &__controls
       font-weight: 600
+      color: #fff
       background-color: transparent
+      border-color: #fff
       box-shadow: 0 1px 1px #fff
       &:hover
         transform: translateY(1px)
