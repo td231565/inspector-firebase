@@ -69,8 +69,9 @@ export default {
     }
   },
   watch: {
-    modelList (modelList) {
-      this.currentModelName = modelList.models[0]
+    modelList (/* modelList */) {
+      // this.currentModelName = modelList.models[0]
+      this.currentModelName = this.modelName
     }
   },
   created () {

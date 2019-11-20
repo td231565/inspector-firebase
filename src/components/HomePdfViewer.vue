@@ -1,12 +1,13 @@
 <template>
   <div class="pdfviewer">
-    <!-- <canvas class="pdfviewer__canvas" ref="canvas"></canvas> -->
-    <pdf class="pdfviewer__pdf" :src="sourcePath" ref="pdf"></pdf>
+    <img class="pdfviewer__img" :src="img" alt="" v-show="isPdfLoaded">
+    <pdf class="pdfviewer__pdf" :src="sourcePath" ref="pdf" v-show="!isPdfLoaded"></pdf>
   </div>
 </template>
 
 <script>
 import pdf from 'vue-pdf'
+import { mapState } from 'vuex'
 
 export default {
   name: 'HomePdfViewer',
@@ -15,12 +16,21 @@ export default {
   },
   data () {
     return {
-      sourcePath: 'https://firebasestorage.googleapis.com/v0/b/sme-markers-data-demo.appspot.com/o/test.pdf?alt=media&token=077f882b-017b-47ad-b862-33d85698f8d4',
-      mark: null
+      // sourcePath: 'https://firebasestorage.googleapis.com/v0/b/sme-markers-data-demo.appspot.com/o/test_plan_C.pdf?alt=media&token=8b074837-e93b-4cc2-8a3e-0a6dadc8e9aa',
+      mark: null,
+      isPdfLoaded: false,
+      img: ''
     }
+  },
+  computed: {
+    ...mapState({
+      sourcePath: state => state.modelState.modelPath
+    })
   },
   methods: {
     pageLoaded () {
+      this.img = document.querySelector('canvas').toDataURL()
+      this.isPdfLoaded = true
       this.$emit('pdfLoaded')
     }
   },
@@ -36,11 +46,15 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.pdfviewer__pdf
-  width: 100%
-  height: 45vh
+.pdfviewer
+  max-height: 45vh
   overflow: auto
+  &__pdf
+    width: 100%
+    // max-height: 45vh
 
-  @include ae768
-    height: 40vh
+    @include ae768
+      max-height: 40vh
+  &__img
+    width: 100%
 </style>

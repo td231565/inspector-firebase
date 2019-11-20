@@ -14,7 +14,6 @@
         <label class="form__items__title">查驗人員</label>
         <select class="form__items__cells" v-model="selectedInspector">
           <option>尚未查驗</option>
-          <!-- <option v-for="(inspector, index) in inspectorsList" :key="'i' + index+1">{{ inspector }}</option> -->
           <option>{{ inspector }}</option>
         </select>
       </li>
@@ -66,7 +65,7 @@
 
 <script>
 import { format } from 'date-fns'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   name: 'SectionForm',
@@ -94,8 +93,11 @@ export default {
     })
   },
   methods: {
+    ...mapMutations({
+      setSelectedMarkerData: 'setSelectedMarkerData'
+    }),
     ...mapActions({
-      updateMissionData: 'checkPictureConvert'
+      updateMissionData: 'checkPictureConvert',
     }),
     getMissionData () {
       this.name = this.missionData.name
@@ -120,21 +122,15 @@ export default {
       } else {
         let newMissionData = {
           accompany: this.accompany,
-          camera: this.camera,
           category: this.category,
-          creator: this.creator,
           date: this.date,
-          floor: this.floor,
-          image: this.image,
           inspector: this.inspector,
-          issue: this.issue,
-          name: this.name,
-          point: this.point,
           problem: this.problem,
           selfCheckState: this.selfCheckState,
           status: this.status
         }
-        this.updateMissionData(newMissionData)
+        this.updateMissionData()
+        this.setSelectedMarkerData(newMissionData)
       }
     }
   },

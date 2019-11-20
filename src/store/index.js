@@ -34,14 +34,19 @@ const userState = {
 
 const modelState = {
   state: {
-    modelPath: 'dxbim/fb8da11f09f542b4b344338aea29d771/83ce08590d0844ed8e171ae8a44a596f/1771ca6b1cc54dfb955fad322a23f23d.asm',
-    modelName: 'gugci_d_22f',
+    modelPath: 'https://firebasestorage.googleapis.com/v0/b/sme-markers-data-demo.appspot.com/o/test_plan_C.pdf?alt=media&token=8b074837-e93b-4cc2-8a3e-0a6dadc8e9aa',
+    modelName: 'gugci_d_22f_flat',
     selectedMarker: '',
     selectedMarkerData: null,
     changedMarkerData: null,
     plans: [],
     photos: [],
   },
+  // getters: {
+  //   nowPhoto (state, getters, rootState) {
+  //     return rootState.systemState.choosedPhoto
+  //   }
+  // },
   mutations: {
     setModelPath (state, modelPath) {
       return state.modelPath = modelPath
@@ -62,9 +67,8 @@ const modelState = {
       return state.photos = data
     },
     setUploadPictureToArray (state, data) {
-      console.log(data)
+      // console.log(data)
       state[data.picArray][data.index] = data.url + ';' + data.text
-      // return picArray[index] = url + ';' + text
     }
   },
   actions: {
@@ -79,48 +83,58 @@ const modelState = {
           // console.log(state.selectedMarkerData)
         })
     },
-    updateModelMarkersData ({ state }, data) {
+    updateModelMarkersData ({ state, commit }) {
       // 確認圖片是否皆已上傳至 server 完畢
       ['plans', 'photos'].forEach(picArray => {
         state[picArray].forEach(item => {
-          if (typeof(item).toLowerCase() !== 'string') return
+          console.log(typeof(item).toLowerCase())
+          if (typeof(item).toLowerCase() === 'object') return
         })
       })
       console.log('all pics uploaded')
+      console.log(state.selectedMarkerData)
+      commit('setNum', 99)
+
+      // TODO: 已確認 commit 其他 module 的方法有效，確認完將資料一起上傳
 
       // 上傳資料至 DB
-      data['plans'] = state.plans
-      data['photos'] = state.photos
-      console.oog(data)
+      // data['plans'] = state.plans
+      // data['photos'] = state.photos
+      // console.oog(data)
 
-      let modelName = state.modelName
-      let markerId = state.selectedMarker
+      // let modelName = state.modelName
+      // let markerId = state.selectedMarker
 
-      db.collection('markersData').doc('gugci_d')
-        .collection(modelName).doc(markerId)
-        .set(data, { merge: true }).then(() => {
+      // db.collection('markersData').doc('gugci_d')
+      //   .collection(modelName).doc(markerId)
+      //   .set(data, { merge: true }).then(() => {
 
-        })
+      //   })
     },
     // 確認圖片是否已上傳 server (Cloudinary)
     checkPictureConvert ({ state, dispatch, commit}) {
       ['plans', 'photos'].forEach(picArray => {
-        state[picArray].forEach((item, index) => {
-          let payload = {
-            url: item[0],
-            text: item[1],
-            index,
-            picArray
-          }
-
-          item[0].match('base64')
-          ? dispatch('uploadImgToServer', payload)
-          : commit('setUploadPictureToArray',payload)
-        })
+        // 判斷是否有圖片
+        if (state[picArray].length !== 0) {
+          state[picArray].forEach((item, index) => {
+            let payload = {
+              url: item[0],
+              text: item[1],
+              index,
+              picArray
+            }
+  
+            item[0].match('base64')
+            ? dispatch('uploadImgToServer', payload)
+            : commit('setUploadPictureToArray',payload)
+          })
+        } else {
+          dispatch('updateModelMarkersData')
+        }
       })
     },
     // 上傳圖片到雲端: 使用第三方服務 Cloudinary
-    uploadImgToServer ({ commit,/* dispatch */}, data) {
+    uploadImgToServer ({ commit, dispatch }, data) {
       let timestamp = Math.floor(Date.now() / 1000)
       let api_secret = 'yynjtJYNqqHy2XWvBh7x4taVNjI'
       let str = `timestamp=${timestamp}${api_secret}` // 規定最後須加上 api_secret
@@ -149,7 +163,8 @@ const modelState = {
         console.log('image uploaded: ' + res.url)
         commit('setUploadPictureToArray', payload)
       }).then(() => {
-        // dispatch('updateModelMarkersData')
+        console.log(1)
+        dispatch('updateModelMarkersData')
       })
     }
   }
@@ -157,11 +172,15 @@ const modelState = {
 
 const systemState = {
   state: {
-    choosedPhoto: ''
+    choosedPhoto: '',
+    num: 11
   },
   mutations: {
     setChoosedPhoto (state, img) {
       return state.choosedPhoto = img
+    },
+    setNum (state, num) {
+      return state.num = num
     }
   }
 }
