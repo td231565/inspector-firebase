@@ -79,32 +79,31 @@ const modelState = {
           // console.log(state.selectedMarkerData)
         })
     },
-    updateModelMarkersData ({ state }) {
+    updateModelMarkersData ({ state }, data) {
+      // 確認圖片是否皆已上傳至 server 完畢
+      ['plans', 'photos'].forEach(picArray => {
+        state[picArray].forEach(item => {
+          if (typeof(item).toLowerCase() !== 'string') return
+        })
+      })
+      console.log('all pics uploaded')
+
+      // 上傳資料至 DB
+      data['plans'] = state.plans
+      data['photos'] = state.photos
+      console.oog(data)
+
       let modelName = state.modelName
       let markerId = state.selectedMarker
+
       db.collection('markersData').doc('gugci_d')
-        .collection(modelName).doc(markerId).set({
-          accompany: '',
-          camera: '',
-          category: '',
-          creator: '',
-          date: '',
-          floor: '',
-          image: '',
-          inspector: '',
-          issue: '',
-          name: '',
-          photos: state.uploadPhoto,
-          plans: state.uploadPlan,
-          point: [],
-          problem: '',
-          selfCheckState: '',
-          status: ''
-        }, { merge: true }).then(() => {
+        .collection(modelName).doc(markerId)
+        .set(data, { merge: true }).then(() => {
 
         })
     },
-    updateMissionData ({ state, dispatch, commit}) {
+    // 確認圖片是否已上傳 server (Cloudinary)
+    checkPictureConvert ({ state, dispatch, commit}) {
       ['plans', 'photos'].forEach(picArray => {
         state[picArray].forEach((item, index) => {
           let payload = {
@@ -113,22 +112,10 @@ const modelState = {
             index,
             picArray
           }
-          if (item[0].match('base64')) {
-            // let payload = {
-            //   item,
-            //   index,
-            //   picArray
-            // }
-            dispatch('uploadImgToServer', payload)
-          } else {
-            // let payload = {
-            //   url: item[0],
-            //   text: item[1],
-            //   index,
-            //   picArray
-            // }
-            commit('setUploadPictureToArray',payload)
-          }
+
+          item[0].match('base64')
+          ? dispatch('uploadImgToServer', payload)
+          : commit('setUploadPictureToArray',payload)
         })
       })
     },
@@ -160,7 +147,7 @@ const modelState = {
           text: data.text
         }
         console.log('image uploaded: ' + res.url)
-        commit('setUploadPictureToArray',payload)
+        commit('setUploadPictureToArray', payload)
       }).then(() => {
         // dispatch('updateModelMarkersData')
       })

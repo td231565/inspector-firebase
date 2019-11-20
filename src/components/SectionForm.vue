@@ -14,7 +14,8 @@
         <label class="form__items__title">查驗人員</label>
         <select class="form__items__cells" v-model="selectedInspector">
           <option>尚未查驗</option>
-          <option v-for="(inspector, index) in inspectorsList" :key="'i' + index+1">{{ inspector }}</option>
+          <!-- <option v-for="(inspector, index) in inspectorsList" :key="'i' + index+1">{{ inspector }}</option> -->
+          <option>{{ inspector }}</option>
         </select>
       </li>
       <li class="form__items">
@@ -56,7 +57,7 @@
         <div class="form__result flex--center">
           <p class="form__result__text">上傳完成！</p>
         </div>
-        <button type="button" class="btn btn__square btn__square--success" @click="updateMissionData">送出表單</button>
+        <button type="button" class="btn btn__square btn__square--success" @click="updateMission">送出表單</button>
         <button type="button" class="btn btn__square btn__square--danger" v-if="isAdmin" onclick="controlPopframeWarning.reveal()">刪除表單</button>
       </li>
     </ul>
@@ -73,7 +74,7 @@ export default {
     return {
       name: '名稱',
       floor: '樓層',
-      inspectorsList: ['協勤_中甫', '協勤_測試', '可事先設定人員'],
+      inspector: '',
       selectedInspector: '尚未查驗',
       accompany: '',
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -82,7 +83,8 @@ export default {
       status: '符合',
       problem: 'OK',
       isUploadSuccess: null,
-      isAdmin: true
+      isAdmin: true,
+      textError: ''
     }
   },
   computed: {
@@ -93,11 +95,12 @@ export default {
   },
   methods: {
     ...mapActions({
-      updateMissionData: 'updateMissionData'
+      updateMissionData: 'checkPictureConvert'
     }),
     getMissionData () {
       this.name = this.missionData.name
       this.floor = this.missionData.floor
+      this.inspector = this.userInfo.name
       this.selectedInspector = this.missionData.inspector
       this.accompany = this.missionData.accompany
       this.date = this.missionData.date
@@ -108,6 +111,31 @@ export default {
     },
     isAdminGroup () {
       this.isAdmin = (this.userInfo.group === 'admin') ? true : false
+    },
+    updateMission () {
+      if (this.inspector !== this.selectedInspector) {
+        this.textError = '查驗人員錯誤'
+      } else if (this.selectedInspector !== '尚未查驗' && this.date === '') {
+        this.textError = '請輸入日期'
+      } else {
+        let newMissionData = {
+          accompany: this.accompany,
+          camera: this.camera,
+          category: this.category,
+          creator: this.creator,
+          date: this.date,
+          floor: this.floor,
+          image: this.image,
+          inspector: this.inspector,
+          issue: this.issue,
+          name: this.name,
+          point: this.point,
+          problem: this.problem,
+          selfCheckState: this.selfCheckState,
+          status: this.status
+        }
+        this.updateMissionData(newMissionData)
+      }
     }
   },
   created () {
@@ -132,6 +160,7 @@ export default {
     width: 100%
 
   &__result
+    // width: 100%
     &__text
       margin: 0
 

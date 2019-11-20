@@ -1,20 +1,17 @@
 <template>
-  <div class="stepBar">
-    <div class="step createNewMarker flex--center" v-if="stepNow === 1">
-      <span>請調整畫面至查驗位置或構件，再建立 BIM 視點，並依操作步驟執行。</span>
-      <a class="btn btn__square step__column__controls" onclick="">建立BIM視點</a>
-    </div>
-
-    <div class="step" v-else>
-      <section class="step__column flex--left">
+  <div class="step">
+    <section class="step__column flex--left">
+      <a class="btn btn__square step__column__controls" onclick="" v-if="stepNow === 1">建立查驗點</a>
+      <div class="flex--left" v-else>
         <a class="btn btn__square step__column__controls" @click="stepPrev">上一步</a>
         <a class="btn btn__square step__column__controls" @click="stepNext"  v-if="stepNow !== 4">下一步</a>
-      </section>
+      </div>
+    </section>
 
-      <section class="step__column flex--right">
-        <a class="btn btn__square step__column__controls" @click="stepToFirst">回列表</a>
-      </section>
-    </div>
+    <section class="step__column flex--right">
+      <a class="btn btn__square step__column__controls" onclick="" v-if="stepNow === 1">列印報表</a>
+      <a class="btn btn__square step__column__controls" @click="stepToFirst" v-else>回列表</a>
+    </section>
   </div>
 </template>
 
@@ -59,21 +56,7 @@ export default {
       background-color: transparent
       border-color: #fff
       &:hover
-        animation: borderTransition 0.3s ease-in
-        border-color: #fff
-      &:active
-        color: rgba(#000, 0.7)
         background-color: rgba(#000, 0.2)
-
-@keyframes borderTransition
-  0%
-    border-color: $bg_stepBar
-  25%
-    border-color: #fff $bg_stepBar $bg_stepBar $bg_stepBar
-  50%
-    border-color: #fff #fff $bg_stepBar $bg_stepBar
-  75%
-    border-color: #fff #fff #fff $bg_stepBar
-  100%
-    border-color: #fff
+      &:active
+        color: rgba(#000, 0.6)
 </style>
