@@ -5,7 +5,7 @@
       <img class="missions__header__icon" src="../assets/camera_marker.png" alt="模型標記">
     </h3>
 
-    <MissionsList :missionList="missionList" @toNextStep="toNextStep" />
+    <MissionsList :missionList="missionList" @stepNext="stepNext" />
   </section>
 </template>
 
@@ -39,13 +39,12 @@ export default {
           docs.forEach(doc => {
             let docData = doc.data()
             if (!docData.name) return
-            // vm.missionList.push(docData)
             vm.missionList.push(doc)
           })
         })
     },
-    toNextStep (num) {
-      this.$emit('toNextStep', num)
+    stepNext () {
+      this.$emit('stepNext')
     }
   },
   watch: {

@@ -1,44 +1,24 @@
 @import '_variables.sass'
 
 .form
-  padding: 0.5px
+  // padding: 0.5px
   // border: 0.5px solid orange
   &__items
-    display: block
-    padding: 5px
+    padding: 3px 0
+    display: flex
     &__title
-      width: 5rem
-      padding-right: 0.4rem
-      display: inline-block
+      width: 7rem
+      padding-right: 0.8rem
       text-align: right
-    &__input
-      width: 11rem
-      padding: 4px 0 4px 0.4rem
-      border: 0.5px solid $bd_input_default
-      &:hover
-        border: 0.5px solid $bd_input_focus
+    &__cells
+      width: calc(100% - 8rem)
+      padding: 3px 6px
+      font-size: 0.8rem
+      &:focus
+        border-color: $bd_input_focus
         background-color: $bg_input_focus
-      &__disabled
-        padding: 4px 0 4px 0.4rem
-        border: 0.5px solid $bd_input_default
     &__footer
       margin-top: 1.5rem
-  &__btn--submit
-    margin: 0 5px
-    padding: 4px 8px
-    display: inline-block
-    font-size: 0.8rem
-    color: $text_link
-    background-color: #fff
-    border: 0.5px solid $bd_input_default
-    cursor: pointer
-    &:hover
-      background-color: rgba($bg_stepBar, 0.1)
-  &__btn--cancel
-    @extend .form__btn--submit
-    color: $text_warning
-    &:hover
-      background-color: rgba($text_warning, 0.1)
 
 .list
   background-color: rgba(pink, 0.3)
@@ -53,24 +33,33 @@
     display: flex
     justify-content: center
     align-items: center
+  &--left
+    display: flex
+    justify-content: flex-start
   &--right
     display: flex
     justify-content: flex-end
 
 // 絕對位置置中
-.absolute--center
-  position: absolute
-  top: 50%
-  left: 50%
-  transform: translate(-50%, -50%)
+.absolute
+  &--center
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+  &--top
+    position: absolute
+    top: 0
+    left: 0
 
 .pseudo
   content: ''
   display: block
 
 .btn
-  margin: 0
+  margin: 0 4px
   padding: 0
+  cursor: pointer
   &__opacity
     opacity: 0.7
     &:hover
@@ -79,14 +68,14 @@
       opacity: 1
 
   &__close
-    width: 20px
-    height: 20px
+    width: 1px
+    height: 1px
     &::before
       @extend .pseudo
       @extend .btn__opacity
-      @extend .absolute--center
+      @extend .absolute--top
       width: 20px
-      height: 3px
+      height: 20px
       content: '❌'
       color: #fff
 
@@ -104,9 +93,15 @@
       background-color: #fff
 
   &__square
-    padding: 4px 8px
+    height: 2rem
+    padding: 0.4rem 0.8rem
     display: flex
     justify-content: center
+    font-size: 0.8rem
     color: #fff
-    border: 1px solid #fff
-    border-radius: 5px
+    border: 0.5px solid #fff
+    border-radius: 8px
+    &--danger
+      background-color: $bg_btn_danger
+    &--success
+      background-color: $bg_btn_success

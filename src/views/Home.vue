@@ -4,14 +4,13 @@
       <StateBar />
       <!-- <Viewer /> -->
       <PdfViewer @pdfLoaded="detectTopHeight"/>
-      <StepBar @stepPrev="stepPrev" @stepNext="stepNext" :stepNow="stepNow" />
+      <StepBar @stepPrev="stepPrev" @stepNext="stepNext" @stepToFirst="stepToFirst" :stepNow="stepNow" />
     </div>
 
     <div class="home__bottom" ref="bottom">
       <keep-alive :include="aliveInclude">
-      <component :is="steps[stepNow-1]" @toNextStep="toStep" />
+      <component :is="steps[stepNow-1]" @stepNext="stepNext" />
       </keep-alive>
-      <!-- <router-view /> -->
     </div>
 
   </div>
@@ -39,9 +38,7 @@ export default {
   data () {
     return {
       stepNow: 1,
-      steps: [Missions, Plans, Photos, Form],
-      selectedMissionPlanList: [],
-      selectedMissionPhotoList: [],
+      steps: [Missions, Plans, Photos, Form]
     }
   },
   computed: {
@@ -60,17 +57,17 @@ export default {
     ...mapActions({
       getMarkerDataFromDB: 'getModelMarkersData'
     }),
-    toStep (num) {
-      this.getMarkerDataFromDB()
-      this.stepNow = num
-    },
     stepPrev () {
       if (this.stepNow === 1) return
       return this.stepNow--
     },
     stepNext () {
       if (this.stepNow === this.steps.length) return
+      if (this.stepNow === 1) this.getMarkerDataFromDB()
       return this.stepNow++
+    },
+    stepToFirst () {
+      return this.stepNow = 1
     }
   }
 }

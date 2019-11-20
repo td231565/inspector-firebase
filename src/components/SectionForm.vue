@@ -4,30 +4,30 @@
     <ul class="form">
       <li class="form__items">
         <label class="form__items__title">視點名稱</label>
-        <input class="form__items__cells log__name" type="text" v-model="name" disabled />
+        <input class="form__items__cells" type="text" v-model="name" disabled />
       </li>
       <li class="form__items">
         <label class="form__items__title">樓層位置</label>
-        <input class="form__items__cells log__floor" type="text" v-model="floor" disabled />
+        <input class="form__items__cells" type="text" v-model="floor" disabled />
       </li>
       <li class="form__items">
         <label class="form__items__title">查驗人員</label>
-        <select class="form__items__cells log__inspector" v-model="selectedInspector">
+        <select class="form__items__cells" v-model="selectedInspector">
           <option>尚未查驗</option>
           <option v-for="(inspector, index) in inspectorsList" :key="'i' + index+1">{{ inspector }}</option>
         </select>
       </li>
       <li class="form__items">
         <label class="form__items__title">隨行人員</label>
-        <input class="form__items__cells log__accompany" type="text" v-model="accompany" placeholder="以半形逗號區隔" />
+        <input class="form__items__cells" type="text" v-model="accompany" placeholder="以半形逗號區隔" />
       </li>
       <li class="form__items">
         <label class="form__items__title">查驗日期</label>
-        <input class="form__items__cells log__date" type="date" v-model="date" placeholder="yyyy-mm-dd"/>
+        <input class="form__items__cells" type="date" v-model="date" placeholder="yyyy-mm-dd"/>
       </li>
       <li class="form__items">
         <label class="form__items__title">查驗類型</label>
-        <select class="form__items__cells log__category" v-model="category">
+        <select class="form__items__cells" v-model="category">
           <option value="建築">建築</option>
           <option value="結構">結構</option>
           <option value="MEP">MEP</option>
@@ -36,35 +36,31 @@
       </li>
       <li class="form__items">
         <label class="form__items__title">自主檢查紀錄是否提送</label>
-        <select class="form__items__cells log__selfCheckState" v-model="selfCheckState">
+        <select class="form__items__cells" v-model="selfCheckState">
           <option value="符合">符合</option>
           <option value="不符合">不符合</option>
         </select>
       </li>
       <li class="form__items">
         <label class="form__items__title">圖說與模型是否一致</label>
-        <select class="form__items__cells log__status" v-model="status">
+        <select class="form__items__cells" v-model="status">
           <option value="符合">符合</option>
           <option value="不符合">不符合</option>
         </select>
       </li>
-      <li class="form__items form__items__problem">
+      <li class="form__items">
         <label class="form__items__title">檢核結果說明</label>
         <textarea class="form__items__cells log__problem" v-model="problem"></textarea>
       </li>
-      <li class="form__items">
+      <li class="form__items form__items__footer">
         <label class="form__items__title"></label>
-        <div class="form__items__cells log__help">
-          <div class="console__result">
-            <p class="console__result__text">上傳完成！</p>
+        <div class="form__items__cells flex--right">
+          <div class="form__result">
+            <p class="form__result__text">上傳完成！</p>
           </div>
-          <button type="button" class="btn btn__square btn__step" title="完成" onclick="updateLogToDB(selectedMarkId)">送出表單</button>
-          <button type="button" class="btn btn__square btn--danger" id="deleteDataBtn" title="刪除" onclick="controlPopframeWarning.reveal()">刪除表單</button>
+          <button type="button" class="btn btn__square btn__square--success" onclick="updateLogToDB(selectedMarkId)">送出表單</button>
+          <button type="button" class="btn btn__square btn__square--danger" onclick="controlPopframeWarning.reveal()">刪除表單</button>
         </div>
-      </li>
-      <li class="form__items">
-        <label class="form__items__title"></label>
-        <p class="form__items__cells log__help">點選「送出表單」後，再列印報表</p>
       </li>
     </ul>
   </section>
@@ -72,6 +68,7 @@
 
 <script>
 import { format } from 'date-fns'
+import { mapState } from 'vuex'
 
 export default {
   name: 'SectionForm',
@@ -79,15 +76,37 @@ export default {
     return {
       name: '名稱',
       floor: '樓層',
-      inspectorsList: ['Allen', 'Bryan', 'Cayon'],
+      inspectorsList: ['協勤_中甫', '協勤_測試', '可事先設定人員'],
       selectedInspector: '尚未查驗',
       accompany: '',
       date: format(new Date(), 'yyyy-MM-dd'),
       category: 'MEP',
       selfCheckState: '符合',
       status: '符合',
-      problem: 'OK'
+      problem: 'OK',
+      isUploadSuccess: null
     }
+  },
+  computed: {
+    ...mapState({
+      missionData: state => state.modelState.selectedMarkerData
+    })
+  },
+  methods: {
+    getMissionData () {
+      this.name = this.missionData.name
+      this.floor = this.missionData.floor
+      this.selectedInspector = this.missionData.inspector
+      this.accompany = this.missionData.accompany
+      this.date = this.missionData.date
+      this.category = this.missionData.category
+      this.selfCheckState = this.missionData.selfCheckState
+      this.status = this.missionData.status
+      this.problem = this.missionData.problem
+    }
+  },
+  mounted () {
+    this.getMissionData()
   }
 }
 </script>
@@ -104,31 +123,10 @@ export default {
   @include ae480
     width: 100%
 
-  &__items
-    padding: 3px 6px
-    display: flex
-    &__title
-      width: 90px
-      margin-right: 10px
-      padding: 3px 0
-      text-align: right
-    &__cells
-      width: calc(100% - 100px)
-      padding: 3px 6px
-      font-size: 0.8rem
-    &__footer
-      padding-top: 30px
-      justify-content: flex-end
+  &__result
+    margin: 0 4px
 
 .log
-  // &__floor, &__name
-  //   color: #4d4d4d
-  //   background-color: #EBEBE4
   &__problem
     height: 80px
-  &__help
-    display: flex
-    justify-content: flex-end
-    color: #505050
-    border: none
 </style>

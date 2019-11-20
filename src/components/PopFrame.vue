@@ -47,6 +47,6 @@ export default {
   left: 90%
 
   @include ae768
-    top: 0
+    top: 10px
     left: calc(100vw - 30px)
 </style>

@@ -2,17 +2,17 @@
   <div class="stepBar">
     <div class="step createNewMarker flex--center" v-if="stepNow === 1">
       <span>請調整畫面至查驗位置或構件，再建立 BIM 視點，並依操作步驟執行。</span>
-      <button type="button" class="btn btn__square btn__step" onclick="">建立BIM視點</button>
+      <a class="btn btn__square step__column__controls" onclick="">建立BIM視點</a>
     </div>
 
     <div class="step" v-else>
-      <section class="step__column step__left">
-        <a class="step__column__controls step__column__controls--prev" @click="stepPrev">上一步</a>
-        <a class="step__column__controls step__column__controls--next" @click="stepNext">下一步</a>
+      <section class="step__column flex--left">
+        <a class="btn btn__square step__column__controls" @click="stepPrev">上一步</a>
+        <a class="btn btn__square step__column__controls" @click="stepNext">下一步</a>
       </section>
 
-      <section class="step__column step__right">
-        <a class="step__column__controls step__column__controls--backToFirst">回列表</a>
+      <section class="step__column flex--right">
+        <a class="btn btn__square step__column__controls" @click="stepToFirst">回列表</a>
       </section>
     </div>
   </div>
@@ -30,6 +30,9 @@ export default {
     },
     stepNext () {
       this.$emit('stepNext')
+    },
+    stepToFirst () {
+      this.$emit('stepToFirst')
     }
   }
 }
@@ -51,25 +54,13 @@ export default {
     display: flex
     align-items: center
     &__controls
-      height: 2rem
-      margin: 0 3px
-      padding: 0.5rem 0.8rem
-      font-size: 0.8rem
       font-weight: 600
-      color: #fff
       background-color: transparent
-      border: 0.5px solid #fff
-      border-radius: 10px
       box-shadow: 0 1px 1px #fff
-      cursor: pointer
       &:hover
         transform: translateY(1px)
         box-shadow: none
       &:active
         color: rgba(#000, 0.7)
         background-color: rgba(#000, 0.2)
-  &__left
-    justify-content: flex-start
-  &__right
-    justify-content: flex-end
 </style>
