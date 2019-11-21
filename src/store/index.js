@@ -38,15 +38,10 @@ const modelState = {
     modelName: 'gugci_d_22f_flat',
     selectedMarker: '',
     selectedMarkerData: null,
-    changedMarkerData: null,
     plans: [],
     photos: [],
+    isMarkerUpdated: null
   },
-  // getters: {
-  //   nowPhoto (state, getters, rootState) {
-  //     return rootState.systemState.choosedPhoto
-  //   }
-  // },
   mutations: {
     setModelPath (state, modelPath) {
       return state.modelPath = modelPath
@@ -69,6 +64,9 @@ const modelState = {
     setUploadPictureToArray (state, data) {
       // console.log(data)
       state[data.picArray][data.index] = data.url + ';' + data.text
+    },
+    setMarkerUpdated (state, boolean) {
+      return state.isMarkerUpdated = boolean
     }
   },
   actions: {
@@ -84,54 +82,59 @@ const modelState = {
         })
     },
     updateModelMarkersData ({ state, commit }) {
-      // 確認圖片是否皆已上傳至 server 完畢
+      // 確認圖片是否皆已處理完畢
       ['plans', 'photos'].forEach(picArray => {
         state[picArray].forEach(item => {
-          console.log(typeof(item).toLowerCase())
-          if (typeof(item).toLowerCase() === 'object') return
+          let itemType = typeof(item).toString()
+          if (itemType.toLowerCase() === 'object') return
         })
       })
-      console.log('all pics uploaded')
-      console.log(state.selectedMarkerData)
-      commit('setNum', 99)
 
-      // TODO: 已確認 commit 其他 module 的方法有效，確認完將資料一起上傳
+      // TODO: 將頁面控制 step 移到 systemModule 中統一管理
 
       // 上傳資料至 DB
-      // data['plans'] = state.plans
-      // data['photos'] = state.photos
-      // console.oog(data)
+      let data = state.selectedMarkerData
+      data.plans = state.plans
+      data.photos = state.photos
+      console.log(data)
 
-      // let modelName = state.modelName
-      // let markerId = state.selectedMarker
+      let modelName = state.modelName
+      let markerId = state.selectedMarker
 
-      // db.collection('markersData').doc('gugci_d')
-      //   .collection(modelName).doc(markerId)
-      //   .set(data, { merge: true }).then(() => {
-
-      //   })
+      db.collection('markersData').doc('gugci_d')
+        .collection(modelName).doc(markerId)
+        .set(data, { merge: true }).then(() => {
+          console.log('update data to DB success')
+          commit('setMarkerUpdated', true)
+        }).catch(err => {
+          console.log(err.code)
+          commit('setMarkerUpdated', false)
+        })
     },
     // 確認圖片是否已上傳 server (Cloudinary)
     checkPictureConvert ({ state, dispatch, commit}) {
-      ['plans', 'photos'].forEach(picArray => {
-        // 判斷是否有圖片
-        if (state[picArray].length !== 0) {
-          state[picArray].forEach((item, index) => {
-            let payload = {
-              url: item[0],
-              text: item[1],
-              index,
-              picArray
-            }
+      if (state['plans'].length === 0 && state['photos'].length === 0) {
+        // 沒有圖片直接跳下個步驟
+        dispatch('updateModelMarkersData')
+      } else {
+        ['plans', 'photos'].forEach(picArray => {
+          // 判斷是否有圖片
+          if (state[picArray].length !== 0) {
+            state[picArray].forEach((item, index) => {
+              let payload = {
+                picArray,
+                index,
+                url: item[0],
+                text: item[1]
+              }
   
-            item[0].match('base64')
-            ? dispatch('uploadImgToServer', payload)
-            : commit('setUploadPictureToArray',payload)
-          })
-        } else {
-          dispatch('updateModelMarkersData')
-        }
-      })
+              item[0].match('base64')
+              ? dispatch('uploadImgToServer', payload)
+              : commit('setUploadPictureToArray',payload)
+            })
+          }
+        })
+      }
     },
     // 上傳圖片到雲端: 使用第三方服務 Cloudinary
     uploadImgToServer ({ commit, dispatch }, data) {
@@ -173,7 +176,7 @@ const modelState = {
 const systemState = {
   state: {
     choosedPhoto: '',
-    num: 11
+    stepNow: 1
   },
   mutations: {
     setChoosedPhoto (state, img) {

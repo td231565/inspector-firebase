@@ -54,7 +54,8 @@
       </li>
       <li class="form__items form__items__footer flex--right">
         <div class="form__result flex--center">
-          <p class="form__result__text">上傳完成！</p>
+          <p class="form__result__text" v-if="textError">{{ textError }}</p>
+          <p class="form__result__text" v-else>上傳完成！</p>
         </div>
         <button type="button" class="btn btn__square btn__square--success" @click="updateMission">送出表單</button>
         <button type="button" class="btn btn__square btn__square--danger" v-if="isAdmin" onclick="controlPopframeWarning.reveal()">刪除表單</button>
@@ -89,12 +90,14 @@ export default {
   computed: {
     ...mapState({
       missionData: state => state.modelState.selectedMarkerData,
-      userInfo: state => state.userState.userInfo
+      userInfo: state => state.userState.userInfo,
+      isMarkerUpdated: state => state.modelState.isMarkerUpdated,
     })
   },
   methods: {
     ...mapMutations({
-      setSelectedMarkerData: 'setSelectedMarkerData'
+      setSelectedMarkerData: 'setSelectedMarkerData',
+      setMarkerUpdated: 'setMarkerUpdated'
     }),
     ...mapActions({
       updateMissionData: 'checkPictureConvert',
@@ -116,12 +119,20 @@ export default {
     },
     updateMission () {
       if (this.inspector !== this.selectedInspector) {
-        this.textError = '查驗人員錯誤'
-      } else if (this.selectedInspector !== '尚未查驗' && this.date === '') {
+        this.textError = '查驗人員需為本人'
+      } else if (!this.date) {
         this.textError = '請輸入日期'
+      } else if (!this.category) {
+        this.textError = '請選擇查驗類型'
+      } else if (!this.selfCheckState) {
+        this.textError = '請確認自主檢查紀錄是否提送'
+      } else if (!this.status) {
+        this.textError = '請確認圖說與模型是否一致'
+      } else if (!this.problem) {
+        this.textError = '請輸入檢核結果說明'
       } else {
         let newMissionData = {
-          accompany: this.accompany,
+          accompany: this.accompany || '',
           category: this.category,
           date: this.date,
           inspector: this.inspector,
@@ -129,8 +140,19 @@ export default {
           selfCheckState: this.selfCheckState,
           status: this.status
         }
-        this.updateMissionData()
         this.setSelectedMarkerData(newMissionData)
+        this.updateMissionData()
+      }
+    }
+  },
+  watch: {
+    isMarkerUpdated (value) {
+      if (value === true) {
+        // 跳回第一頁
+        this.$emit('stepToFirst')
+        this.setMarkerUpdated(null)
+      } else if (value === false) {
+        this.textError = '上傳失敗'
       }
     }
   },

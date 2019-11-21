@@ -4,12 +4,12 @@
       <StateBar />
       <!-- <Viewer /> -->
       <PdfViewer @pdfLoaded="detectTopHeight"/>
-      <StepBar @stepPrev="stepPrev" @stepNext="stepNext" @stepToFirst="stepToFirst" :stepNow="stepNow" />
+      <StepBar :stepNow="stepNow" @stepPrev="stepPrev" @stepNext="stepNext" @stepToFirst="stepToFirst" />
     </div>
 
     <div class="home__bottom" ref="bottom">
       <keep-alive :include="aliveInclude">
-      <component :is="steps[stepNow-1]" @stepNext="stepNext" />
+      <component :is="steps[stepNow-1]" @stepNext="stepNext" @stepToFirst="stepToFirst" />
       </keep-alive>
     </div>
 
@@ -89,7 +89,7 @@ export default {
   @include ae768
     width: 100%
 
-  // TODO 手機版面，改成兩個頁面切換？
+  // TODO: 手機版面，改成兩個頁面切換？
 
   &__top
     width: 100%
