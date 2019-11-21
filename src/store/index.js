@@ -37,6 +37,7 @@ const modelState = {
     modelPath: 'https://firebasestorage.googleapis.com/v0/b/sme-markers-data-demo.appspot.com/o/test_plan_C.pdf?alt=media&token=8b074837-e93b-4cc2-8a3e-0a6dadc8e9aa',
     modelName: 'gugci_d_22f_flat',
     selectedMarker: '',
+    selectedMarkerImage: '',
     selectedMarkerData: null,
     plans: [],
     photos: [],
@@ -48,6 +49,9 @@ const modelState = {
     },
     setModelName (state, modelName) {
       return state.modelName = modelName
+    },
+    setselectedMarkerImage (state, image) {
+      return state.selectedMarkerImage = image
     },
     setSelectedMarker (state, selectedMarkerId) {
       return state.selectedMarker = selectedMarkerId
@@ -118,14 +122,15 @@ const modelState = {
         ['plans', 'photos'].forEach(picArray => {
           if (state[picArray].length !== 0) {
             state[picArray].forEach((item, index) => {
+              let [imgUrl, imgText] = item
               let payload = {
                 picArray,
                 index,
-                url: item[0],
-                text: item[1]
+                url: imgUrl,
+                text: imgText
               }
 
-              item[0].match('base64')
+              imgUrl.match('base64')
               ? dispatch('uploadImgToServer', payload)
               : commit('setUploadPictureToArray',payload)
             })

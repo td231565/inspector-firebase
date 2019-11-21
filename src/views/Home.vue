@@ -3,13 +3,16 @@
     <div class="home__top" ref="top">
       <StateBar />
       <!-- <Viewer /> -->
-      <PdfViewer @pdfLoaded="detectTopHeight"/>
-      <StepBar :stepNow="stepNow" @stepPrev="stepPrev" @stepNext="stepNext" @stepToFirst="stepToFirst" />
+      <PdfViewer :stepNow="stepNow" :isAddNewMarker="isAddNewMarker"
+        @pdfLoaded="detectTopHeight" @finishAddingMarker="finishAddingMarker"/>
+      <StepBar :stepNow="stepNow"
+        @stepPrev="stepPrev" @stepNext="stepNext" @stepToFirst="stepToFirst"
+        @gotoAddNewMarker="gotoAddNewMarker" />
     </div>
 
     <div class="home__bottom" ref="bottom">
       <keep-alive :include="aliveInclude">
-      <component :is="steps[stepNow-1]" @stepNext="stepNext" @stepToFirst="stepToFirst" />
+        <component :is="steps[stepNow-1]" @stepNext="stepNext" @stepToFirst="stepToFirst" />
       </keep-alive>
     </div>
 
@@ -38,7 +41,8 @@ export default {
   data () {
     return {
       stepNow: 1,
-      steps: [Missions, Plans, Photos, Form]
+      steps: [Missions, Plans, Photos, Form],
+      isAddNewMarker: false
     }
   },
   computed: {
@@ -68,6 +72,12 @@ export default {
     },
     stepToFirst () {
       return this.stepNow = 1
+    },
+    gotoAddNewMarker () {
+      this.isAddNewMarker = true
+    },
+    finishAddingMarker () {
+      this.isAddNewMarker = false
     }
   }
 }

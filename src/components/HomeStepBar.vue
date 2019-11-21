@@ -1,7 +1,7 @@
 <template>
   <div class="step">
     <section class="step__column flex--left">
-      <a class="btn btn__square step__column__controls" onclick="" v-if="stepNow === 1">建立查驗點</a>
+      <a class="btn btn__square step__column__controls" @click="gotoAddNewMarker" v-if="stepNow === 1">建立查驗點</a>
       <div class="flex--left" v-else>
         <a class="btn btn__square step__column__controls" @click="stepPrev">上一步</a>
         <a class="btn btn__square step__column__controls" @click="stepNext"  v-if="stepNow !== 4">下一步</a>
@@ -30,6 +30,9 @@ export default {
     },
     stepToFirst () {
       this.$emit('stepToFirst')
+    },
+    gotoAddNewMarker () {
+      this.$emit('gotoAddNewMarker')
     }
   }
 }

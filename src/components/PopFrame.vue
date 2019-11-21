@@ -29,7 +29,7 @@ export default {
   position: absolute
   top: 0
   left: 0
-  background-color: rgba(0,0,0,0.6)
+  background-color: $bg_cover_layer
   box-shadow: inset 0 0 50px #000
   z-index: 9
   &__item
