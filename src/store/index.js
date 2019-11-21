@@ -90,8 +90,6 @@ const modelState = {
         })
       })
 
-      // TODO: 將頁面控制 step 移到 systemModule 中統一管理
-
       // 上傳資料至 DB
       let data = state.selectedMarkerData
       data.plans = state.plans
@@ -114,11 +112,10 @@ const modelState = {
     // 確認圖片是否已上傳 server (Cloudinary)
     checkPictureConvert ({ state, dispatch, commit}) {
       if (state['plans'].length === 0 && state['photos'].length === 0) {
-        // 沒有圖片直接跳下個步驟
+        // 都沒有圖片直接跳下個步驟
         dispatch('updateModelMarkersData')
       } else {
         ['plans', 'photos'].forEach(picArray => {
-          // 判斷是否有圖片
           if (state[picArray].length !== 0) {
             state[picArray].forEach((item, index) => {
               let payload = {
@@ -127,7 +124,7 @@ const modelState = {
                 url: item[0],
                 text: item[1]
               }
-  
+
               item[0].match('base64')
               ? dispatch('uploadImgToServer', payload)
               : commit('setUploadPictureToArray',payload)
@@ -166,7 +163,6 @@ const modelState = {
         console.log('image uploaded: ' + res.url)
         commit('setUploadPictureToArray', payload)
       }).then(() => {
-        console.log(1)
         dispatch('updateModelMarkersData')
       })
     }
@@ -176,14 +172,11 @@ const modelState = {
 const systemState = {
   state: {
     choosedPhoto: '',
-    stepNow: 1
+    // stepNow: 1
   },
   mutations: {
     setChoosedPhoto (state, img) {
       return state.choosedPhoto = img
-    },
-    setNum (state, num) {
-      return state.num = num
     }
   }
 }
