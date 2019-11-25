@@ -1,14 +1,18 @@
 <template>
   <div class="pdfviewer">
-    <div class="pdfviewer__imgLayer">
-      <img class="pdfviewer__imgLayer__img" :src="img" alt="" v-if="isPdfLoaded && stepNow === 1">
-      <!-- <img class="pdfviewer__imgLayer__img" :src="selectedMarkerImage" alt="" v-else-if="isPdfLoaded && stepNow !== 1"> -->
+    <div class="pdfviewer__imgLayer" v-if="isPdfLoaded && stepNow === 1">
+      <img class="pdfviewer__imgLayer__img" :src="img" alt="">
       <div class="pdfviewer__imgLayer__markersLayer absolute--top">
-        <MarkerItem v-for="(mark, index) in markersList" :key="'m'+index+1" :mark="mark" />
+        <MarkerItem v-for="(mark, index) in markersList" :key="index+1"
+          :mark="mark" @stepNext="stepNext" />
       </div>
     </div>
+
+    <img class="pdfviewer__imgLayer__img" :src="img" alt="" v-if="stepNow !== 1 && !selectedMarkerImage">
+    <img class="pdfviewer__imgLayer__img" :src="selectedMarkerImage" alt="" v-if="stepNow !== 1 && !!selectedMarkerImage">
+
     <pdf class="pdfviewer__pdf" :src="modelPath" ref="pdf" v-show="!isPdfLoaded"></pdf>
-    <AddNewMarker v-if="isAddNewMarker" />
+    <AddNewMarker v-if="isAddNewMarker" @finishAddingMarker="finishAddingMarker" />
   </div>
 </template>
 
@@ -46,27 +50,38 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setselectedMarkerImage: 'setselectedMarkerImage'
+      setSelectedMarkerImage: 'setSelectedMarkerImage',
+      addingNewMarker: 'addingNewMarker',
+      setSelectedMarker: 'setSelectedMarker'
     }),
     pageLoaded () {
       this.img = document.querySelector('canvas').toDataURL()
-      this.setselectedMarkerImage(this.img)
+      this.setSelectedMarkerImage(this.img)
       this.isPdfLoaded = true
       this.$emit('pdfLoaded')
     },
     getMarkersListFromDB () {
       let vm = this
       let modelName = vm.modelName
-      vm.markersList = []
 
       db.collection('markersData').doc('gugci_d')
-        .collection(modelName).get().then(docs => {
+        .collection(modelName).onSnapshot(docs => {
+          vm.markersList = []
           docs.forEach(doc => {
             if (doc.id === 'modelInfo') return
             let docData = doc.data()
+            docData.id = doc.id
             vm.markersList.push(docData)
           })
         })
+    },
+    stepNext () {
+      this.$emit('stepNext')
+    },
+    finishAddingMarker (id) {
+      this.addingNewMarker(false)
+      this.setSelectedMarker(id)
+      this.stepNext()
     }
   },
   mounted () {
@@ -85,6 +100,7 @@ export default {
   max-height: 45vh
   position: relative
   overflow: auto
+  z-index: -1
   &__pdf
     width: 100%
     // max-height: 45vh

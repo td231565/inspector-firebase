@@ -7,11 +7,11 @@
     </li>
     <!-- insert new itemBox -->
     <PictureItem v-for="(picture, index) in pictures"
-      :key="'p' + index+1"
+      :key="index+1"
       :picture="picture"
       @savePhotoText="saveToList" />
     <PictureItem v-for="(img, index) in imgUploadList"
-      :key="'u' + index+1"
+      :key="index+20"
       :picture="img"
       @savePhotoText="saveToList" />
   </ul>

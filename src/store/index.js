@@ -51,7 +51,7 @@ const modelState = {
     setModelName (state, modelName) {
       return state.modelName = modelName
     },
-    setselectedMarkerImage (state, image) {
+    setSelectedMarkerImage (state, image) {
       return state.selectedMarkerImage = image
     },
     setSelectedMarker (state, selectedMarkerId) {

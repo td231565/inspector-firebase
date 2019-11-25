@@ -33,9 +33,9 @@ export default {
   methods: {
     getModelMissionsFromDB () {
       let vm = this
-      vm.missionList = []
       db.collection('markersData').doc('gugci_d')
-        .collection(vm.modelName).get().then(docs => {
+        .collection(vm.modelName).onSnapshot(docs => {
+          vm.missionList = []
           docs.forEach(doc => {
             let docData = doc.data()
             if (!docData.name) return

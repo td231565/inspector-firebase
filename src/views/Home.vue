@@ -4,7 +4,7 @@
       <StateBar />
       <!-- <Viewer /> -->
       <PdfViewer :stepNow="stepNow" :isAddNewMarker="isAddNewMarker"
-        @pdfLoaded="detectTopHeight"/>
+        @pdfLoaded="detectTopHeight" @stepNext="stepNext"/>
       <StepBar :stepNow="stepNow"
         @stepPrev="stepPrev" @stepNext="stepNext" @stepToFirst="stepToFirst" />
     </div>

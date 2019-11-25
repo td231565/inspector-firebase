@@ -1,8 +1,8 @@
 <template>
   <div class="add absolute--top">
-    <img :src="selectedMarkerImage" alt="平面圖">
+    <img :src="selectedMarkerImage" alt="平面圖" ref="img">
 
-    <div class="add__cover absolute--top" @click="addingNewMarker">
+    <div class="add__cover absolute--top" @click="addingNewMarker" v-if="addStep !== 3">
       <section class="add__section add__point" v-if="addStep === 1">
         <h4 class="add__section__header">點擊圖片位置新增查驗點</h4>
       </section>
@@ -12,8 +12,8 @@
       </section>
     </div>
 
-    <section class="add__section add__mark" v-if="addStep === 3">
-      <NewMarkerForm @addMarkerInfo="addMarkerDataToDB" />
+    <section class="add__section add__annotation" v-if="addStep === 3">
+      <img class="add__annotation__img absolute--top" ref="imgMarked" :src="imgMarkedDataUrl">
     </section>
   </div>
 </template>
@@ -22,7 +22,7 @@
 import { mapState } from 'vuex'
 import { markersDB } from '../config/db'
 import NewMarkerForm from './NewForm'
-// import { MarkerArea } from 'markerjs'
+import { MarkerArea } from 'markerjs'
 
 export default {
   name: 'AddNewMarker',
@@ -32,7 +32,9 @@ export default {
   data () {
     return {
       addStep: 1,
-      position: null
+      position: null,
+      newMarkerId: '',
+      imgMarkedDataUrl: ''
     }
   },
   computed: {
@@ -53,16 +55,68 @@ export default {
     addMarkerDataToDB (info) {
       info.point = [this.position.left, this.position.top]
       markersDB.collection(this.modelName).add(info)
-      .then(() => {
+      .then(res => {
         console.log('add marker success')
         this.addStep = 3
-        // this.$emit('finishAddingMarker')
+        this.newMarkerId = res.id
+      }).catch(err => {
+        console.log(err.code)
+      })
+    },
+    addMarkerCoverImageToDB () {
+
+    },
+    addAnnotationOnImage () {
+      let img = this.$refs.img
+      let markjs = new MarkerArea(img, {
+        renderAtNaturalSize: true
+      })
+      markjs.show(dataUrl => {
+        // vmRefs.imgMarked.src = dataUrl
+        this.imgMarkedDataUrl = dataUrl
+      })
+
+      // 調整 toolbar 位置
+      let toolbar = document.querySelector('.markerjs-toolbar')
+      let position = {
+        left: toolbar.offsetLeft,
+        top: toolbar.offsetTop + 25,
+      }
+      toolbar.style.cssText = `position: absolute; left: ${position.left}px; top: ${position.top}px; z-index: 9;`
+
+      // 調整 annotation layer 到畫面最上層
+      let annoLayer = null
+      let allDivs = document.querySelectorAll('div')
+      allDivs.forEach(div => {
+        if (div.style.transformOrigin === 'left top') {
+          annoLayer = div
+          annoLayer.style.zIndex = 9
+        }
+      })
+    },
+    updateImgMarkedToDB () {
+      let vm = this
+      markersDB.collection(this.modelName).doc(this.newMarkerId).set({
+        image: vm.imgMarkedDataUrl
+      }, { merge: true }).then(() => {
+        console.log('new image')
+        this.$emit('finishAddingMarker', vm.newMarkerId)
       }).catch(err => {
         console.log(err.code)
       })
     },
     resetAddStep () {
       this.addStep = 1
+    }
+  },
+  watch: {
+    addStep (val) {
+      console.log(val)
+      if (val === 3) this.addAnnotationOnImage()
+    },
+    imgMarkedDataUrl (val) {
+      if (!val) return
+
     }
   },
   beforeDestroy () {
@@ -82,6 +136,6 @@ export default {
     &__header
       color: #fff
 
-  &__point
-
+  &__annotation
+    &__img
 </style>
