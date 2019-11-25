@@ -41,7 +41,8 @@ const modelState = {
     selectedMarkerData: null,
     plans: [],
     photos: [],
-    isMarkerUpdated: null
+    isMarkerUpdated: null,
+    isAddNewMarker: false
   },
   mutations: {
     setModelPath (state, modelPath) {
@@ -71,6 +72,9 @@ const modelState = {
     },
     setMarkerUpdated (state, boolean) {
       return state.isMarkerUpdated = boolean
+    },
+    addingNewMarker (state, boolean) {
+      return state.isAddNewMarker = boolean
     }
   },
   actions: {

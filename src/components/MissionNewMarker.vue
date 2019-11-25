@@ -11,6 +11,10 @@
         <NewMarkerForm @addMarkerInfo="addMarkerDataToDB" />
       </section>
     </div>
+
+    <section class="add__section add__mark" v-if="addStep === 3">
+      <NewMarkerForm @addMarkerInfo="addMarkerDataToDB" />
+    </section>
   </div>
 </template>
 
@@ -18,6 +22,7 @@
 import { mapState } from 'vuex'
 import { markersDB } from '../config/db'
 import NewMarkerForm from './NewForm'
+// import { MarkerArea } from 'markerjs'
 
 export default {
   name: 'AddNewMarker',
@@ -43,24 +48,21 @@ export default {
         top: e.offsetY,
         left: e.offsetX
       }
-      // this.$emit('addingNewMarker', position)
       this.addStep = 2
-    },
-    resetAddStep () {
-      this.addStep = 1
     },
     addMarkerDataToDB (info) {
       info.point = [this.position.left, this.position.top]
       markersDB.collection(this.modelName).add(info)
       .then(() => {
         console.log('add marker success')
-        this.$emit('finishAddingMarker')
+        this.addStep = 3
+        // this.$emit('finishAddingMarker')
       }).catch(err => {
         console.log(err.code)
       })
     },
-    cancelAddNewMarker () {
-      this.$emit('finishAddingMarker')
+    resetAddStep () {
+      this.addStep = 1
     }
   },
   beforeDestroy () {

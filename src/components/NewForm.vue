@@ -23,7 +23,7 @@
 
 <script>
 import { format } from 'date-fns'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'NewMarkerForm',
@@ -54,8 +54,11 @@ export default {
       }
       this.$emit('addMarkerInfo', info)
     },
+    ...mapMutations({
+      addingNewMarker: 'addingNewMarker'
+    }),
     cancelAddNewMarker () {
-      this.$emit('cancelAddNewMarker')
+      this.addingNewMarker(false)
     }
   }
 }

@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
   name: 'StepBar',
   props: {
@@ -31,8 +33,11 @@ export default {
     stepToFirst () {
       this.$emit('stepToFirst')
     },
+    ...mapMutations({
+      addingNewMarker: 'addingNewMarker'
+    }),
     gotoAddNewMarker () {
-      this.$emit('gotoAddNewMarker')
+      this.addingNewMarker(true)
     }
   }
 }

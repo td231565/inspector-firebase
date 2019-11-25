@@ -4,10 +4,9 @@
       <StateBar />
       <!-- <Viewer /> -->
       <PdfViewer :stepNow="stepNow" :isAddNewMarker="isAddNewMarker"
-        @pdfLoaded="detectTopHeight" @finishAddingMarker="finishAddingMarker"/>
+        @pdfLoaded="detectTopHeight"/>
       <StepBar :stepNow="stepNow"
-        @stepPrev="stepPrev" @stepNext="stepNext" @stepToFirst="stepToFirst"
-        @gotoAddNewMarker="gotoAddNewMarker" />
+        @stepPrev="stepPrev" @stepNext="stepNext" @stepToFirst="stepToFirst" />
     </div>
 
     <div class="home__bottom" ref="bottom">
@@ -20,7 +19,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import Viewer from '../components/HomeViewer.vue'
 import PdfViewer from '../components/HomePdfViewer.vue'
 import StateBar from '../components/HomeStateBar.vue'
@@ -42,14 +41,16 @@ export default {
     return {
       stepNow: 1,
       steps: [Missions, Plans, Photos, Form],
-      isAddNewMarker: false
     }
   },
   computed: {
     aliveInclude () {
       let cachedSteps = (this.stepNow === 1) ? [] : this.steps.filter((step, index) => index !== 0)
       return cachedSteps.map(component => component.name)
-    }
+    },
+    ...mapState({
+      isAddNewMarker: state => state.modelState.isAddNewMarker
+    })
   },
   methods: {
     detectTopHeight () {
@@ -72,12 +73,6 @@ export default {
     },
     stepToFirst () {
       return this.stepNow = 1
-    },
-    gotoAddNewMarker () {
-      this.isAddNewMarker = true
-    },
-    finishAddingMarker () {
-      this.isAddNewMarker = false
     }
   }
 }
@@ -114,4 +109,7 @@ export default {
     height: 100%
     padding-top: 10px
     overflow: auto
+
+.viewerLayer
+  position: relative
 </style>
