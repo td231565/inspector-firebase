@@ -58,18 +58,23 @@
           <p class="form__result__text" v-if="snedText">{{ snedText }}</p>
         </div>
         <button type="button" class="btn btn__square btn__square--success" @click="updateMission">送出表單</button>
-        <button type="button" class="btn btn__square btn__square--danger" v-if="isAdmin" onclick="controlPopframeWarning.reveal()">刪除表單</button>
+        <button type="button" class="btn btn__square btn__square--danger" v-if="isAdmin" @click="deleteMission">刪除表單</button>
       </li>
     </ul>
+    <PopWarning v-if="isDeleteMission"/>
   </section>
 </template>
 
 <script>
 import { format } from 'date-fns'
 import { mapState, mapActions, mapMutations } from 'vuex'
+import PopWarning from './FormWarning'
 
 export default {
   name: 'SectionForm',
+  components: {
+    PopWarning
+  },
   data () {
     return {
       name: '名稱',
@@ -85,7 +90,8 @@ export default {
       isUploadSuccess: null,
       isAdmin: true,
       textError: '',
-      snedText: ''
+      snedText: '',
+      isDeleteMission: false
     }
   },
   computed: {
@@ -148,6 +154,9 @@ export default {
         this.setSelectedMarkerData(newMissionData)
         this.updateMissionData()
       }
+    },
+    deleteMission () {
+      this.isDeleteMission = true
     }
   },
   watch: {
