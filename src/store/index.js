@@ -108,7 +108,7 @@ const modelState = {
       let data = state.selectedMarkerData
       data.plans = state.plans
       data.photos = state.photos
-      console.log(data)
+      // console.log(data)
 
       let modelName = state.modelName
       let markerId = state.selectedMarker
@@ -140,9 +140,12 @@ const modelState = {
                 text: imgText
               }
 
-              imgUrl.match('base64')
-              ? dispatch('uploadImgToServer', payload)
-              : commit('setUploadPictureToArray',payload)
+              if (imgUrl.match('base64')) {
+                dispatch('uploadImgToServer', payload)
+              } else {
+                commit('setUploadPictureToArray',payload)
+                dispatch('updateModelMarkersData')
+              }
             })
           }
         })
@@ -175,7 +178,7 @@ const modelState = {
           url: res.url,
           text: data.text
         }
-        console.log('image uploaded: ' + res.url)
+        // console.log('image uploaded: ' + res.url)
         commit('setUploadPictureToArray', payload)
       }).then(() => {
         dispatch('updateModelMarkersData')

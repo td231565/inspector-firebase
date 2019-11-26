@@ -13,11 +13,6 @@ export default {
   props: {
     mark: Object
   },
-  // computed: {
-  //   ...mapState({
-  //     selectedMarkerData: state => state.modelState.selectedMarkerData
-  //   })
-  // },
   methods: {
     setMarkerPoint () {
       let markObj = this.$refs.mark
@@ -31,7 +26,6 @@ export default {
     }),
     selectMission (id) {
       this.setSelectedMarker(id)
-      // this.setSelectedMarkerImage(this.selectedMarkerData.image)
       this.$emit('stepNext')
     }
   },

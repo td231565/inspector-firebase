@@ -83,7 +83,7 @@ export default {
   width: 60%
   height: 100%
   margin: auto
-  padding: 0 10px
+  padding: 0
   position: relative
   background-color: $bg_default
   box-shadow: 0 0 1rem #000
@@ -95,7 +95,6 @@ export default {
     width: 100%
 
   // TODO: 手機版面，改成兩個頁面切換？
-
   &__top
     width: 100%
     min-height: 40vh
@@ -104,7 +103,6 @@ export default {
     left: 0
     background-color: $bg_default
     z-index: 1
-
   &__bottom
     height: 100%
     padding-top: 10px

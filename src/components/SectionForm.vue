@@ -55,7 +55,7 @@
       <li class="form__items form__items__footer flex--right">
         <div class="form__result flex--center">
           <p class="form__result__text" v-if="textError">{{ textError }}</p>
-          <p class="form__result__text" v-else>上傳完成！</p>
+          <p class="form__result__text" v-if="snedText">{{ snedText }}</p>
         </div>
         <button type="button" class="btn btn__square btn__square--success" @click="updateMission">送出表單</button>
         <button type="button" class="btn btn__square btn__square--danger" v-if="isAdmin" onclick="controlPopframeWarning.reveal()">刪除表單</button>
@@ -84,7 +84,8 @@ export default {
       problem: 'OK',
       isUploadSuccess: null,
       isAdmin: true,
-      textError: ''
+      textError: '',
+      snedText: ''
     }
   },
   computed: {
@@ -117,6 +118,9 @@ export default {
     isAdminGroup () {
       this.isAdmin = (this.userInfo.group === 'admin') ? true : false
     },
+    sendTextContent (content) {
+      this.snedText = content
+    },
     updateMission () {
       if (this.inspector !== this.selectedInspector) {
         this.textError = '查驗人員需為本人'
@@ -140,6 +144,7 @@ export default {
           selfCheckState: this.selfCheckState,
           status: this.status
         }
+        this.sendTextContent('上傳中... ')
         this.setSelectedMarkerData(newMissionData)
         this.updateMissionData()
       }
@@ -148,11 +153,12 @@ export default {
   watch: {
     isMarkerUpdated (value) {
       if (value === true) {
+        this.sendTextContent('上傳成功！')
         // 跳回第一頁
         this.$emit('stepToFirst')
         this.setMarkerUpdated(null)
       } else if (value === false) {
-        this.textError = '上傳失敗'
+        this.sendTextContent('上傳失敗')
       }
     }
   },
@@ -161,6 +167,9 @@ export default {
   },
   mounted () {
     this.getMissionData()
+  },
+  destroyed () {
+    this.sendTextContent('')
   }
 }
 </script>
