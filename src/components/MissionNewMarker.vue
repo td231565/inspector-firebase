@@ -1,20 +1,22 @@
 <template>
-  <div class="add absolute--top">
+  <div class="add absolute--top" ref="sectionAdd">
     <img :src="selectedMarkerImage" alt="平面圖" ref="img">
 
-    <div class="add__cover absolute--top" @click="addingNewMarker" v-if="addStep !== 3">
-      <section class="add__section add__point" v-if="addStep === 1">
+    <div class="absolute--top" :class="{ add__cover: addStep !== 3}" ref="edit">
+      <section class="add__section add__point" @click="addingNewMarker" v-if="addStep === 1">
         <h4 class="add__section__header">點擊圖片位置新增查驗點</h4>
       </section>
 
       <section class="add__section add__form" v-else-if="addStep === 2">
         <NewMarkerForm @addMarkerInfo="addMarkerDataToDB" />
       </section>
+
+      <section class="add__section add__annotation" v-if="addStep === 3">
+        <img class="add__annotation__img" :src="imgMarkedDataUrl">
+      </section>
+
     </div>
 
-    <section class="add__section add__annotation" v-if="addStep === 3">
-      <img class="add__annotation__img absolute--top" ref="imgMarked" :src="imgMarkedDataUrl">
-    </section>
   </div>
 </template>
 
@@ -66,33 +68,26 @@ export default {
     addMarkerCoverImageToDB () {
 
     },
+    // 設定 Mark.js 介面
     addAnnotationOnImage () {
-      let img = this.$refs.img
+      const img = this.$refs.img
+      const sectionAdd = this.$refs.sectionAdd
+      const edit = this.$refs.edit
+
       let markjs = new MarkerArea(img, {
-        renderAtNaturalSize: true
+        targetRoot: edit, // 移動 markjs 的根目錄DOM
+        renderAtNaturalSize: true // 使用圖片原始尺寸
       })
-      markjs.show(dataUrl => {
-        // vmRefs.imgMarked.src = dataUrl
-        this.imgMarkedDataUrl = dataUrl
-      })
+      // markjs.toolbars = markjs.toolbars.slice(0, 9)
+      markjs.show(dataUrl => this.imgMarkedDataUrl = dataUrl)
 
       // 調整 toolbar 位置
-      let toolbar = document.querySelector('.markerjs-toolbar')
+      let toolbar = sectionAdd.querySelector('.markerjs-toolbar')
       let position = {
         left: toolbar.offsetLeft,
         top: toolbar.offsetTop + 25,
       }
       toolbar.style.cssText = `position: absolute; left: ${position.left}px; top: ${position.top}px; z-index: 9;`
-
-      // 調整 annotation layer 到畫面最上層
-      let annoLayer = null
-      let allDivs = document.querySelectorAll('div')
-      allDivs.forEach(div => {
-        if (div.style.transformOrigin === 'left top') {
-          annoLayer = div
-          annoLayer.style.zIndex = 9
-        }
-      })
     },
     updateImgMarkedToDB () {
       let vm = this
@@ -111,12 +106,11 @@ export default {
   },
   watch: {
     addStep (val) {
-      console.log(val)
       if (val === 3) this.addAnnotationOnImage()
     },
     imgMarkedDataUrl (val) {
       if (!val) return
-
+      this.updateImgMarkedToDB()
     }
   },
   beforeDestroy () {
@@ -133,9 +127,14 @@ export default {
     background-color: $bg_cover_layer
     box-shadow: inset 0 0 50px #000
   &__section
+    width: 100%
+    height: 100%
     &__header
       color: #fff
-
   &__annotation
+    text-align: center
     &__img
+    &__toolbar
+      display: flex
+      z-index: 99
 </style>
