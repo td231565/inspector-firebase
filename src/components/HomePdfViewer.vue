@@ -1,17 +1,25 @@
 <template>
   <div class="pdfviewer">
-    <div class="pdfviewer__imgLayer" v-if="isPdfLoaded && stepNow === 1">
-      <img class="pdfviewer__imgLayer__img" :src="img" alt="">
-      <div class="pdfviewer__imgLayer__markersLayer absolute--top">
+    <div class="pdfviewer__imgLayer">
+      <!-- 原圖: 未選擇查驗點 或 此查驗點沒有標註圖片 -->
+      <img class="pdfviewer__imgLayer__img" :src="img" :alt="missionImgName"
+        v-if="!selectedMarkerData || !selectedMarkerData.image">
+
+      <!-- 標記圖層: 放置各查驗點的標記 -->
+      <div class="pdfviewer__imgLayer__markersLayer absolute--top" v-if="isPdfLoaded && stepNow === 1">
         <MarkerItem v-for="(mark, index) in markersList" :key="index+1"
           :mark="mark" @stepNext="stepNext" />
       </div>
+
+      <!-- 標註過的圖片(annotated): 顯示此查驗點中標註過的圖片 -->
+      <img class="pdfviewer__imgLayer__img" :src="missionImg" :alt="missionImgName"
+        v-if="stepNow !== 1 && selectedMarkerData">
     </div>
 
-    <img class="pdfviewer__imgLayer__img" :src="img" alt="" v-if="stepNow !== 1 && !selectedMarkerImage">
-    <img class="pdfviewer__imgLayer__img" :src="selectedMarkerImage" alt="" v-if="stepNow !== 1 && !!selectedMarkerImage">
-
+    <!-- pdfjs: 負責轉換 PDF to PNG -->
     <pdf class="pdfviewer__pdf" :src="modelPath" ref="pdf" v-show="!isPdfLoaded"></pdf>
+
+    <!-- 增加新查驗點 -->
     <AddNewMarker v-if="isAddNewMarker" @finishAddingMarker="finishAddingMarker" />
   </div>
 </template>
@@ -45,8 +53,15 @@ export default {
       modelName: state => state.modelState.modelName,
       modelPath: state => state.modelState.modelPath,
       selectedMarkerImage: state => state.modelState.selectedMarkerImage,
+      selectedMarkerData: state => state.modelState.selectedMarkerData,
       isAddNewMarker: state => state.modelState.isAddNewMarker,
-    })
+    }),
+    missionImg () {
+      return (this.selectedMarkerData) ? this.selectedMarkerData.image : ''
+    },
+    missionImgName () {
+      return (this.selectedMarkerData) ? this.selectedMarkerData.name + '平面圖' : ''
+    }
   },
   methods: {
     ...mapMutations({

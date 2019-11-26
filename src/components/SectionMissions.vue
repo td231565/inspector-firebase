@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { db } from '../config/db'
 import MissionsList from './MissionsList.vue'
 
@@ -45,6 +45,12 @@ export default {
     },
     stepNext () {
       this.$emit('stepNext')
+    },
+    ...mapMutations({
+      setSelectedMarkerData: 'setSelectedMarkerData'
+    }),
+    clearMarkerData () {
+      this.setSelectedMarkerData(null)
     }
   },
   watch: {
@@ -54,6 +60,7 @@ export default {
   },
   created () {
     this.getModelMissionsFromDB()
+    this.clearMarkerData()
   }
 }
 </script>

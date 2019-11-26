@@ -13,6 +13,11 @@ export default {
   props: {
     mark: Object
   },
+  // computed: {
+  //   ...mapState({
+  //     selectedMarkerData: state => state.modelState.selectedMarkerData
+  //   })
+  // },
   methods: {
     setMarkerPoint () {
       let markObj = this.$refs.mark
@@ -21,10 +26,12 @@ export default {
       markObj.style.cssText = `left: ${leftFixed}px; top: ${top}px;`
     },
     ...mapMutations({
-      setSelectedMarker: 'setSelectedMarker'
+      setSelectedMarker: 'setSelectedMarker',
+      setSelectedMarkerImage: 'setSelectedMarkerImage'
     }),
     selectMission (id) {
       this.setSelectedMarker(id)
+      // this.setSelectedMarkerImage(this.selectedMarkerData.image)
       this.$emit('stepNext')
     }
   },
