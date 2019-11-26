@@ -90,13 +90,19 @@ const modelState = {
         })
     },
     updateModelMarkersData ({ state, commit }) {
+      let isAllImgConverted = checkImgConvert()
       // 確認圖片是否皆已處理完畢
-      ['plans', 'photos'].forEach(picArray => {
-        state[picArray].forEach(item => {
-          let itemType = typeof(item).toString()
-          if (itemType.toLowerCase() === 'object') return
+      function checkImgConvert () {
+        let check = true
+        ;['plans', 'photos'].forEach(picArray => {
+          state[picArray].forEach(item => {
+            let itemType = typeof(item)
+            if (itemType.toString().toLowerCase() === 'object') check = false
+          })
         })
-      })
+        return check
+      }
+      if (!isAllImgConverted) return
 
       // 上傳資料至 DB
       let data = state.selectedMarkerData
