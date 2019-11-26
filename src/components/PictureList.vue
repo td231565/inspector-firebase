@@ -9,11 +9,13 @@
     <PictureItem v-for="(picture, index) in pictures"
       :key="index+1"
       :picture="picture"
-      @savePhotoText="saveToList" />
+      @savePhotoText="saveToList"
+      @deletePicture="deleteExistPicture" />
     <PictureItem v-for="(img, index) in imgUploadList"
       :key="index+20"
       :picture="img"
-      @savePhotoText="saveToList" />
+      @savePhotoText="saveToList"
+      @deletePicture="deleteUploadPicture" />
   </ul>
 </template>
 
@@ -40,8 +42,9 @@ export default {
   methods: {
     // 處理本機上傳圖片
     handelFileUploadFromLocal (e) {
-      // console.log(e)
       let file = e.target.files[0]
+      if (!file) return
+
       let reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = ev => {
@@ -57,6 +60,14 @@ export default {
     },
     saveAllPhotoTextList () {
       this.$emit('saveAllPhotoTextList', this.allPhotoTextList)
+    },
+    deleteUploadPicture (imgUrl) {
+      let index = this.imgUploadList.indexOf(imgUrl)
+      this.imgUploadList.splice(index, 1)
+    },
+    deleteExistPicture (imgUrl) {
+      let index = this.pictures.indexOf(imgUrl)
+      this.pictures.splice(index, 1)
     }
   },
   activated () {
@@ -78,7 +89,7 @@ export default {
   &__item
     width: 31%
     height: auto
-    margin: 3px
+    margin: 0.4%
     &__block
       width: 100%
       height: 200px

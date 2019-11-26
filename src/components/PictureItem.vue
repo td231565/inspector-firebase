@@ -2,7 +2,7 @@
   <li class="photos__item">
     <div class="photos__item__block photos__item__block--picture flex--center" @click="choosePhoto">
       <img class="photos__item__block__img" :src="pictureImg" alt="">
-      <button class="btn btn__delete" title="刪除圖片"></button>
+      <button class="btn btn__delete" title="刪除圖片" @click="deletePicture"></button>
     </div>
     <textarea class="photos__item__text" placeholder="請輸入抽查意見"
       v-model="pictureText"></textarea>
@@ -32,7 +32,7 @@ export default {
 
       let picture = this.picture
       let isBase64 = picture.match('base64')
-      // console.log(isBase64)
+
       this.pictureImg = (isBase64) ? picture : picture.split(';')[0]
       this.pictureText = (isBase64) ? '' : picture.split(';')[1]
     },
@@ -42,6 +42,15 @@ export default {
     },
     savePhotoText () {
       this.$emit('savePhotoText', this.combinePhotoText)
+    },
+    deletePicture () {
+      let imgUrl = this.pictureImg
+      this.$emit('deletePicture', imgUrl)
+    }
+  },
+  watch: {
+    picture () {
+      this.loadPicture()
     }
   },
   mounted () {
@@ -56,6 +65,7 @@ export default {
 <style lang="sass" scoped>
 .photos
   &__item
+    margin: 0.4%
     &__block
       &--picture
         flex-wrap: wrap
