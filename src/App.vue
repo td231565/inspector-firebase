@@ -1,11 +1,15 @@
 <template>
   <div id="app">
-    <component :is="viewPath" @loading="gotoLoading"/>
+    <component :is="viewPath"
+      :errorCode="errorCodeFromAuth"
+      @loading="gotoLoading"
+      @signIn="signIn"
+      @signUp="signUp" />
   </div>
 </template>
 
 <script>
-import { fireAuth } from './config/db'
+import { fireAuth, fireAuthSignUp, fireAuthSignIn } from './config/db'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import Home from './views/Home'
 import Landing from './views/Landing'
@@ -20,7 +24,8 @@ export default {
   },
   data () {
     return {
-      viewPath: null
+      viewPath: null,
+      errorCodeFromAuth: ''
     }
   },
   computed: {
@@ -48,6 +53,7 @@ export default {
     watchState () {
       let vm = this
 
+      // 登入狀態有'變化'才會反應
       fireAuth.onAuthStateChanged(userAuth => {
         if (userAuth) {
           console.log(userAuth)
@@ -57,12 +63,58 @@ export default {
             vm.gotoHome()
           }
         } else {
+          vm.setErrorCode(undefined)
           vm.setUserAuth(null)
           vm.setUserInfo(null)
           vm.gotoLanding()
         }
         return userAuth
       })
+    },
+    setErrorCode (errorCode) {
+      this.errorCodeFromAuth = errorCode
+    },
+    signIn (profile) {
+      let vm = this
+      fireAuthSignIn(profile.email, profile.pwd).catch(err => {
+        console.log(err.code)
+        vm.setErrorCode(err.code)
+        vm.gotoLanding()
+      })
+      vm.$emit('loading')
+    },
+    signUp (profile) {
+      let vm = this
+      fireAuthSignUp(profile).catch(err => {
+        vm.setErrorCode(err.code)
+        vm.gotoLanding()
+      }).then(uid => {
+        console.log(uid)
+        vm.gotoHome()
+      })
+    },
+    distingishError (err) {
+      let vm = this
+      switch (err) {
+        case 'auth/wrong-password':
+          vm.errorText = '密碼錯誤'
+          break
+        case 'auth/user-not-found':
+          vm.errorText = '尚未註冊'
+          break
+        case 'auth/email-already-in-use':
+          vm.errorText = '此信箱已註冊'
+          break
+        case 'auth/invalid-email':
+          vm.errorText = '信箱格式錯誤'
+          break
+        case 'auth/weak-password':
+          vm.errorText = '密碼需大於6碼'
+          break
+        default:
+          console.log('new error')
+          break
+      }
     }
   },
   created () {

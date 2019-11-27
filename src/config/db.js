@@ -17,32 +17,49 @@ const markersDB = db.collection('markersData').doc('gugci_d')
 const fireAuth = firebase.auth()
 // const storageRef = firebase.storage()
 
-const fireAuthSignUp = (email, pwd) => {
-  return fireAuth.createUserWithEmailAndPassword(email, pwd).then(user => {
-    let uid = user.user.uid
-    let date = format(new Date(), 'yyyy-MM-dd')
-    let time = format(new Date(), 'HH:mm:ss')
-    let timeValue = format(new Date(), 'T')
+function updateUserAuthDisplayName (userAuth, profile) {
+  userAuth.updateProfile({
+    displayName: profile.name,
+    phoneNumber: profile.phone
+  }).then(() => {
+    console.log('User Auth update success')
+  }).catch(err => {
+    console.log(err.code)
+  })
+}
 
-    db.collection('userGroup').doc(uid).set({
-      signup: timeValue,
-      date,
-      time,
-      email,
-      uid
-    }).then(() => {
-      console.log('sign up')
-    }).catch(err => {
-      console.log(err.code)
-    })
+function addNewUserToDB (uid, profile) {
+  let timeValue = format(new Date(), 'T')
+
+  db.collection('userGroup').doc(uid).set({
+    signup: timeValue,
+    date: format(new Date(), 'yyyy-MM-dd'),
+    time: format(new Date(), 'HH:mm:ss'),
+    email: profile.email,
+    name: profile.name,
+    phone: profile.phone,
+    group: 'user',
+    uid
+  }).then(() => {
+    console.log('Sign up success')
+  }).catch(err => {
+    console.log(err.code)
+  })
+}
+
+const fireAuthSignUp = profile => {
+  return fireAuth.createUserWithEmailAndPassword(profile.email, profile.pwd).then(user => {
+    let uid = user.user.uid
+    addNewUserToDB(uid, profile)
+    updateUserAuthDisplayName(user.user, profile)
+
+    return uid
   })
 }
 
 const fireAuthSignIn = (email, pwd) => {
   return fireAuth.signInWithEmailAndPassword(email, pwd).then(() => {
     console.log('user login success')
-  }).catch(err => {
-    console.log(err.code)
   })
 }
 

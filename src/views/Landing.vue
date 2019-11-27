@@ -14,49 +14,79 @@
             <label class="form__items__title">密碼</label>
             <input type="password" class="form__items__cells" v-model="password" />
           </li>
+
+          <div v-if="!isSignIn">
+            <li class="form__items flex--center">
+              <label class="form__items__title">姓名</label>
+              <input type="text" class="form__items__cells" v-model="name" />
+            </li>
+            <li class="form__items flex--center">
+              <label class="form__items__title">手機</label>
+              <input type="text" class="form__items__cells" v-model="phone" />
+            </li> 
+          </div>
+
           <li class="form__items flex--center">
             <p class="text text--hint" @click="switchSignIn">{{ hintText }}</p>
           </li>
+
           <li class="form__items form__items__footer flex--center" v-if="isSignIn">
             <button class="btn btn__square" @click="signIn">登入</button>
           </li>
+
           <li class="form__items form__items__footer flex--center" v-else>
             <button class="btn btn__square" @click="signUp">註冊</button>
             <button class="btn btn__square" @click="signIn">訪客登入</button>
           </li>
+
           <li class="form__items flex--center">
             <p class="text text--danger" v-if="errorText">{{ errorText }}</p>
           </li>
         </ul>
       </form>
+
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { fireAuthSignUp, fireAuthSignIn } from '../config/db'
+// import { mapState } from 'vuex'
 
 export default {
   name: 'Landing',
+  props: {
+    errorCode: String
+  },
   data () {
     return {
       account: '',
       password: '',
+      name: '',
+      phone: '',
       isSignIn: true,
       errorText: ''
     }
   },
   computed: {
-    ...mapState({
-      userInfo: state => state.userInfo
-    }),
+    // ...mapState({
+    //   userInfo: state => state.userInfo
+    // }),
     hintText () {
-      return (this.isSignIn) ? '還沒有帳號？' : '已有帳號'
+      return (this.isSignIn) ? '還沒有帳號？' : '我有帳號'
+    },
+    profile () {
+      return {
+        email: this.account,
+        pwd: this.password,
+        name: this.name,
+        phone: this.phone
+      }
     }
   },
   methods: {
     distingishError (err) {
+      if (!err) return
+
       let vm = this
       switch (err) {
         case 'auth/wrong-password':
@@ -74,36 +104,28 @@ export default {
         case 'auth/weak-password':
           vm.errorText = '密碼需大於6碼'
           break
+        case 'auth/too-many-requests':
+          vm.errorText = '操作次數過於頻繁，請稍後再試'
+          break
         default:
-          console.log('new error')
+          console.log('new error: ' + err)
           break
       }
     },
     signIn () {
       this.$emit('loading')
-      // TODO: 此時先進loading，如果輸入錯誤，會停在loading畫面
-      // TODO: 但如果等確定登入，就不需要loading了
-
-      let email = this.account
-      let pwd = this.password
-      let vm = this
-
-      fireAuthSignIn(email, pwd).catch(err => {
-        vm.distingishError(err.code)
-      })
+      this.$emit('signIn', this.profile)
     },
     signUp () {
-      let email = this.account
-      let pwd = this.password
-      let vm = this
-
-      fireAuthSignUp(email, pwd).catch(err => {
-        vm.distingishError(err.code)
-      })
+      this.$emit('signUp', this.profile)
     },
     switchSignIn () {
       this.isSignIn = !this.isSignIn
     }
+  },
+  mounted () {
+    let errorCode = this.errorCode
+    this.distingishError(errorCode)
   }
 }
 </script>
