@@ -186,22 +186,9 @@ const modelState = {
   }
 }
 
-const systemState = {
-  state: {
-    choosedPhoto: '',
-    // stepNow: 1
-  },
-  mutations: {
-    setChoosedPhoto (state, img) {
-      return state.choosedPhoto = img
-    }
-  }
-}
-
 export default new Vuex.Store({
   modules: {
     userState,
-    modelState,
-    systemState
+    modelState
   }
 })

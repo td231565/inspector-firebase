@@ -18,7 +18,7 @@ const fireAuth = firebase.auth()
 // const storageRef = firebase.storage()
 
 const fireAuthSignUp = (email, pwd) => {
-  fireAuth.createUserWithEmailAndPassword(email, pwd).then(user => {
+  return fireAuth.createUserWithEmailAndPassword(email, pwd).then(user => {
     let uid = user.user.uid
     let date = format(new Date(), 'yyyy-MM-dd')
     let time = format(new Date(), 'HH:mm:ss')
@@ -38,4 +38,12 @@ const fireAuthSignUp = (email, pwd) => {
   })
 }
 
-export { db, fireAuth, fireAuthSignUp, markersDB }
+const fireAuthSignIn = (email, pwd) => {
+  return fireAuth.signInWithEmailAndPassword(email, pwd).then(() => {
+    console.log('user login success')
+  }).catch(err => {
+    console.log(err.code)
+  })
+}
+
+export { db, markersDB, fireAuth, fireAuthSignUp, fireAuthSignIn }

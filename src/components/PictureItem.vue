@@ -6,19 +6,27 @@
     </div>
     <textarea class="photos__item__text" placeholder="請輸入抽查意見"
       v-model="pictureText"></textarea>
+
+    <PopFrame :photo="pictureImg" @closePop="unChoosePhoto" v-if="isChoosed" />
   </li>
 </template>
 
 <script>
+import PopFrame from './PopFrame'
+
 export default {
   name: 'PhotoItem',
+  components: {
+    PopFrame
+  },
   props: {
     picture: String
   },
   data () {
     return {
       pictureImg: '',
-      pictureText: ''
+      pictureText: '',
+      isChoosed: false
     }
   },
   computed: {
@@ -38,7 +46,11 @@ export default {
     },
     choosePhoto (e) {
       if (e.target.className.match('btn__delete')) return
-      this.$store.commit('setChoosedPhoto', this.pictureImg)
+      // this.$store.commit('setChoosedPhoto', this.pictureImg)
+      this.isChoosed = true
+    },
+    unChoosePhoto () {
+      this.isChoosed = false
     },
     savePhotoText () {
       this.$emit('savePhotoText', this.combinePhotoText)

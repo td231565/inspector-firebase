@@ -1,22 +1,19 @@
 <template>
   <div id="app">
     <component :is="viewPath" @loading="gotoLoading"/>
-    <PopFrame :photo="choosedPhoto" v-if="isChoosed" />
   </div>
 </template>
 
 <script>
 import { fireAuth } from './config/db'
-import { mapState } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import Home from './views/Home'
 import Landing from './views/Landing'
 import Loading from './views/Loading'
-import PopFrame from './components/PopFrame'
 
 export default {
   name: 'app',
   components: {
-    PopFrame,
     Home,
     Landing,
     Loading
@@ -29,11 +26,7 @@ export default {
   computed: {
     ...mapState({
       userAuth: state => state.userState.userAuth,
-      choosedPhoto: state => state.systemState.choosedPhoto
-    }),
-    isChoosed () {
-      return (this.choosedPhoto) ? true : false
-    }
+    })
   },
   methods: {
     gotoHome () {
@@ -43,24 +36,29 @@ export default {
       this.viewPath = Landing
     },
     gotoLoading () {
-      console.log(1)
       this.viewPath = Loading
     },
+    ...mapMutations({
+      setUserAuth: 'setUserAuth',
+      setUserInfo: 'setUserInfo'
+    }),
+    ...mapActions({
+      detectUserGroup: 'detectUserGroup'
+    }),
     watchState () {
       let vm = this
-      let store = vm.$store
 
       fireAuth.onAuthStateChanged(userAuth => {
         if (userAuth) {
           console.log(userAuth)
-          store.commit('setUserAuth', userAuth)
-          store.dispatch('detectUserGroup')
+          vm.setUserAuth(userAuth)
+          vm.detectUserGroup()
           if (userAuth.displayName) {
             vm.gotoHome()
           }
         } else {
-          store.commit('setUserAuth', null)
-          store.commit('setUserInfo', null)
+          vm.setUserAuth(null)
+          vm.setUserInfo(null)
           vm.gotoLanding()
         }
         return userAuth

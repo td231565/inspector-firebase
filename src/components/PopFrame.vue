@@ -16,7 +16,7 @@ export default {
   methods: {
     closePopFrame (e) {
       if (e.target.className === 'popframe__item') return
-      this.$store.commit('setChoosedPhoto', null)
+      this.$emit('closePop')
     }
   }
 }
@@ -26,7 +26,7 @@ export default {
 .popframe
   width: 100%
   height: 100%
-  position: absolute
+  position: fixed
   top: 0
   left: 0
   background-color: $bg_cover_layer
