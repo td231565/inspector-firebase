@@ -50,8 +50,6 @@
 </template>
 
 <script>
-// import { mapState } from 'vuex'
-
 export default {
   name: 'Landing',
   props: {
@@ -64,13 +62,15 @@ export default {
       name: '',
       phone: '',
       isSignIn: true,
-      errorText: ''
+      errorText: '',
+      rules: {
+        email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        phone: /^09[0-9]{8}$/,
+        pwd: /^.{7,30}$/ 
+      }
     }
   },
   computed: {
-    // ...mapState({
-    //   userInfo: state => state.userInfo
-    // }),
     hintText () {
       return (this.isSignIn) ? '還沒有帳號？' : '我有帳號'
     },
@@ -84,6 +84,18 @@ export default {
     }
   },
   methods: {
+    detectInputFormat () {
+      this.errorText = ''
+      let isCorrect = true
+
+      ;(this.rules.phone.test(this.phone)) ? null : this.errorText = '手機號碼需為09開頭的10碼數字'
+      ;this.name ? null : this.errorText = '名字不可為空白'
+      ;(this.rules.pwd.test(this.password)) ? null : this.errorText = '密碼需大於6位數'
+      ;(this.rules.email.test(this.account)) ? null : this.errorText = 'email 格式錯誤'
+      if (this.errorText) isCorrect = false
+
+      return isCorrect
+    },
     distingishError (err) {
       if (!err) return
 
@@ -117,7 +129,11 @@ export default {
       this.$emit('signIn', this.profile)
     },
     signUp () {
-      this.$emit('signUp', this.profile)
+      let checkPhoneCorrect = this.detectInputFormat()
+      if (checkPhoneCorrect) {
+        this.$emit('loading')
+        this.$emit('signUp', this.profile)
+      }
     },
     signInGuess () {
       this.$emit('guess')

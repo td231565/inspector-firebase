@@ -92,7 +92,7 @@ export default {
         vm.gotoLanding()
       }).then(uid => {
         console.log(uid)
-        vm.gotoHome()
+        if (uid) vm.gotoHome()
       })
     },
     distingishError (err) {
