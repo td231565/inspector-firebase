@@ -106,9 +106,8 @@ const modelState = {
 
       // 上傳資料至 DB
       let data = state.selectedMarkerData
-      data.plans = state.plans
-      data.photos = state.photos
-      // console.log(data)
+      data['plans'] = state.plans
+      data['photos'] = state.photos
 
       let modelName = state.modelName
       let markerId = state.selectedMarker

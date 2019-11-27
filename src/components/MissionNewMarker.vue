@@ -1,16 +1,20 @@
 <template>
   <div class="add absolute--top" ref="sectionAdd">
+    <!-- 本次查驗目標圖片 -->
     <img :src="selectedMarkerImage" alt="平面圖" ref="img">
 
     <div class="absolute--top" :class="{ add__cover: addStep !== 3}" ref="edit">
+      <!-- 新增查驗點標記 -->
       <section class="add__section add__point" @click="addingNewMarker" v-if="addStep === 1">
         <h4 class="add__section__header">點擊圖片位置新增查驗點</h4>
       </section>
 
+      <!-- 新增查驗點資訊 -->
       <section class="add__section add__form" v-else-if="addStep === 2">
         <NewMarkerForm @addMarkerInfo="addMarkerDataToDB" />
       </section>
 
+      <!-- 新增查驗點註記 -->
       <section class="add__section add__annotation" v-if="addStep === 3">
         <img class="add__annotation__img" :src="imgMarkedDataUrl">
       </section>

@@ -54,14 +54,14 @@
       </li>
       <li class="form__items form__items__footer flex--right">
         <div class="form__result flex--center">
-          <p class="form__result__text" v-if="textError">{{ textError }}</p>
-          <p class="form__result__text" v-if="snedText">{{ snedText }}</p>
+          <p class="form__result__text form__result__text--danger" v-if="errorText">{{ errorText }}</p>
+          <p class="form__result__text form__result__text--normal" v-if="snedText">{{ snedText }}</p>
         </div>
         <button type="button" class="btn btn__square btn__square--success" @click="updateMission">送出表單</button>
         <button type="button" class="btn btn__square btn__square--danger" v-if="isAdmin" @click="deleteMission">刪除表單</button>
       </li>
     </ul>
-    <PopWarning v-if="isDeleteMission"/>
+    <PopWarning v-if="isDeleteMission" @revealWarning="revealWarning" @stepToFirst="stepToFirst"/>
   </section>
 </template>
 
@@ -88,8 +88,8 @@ export default {
       status: '符合',
       problem: 'OK',
       isUploadSuccess: null,
-      isAdmin: true,
-      textError: '',
+      isAdmin: false,
+      errorText: '',
       snedText: '',
       isDeleteMission: false
     }
@@ -124,22 +124,27 @@ export default {
     isAdminGroup () {
       this.isAdmin = (this.userInfo.group === 'admin') ? true : false
     },
-    sendTextContent (content) {
+    setSendTextContent (content) {
       this.snedText = content
     },
+    setErrorTextContent (content) {
+      this.errorText = content
+    },
     updateMission () {
+      this.setErrorTextContent('')
+
       if (this.inspector !== this.selectedInspector) {
-        this.textError = '查驗人員需為本人'
+        this.setErrorTextContent('查驗人員需為本人')
       } else if (!this.date) {
-        this.textError = '請輸入日期'
+        this.setErrorTextContent('請輸入日期')
       } else if (!this.category) {
-        this.textError = '請選擇查驗類型'
+        this.setErrorTextContent('請選擇查驗類型')
       } else if (!this.selfCheckState) {
-        this.textError = '請確認自主檢查紀錄是否提送'
+        this.setErrorTextContent('請確認自主檢查紀錄是否提送')
       } else if (!this.status) {
-        this.textError = '請確認圖說與模型是否一致'
+        this.setErrorTextContent('請確認圖說與模型是否一致')
       } else if (!this.problem) {
-        this.textError = '請輸入檢核結果說明'
+        this.setErrorTextContent('請輸入檢核結果說明')
       } else {
         let newMissionData = {
           accompany: this.accompany || '',
@@ -150,35 +155,42 @@ export default {
           selfCheckState: this.selfCheckState,
           status: this.status
         }
-        this.sendTextContent('上傳中... ')
+        this.setSendTextContent('上傳中... ')
         this.setSelectedMarkerData(newMissionData)
         this.updateMissionData()
       }
     },
     deleteMission () {
       this.isDeleteMission = true
+    },
+    revealWarning (errMsg) {
+      this.isDeleteMission = false
+      if (errMsg) this.setErrorTextContent(errMsg)
+    },
+    stepToFirst () {
+      this.$emit('stepToFirst')
     }
   },
   watch: {
     isMarkerUpdated (value) {
       if (value === true) {
-        this.sendTextContent('上傳成功！')
+        this.setSendTextContent('上傳成功！')
         // 跳回第一頁
         this.$emit('stepToFirst')
         this.setMarkerUpdated(null)
       } else if (value === false) {
-        this.sendTextContent('上傳失敗')
+        this.setSendTextContent('上傳失敗')
       }
     }
   },
   created () {
-    // this.isAdminGroup()
+    this.isAdminGroup()
   },
   mounted () {
     this.getMissionData()
   },
   destroyed () {
-    this.sendTextContent('')
+    this.setSendTextContent('')
   }
 }
 </script>
@@ -199,6 +211,11 @@ export default {
     // width: 100%
     &__text
       margin: 0
+      font-size: 0.8rem
+      &--danger
+        color: $text_warning
+      &--normal
+        color: $text_success
 
 .log
   &__problem
