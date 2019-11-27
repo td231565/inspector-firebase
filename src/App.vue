@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    <!-- <Loading v-if="isLoading" /> -->
-    <!-- <Home v-else-if="isSignIn" /> -->
-    <!-- <Landing v-else /> -->
-    <router-view/>
+    <component :is="viewPath" @loading="gotoLoading"/>
     <PopFrame :photo="choosedPhoto" v-if="isChoosed" />
   </div>
 </template>
@@ -11,16 +8,22 @@
 <script>
 import { fireAuth } from './config/db'
 import { mapState } from 'vuex'
+import Home from './views/Home'
+import Landing from './views/Landing'
+import Loading from './views/Loading'
 import PopFrame from './components/PopFrame'
 
 export default {
   name: 'app',
   components: {
-    PopFrame
+    PopFrame,
+    Home,
+    Landing,
+    Loading
   },
   data () {
     return {
-      
+      viewPath: null
     }
   },
   computed: {
@@ -34,10 +37,14 @@ export default {
   },
   methods: {
     gotoHome () {
-      this.$router.push('/home')
+      this.viewPath = Home
     },
     gotoLanding () {
-      this.$router.push('/landing')
+      this.viewPath = Landing
+    },
+    gotoLoading () {
+      console.log(1)
+      this.viewPath = Loading
     },
     watchState () {
       let vm = this

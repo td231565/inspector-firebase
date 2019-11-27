@@ -51,6 +51,8 @@ export default {
   },
   methods: {
     signin () {
+      this.$emit('loading')
+
       let vm = this
       let email = vm.account
       let pwd = vm.password
