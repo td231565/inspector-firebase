@@ -1,8 +1,8 @@
 <template>
   <div class="step">
     <section class="step__column flex--left">
-      <a class="btn btn__square step__column__controls" @click="gotoAddNewMarker" v-if="stepNow === 1">建立查驗點</a>
-      <div class="flex--left" v-else>
+      <a class="btn btn__square step__column__controls" @click="gotoAddNewMarker" v-if="userAuth && stepNow === 1">建立查驗點</a>
+      <div class="flex--left" v-if="stepNow !== 1">
         <a class="btn btn__square step__column__controls" @click="stepPrev">上一步</a>
         <a class="btn btn__square step__column__controls" @click="stepNext"  v-if="stepNow !== 4">下一步</a>
       </div>
@@ -16,12 +16,17 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'StepBar',
   props: {
     stepNow: Number
+  },
+  computed: {
+    ...mapState({
+      userAuth: state => state.userState.userAuth
+    })
   },
   methods: {
     stepPrev () {

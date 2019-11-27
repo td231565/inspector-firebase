@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="home__top" ref="top">
-      <StateBar />
+      <StateBar @signOutGuess="signOutGuess" />
       <!-- <Viewer /> -->
       <PdfViewer :stepNow="stepNow" :isAddNewMarker="isAddNewMarker"
         @pdfLoaded="detectTopHeight" @stepNext="stepNext"/>
@@ -73,6 +73,9 @@ export default {
     },
     stepToFirst () {
       return this.stepNow = 1
+    },
+    signOutGuess () {
+      this.$emit('signOutGuess')
     }
   }
 }

@@ -10,12 +10,16 @@
         <label class="form__items__title">樓層位置</label>
         <input class="form__items__cells" type="text" v-model="floor" disabled />
       </li>
-      <li class="form__items">
+      <li class="form__items" v-if="userInfo">
         <label class="form__items__title">查驗人員</label>
         <select class="form__items__cells" v-model="selectedInspector">
           <option>尚未查驗</option>
           <option>{{ inspector }}</option>
         </select>
+      </li>
+      <li class="form__items" v-else>
+        <label class="form__items__title">查驗人員</label>
+        <input class="form__items__cells" type="text" v-model="selectedInspector" disabled />
       </li>
       <li class="form__items">
         <label class="form__items__title">隨行人員</label>
@@ -57,7 +61,7 @@
           <p class="form__result__text form__result__text--danger" v-if="errorText">{{ errorText }}</p>
           <p class="form__result__text form__result__text--normal" v-if="snedText">{{ snedText }}</p>
         </div>
-        <button type="button" class="btn btn__square btn__square--success" @click="updateMission">送出表單</button>
+        <button type="button" class="btn btn__square btn__square--success" @click="updateMission" v-if="userInfo">送出表單</button>
         <button type="button" class="btn btn__square btn__square--danger" v-if="isAdmin" @click="deleteMission">刪除表單</button>
       </li>
     </ul>
@@ -79,7 +83,7 @@ export default {
     return {
       name: '名稱',
       floor: '樓層',
-      inspector: '',
+      // inspector: '',
       selectedInspector: '尚未查驗',
       accompany: '',
       date: format(new Date(), 'yyyy-MM-dd'),
@@ -99,7 +103,12 @@ export default {
       missionData: state => state.modelState.selectedMarkerData,
       userInfo: state => state.userState.userInfo,
       isMarkerUpdated: state => state.modelState.isMarkerUpdated,
-    })
+    }),
+    inspector () {
+      let name = ''
+      if (this.userInfo) name = this.userInfo.name
+      return name
+    }
   },
   methods: {
     ...mapMutations({
@@ -112,7 +121,7 @@ export default {
     getMissionData () {
       this.name = this.missionData.name
       this.floor = this.missionData.floor
-      this.inspector = this.userInfo.name
+      // this.inspector = this.userInfo.name || ''
       this.selectedInspector = this.missionData.inspector
       this.accompany = this.missionData.accompany
       this.date = this.missionData.date
@@ -122,7 +131,9 @@ export default {
       this.problem = this.missionData.problem
     },
     isAdminGroup () {
-      this.isAdmin = (this.userInfo.group === 'admin') ? true : false
+      let userInfo = this.userInfo
+      if (!userInfo) return
+      this.isAdmin = (userInfo.group === 'admin') ? true : false
     },
     setSendTextContent (content) {
       this.snedText = content
@@ -150,7 +161,7 @@ export default {
           accompany: this.accompany || '',
           category: this.category,
           date: this.date,
-          inspector: this.inspector,
+          inspector: this.selectedInspector,
           problem: this.problem,
           selfCheckState: this.selfCheckState,
           status: this.status

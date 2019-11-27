@@ -4,7 +4,9 @@
       :errorCode="errorCodeFromAuth"
       @loading="gotoLoading"
       @signIn="signIn"
-      @signUp="signUp" />
+      @signUp="signUp"
+      @guess="gotoHome"
+      @signOutGuess="gotoLanding" />
   </div>
 </template>
 
@@ -56,13 +58,13 @@ export default {
       // 登入狀態有'變化'才會反應
       fireAuth.onAuthStateChanged(userAuth => {
         if (userAuth) {
-          console.log(userAuth)
+          // 無狀態 -> 登入
+          // console.log(userAuth)
           vm.setUserAuth(userAuth)
           vm.detectUserGroup()
-          if (userAuth.displayName) {
-            vm.gotoHome()
-          }
+          if (userAuth.displayName) vm.gotoHome()
         } else {
+          // 登入 -> 登出
           vm.setErrorCode(undefined)
           vm.setUserAuth(null)
           vm.setUserInfo(null)

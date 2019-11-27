@@ -36,7 +36,7 @@
 
           <li class="form__items form__items__footer flex--center" v-else>
             <button class="btn btn__square" @click="signUp">註冊</button>
-            <button class="btn btn__square" @click="signIn">訪客登入</button>
+            <button class="btn btn__square" @click="signInGuess">訪客登入</button>
           </li>
 
           <li class="form__items flex--center">
@@ -118,6 +118,9 @@ export default {
     },
     signUp () {
       this.$emit('signUp', this.profile)
+    },
+    signInGuess () {
+      this.$emit('guess')
     },
     switchSignIn () {
       this.isSignIn = !this.isSignIn

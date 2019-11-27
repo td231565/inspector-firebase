@@ -48,11 +48,8 @@ export default {
   },
   methods: {
     signout () {
-      fireAuth.signOut().then(() => {
-        console.log('sign out')
-      }).catch(err => {
-        console.log(err.code)
-      })
+      if (!this.userInfo) this.$emit('signOutGuess')
+      fireAuth.signOut()
     },
     selectModel () {
       let vm = this
