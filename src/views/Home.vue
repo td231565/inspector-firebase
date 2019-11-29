@@ -6,7 +6,8 @@
       <PdfViewer :stepNow="stepNow" :isAddNewMarker="isAddNewMarker"
         @pdfLoaded="detectTopHeight" @stepNext="stepNext"/>
       <StepBar :stepNow="stepNow"
-        @stepPrev="stepPrev" @stepNext="stepNext" @stepToFirst="stepToFirst" />
+        @stepPrev="stepPrev" @stepNext="stepNext" @stepToFirst="stepToFirst"
+        @gotoPrint="gotoPrint" />
     </div>
 
     <div class="home__bottom" ref="bottom">
@@ -76,6 +77,9 @@ export default {
     },
     signOutGuess () {
       this.$emit('signOutGuess')
+    },
+    gotoPrint () {
+      this.$emit('gotoPrint')
     }
   }
 }

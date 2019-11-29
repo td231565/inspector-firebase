@@ -1,12 +1,15 @@
 <template>
-  <div id="app">
+  <div id="app" :class="{ allowScroll: isPrint}">
     <component :is="viewPath"
       :errorCode="errorCodeFromAuth"
       @loading="gotoLoading"
       @signIn="signIn"
       @signUp="signUp"
       @guess="gotoHome"
-      @signOutGuess="gotoLanding" />
+      @signOutGuess="gotoLanding"
+      @gotoPrint="gotoPrint"
+      @finishPrint="gotoHome" />
+    <!-- <Print v-if="isPrint" v-show="true" /> -->
   </div>
 </template>
 
@@ -16,18 +19,21 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import Home from './views/Home'
 import Landing from './views/Landing'
 import Loading from './views/Loading'
+import Print from './views/Print'
 
 export default {
   name: 'app',
   components: {
     Home,
     Landing,
-    Loading
+    Loading,
+    Print
   },
   data () {
     return {
       viewPath: null,
-      errorCodeFromAuth: ''
+      errorCodeFromAuth: '',
+      isPrint: false
     }
   },
   computed: {
@@ -44,6 +50,10 @@ export default {
     },
     gotoLoading () {
       this.viewPath = Loading
+    },
+    gotoPrint () {
+      this.viewPath = Print
+      this.isPrint = true
     },
     ...mapMutations({
       setUserAuth: 'setUserAuth',
@@ -91,7 +101,7 @@ export default {
         vm.setErrorCode(err.code)
         vm.gotoLanding()
       }).then(uid => {
-        console.log(uid)
+        // console.log(uid)
         if (uid) vm.gotoHome()
       })
     },
@@ -121,6 +131,7 @@ export default {
   },
   created () {
     this.watchState()
+    this.isPrint = false
   }
 }
 </script>
@@ -136,11 +147,6 @@ export default {
   background-size: cover
   background-image: url(./assets/contact_bg.jpg)
   overflow: hidden
-
-#nav
-  a
-    font-weight: bold
-    color: $text_defalt
-    &.router-link-exact-active
-      color: $text_link
+  &.allowScroll
+    overflow: auto
 </style>

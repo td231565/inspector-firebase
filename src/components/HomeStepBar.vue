@@ -9,7 +9,7 @@
     </section>
 
     <section class="step__column flex--right">
-      <a class="btn btn__square step__column__controls" onclick="" v-if="stepNow === 1">列印報表</a>
+      <a class="btn btn__square step__column__controls" @click="gotoPrint" v-if="stepNow === 1">列印報表</a>
       <a class="btn btn__square step__column__controls" @click="stepToFirst" v-else>回列表</a>
     </section>
   </div>
@@ -43,6 +43,9 @@ export default {
     }),
     gotoAddNewMarker () {
       this.addingNewMarker(true)
+    },
+    gotoPrint () {
+      this.$emit('gotoPrint')
     }
   }
 }
