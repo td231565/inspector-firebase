@@ -1,8 +1,8 @@
 <template>
   <div class="print">
     <div class="print__controls flex--right">
-      <button class="btn">列印</button>
-      <button class="btn" @click="finishPrint">上一步</button>
+      <button class="btn btn__square btn__square--success" @click="printPage">列印</button>
+      <button class="btn btn__square btn__square--success" @click="finishPrint">上一步</button>
     </div>
 
     <h1 class="print__header">BIM 自主查驗表</h1>
@@ -32,9 +32,9 @@
         <p class="print__column">隨行人員：{{ accompany }}</p>
       </li>
       <!-- 查驗內容結果 -->
-      <li class="print__row print__column result">查驗內容結果</li>
+      <li class="print__row print__column">查驗內容結果</li>
       <li class="print__row">
-        <div class="print__column result__left">
+        <div class="print__column">
           <p>自主檢查紀錄是否提送：</p>
           <div>
             <input type="checkbox" v-model="selfCheckYes" disabled /><label>符合</label>
@@ -47,34 +47,38 @@
           </div>
         </div>
 
-        <div class="print__column result__middle"></div>
-
-        <div class="print__column result__right">
+        <div class="print__column">
           <p>不符合處之檢核結果說明：</p>
-          <div id="problem"></div>
+          <div class="problem"
+            v-for="(mission, index) in missionsWithStatusNo"
+            :key="index+20">
+            <p>{{ mission.name }}：</p>
+            <pre v-html="mission.problem"></pre>
+          </div>
         </div>
       </li>
-      <!-- 查驗意見 -->
+      <!-- 查驗意見與圖片 -->
       <li class="print__row print__column">查驗意見</li>
-      <li class="print__row print__column"><strong>現場與模型核對皆相符</strong></li>
-      <li class="print__column">
+      <!-- <li class="print__row print__column"><strong>現場與模型核對皆相符</strong></li> -->
+      <li class="print__row print__row--block print__column">
+        <p>現場與模型核對皆相符</p>
         <printItem
-          class="print__column"
-          v-for="(mission, index) in missionsData"
+          class="print__column print__column--borderless"
+          v-for="(mission, index) in missionsWithStatusYes"
           :key="index+1"
           :mission="mission" />
       </li>
-
-      <li class="print__row print__column">
-        <p><strong>現場與模型核對不相符</strong></p>
+      <!-- <li class="print__row print__column"><strong>現場與模型核對不相符</strong></li> -->
+      <li class="print__row print__row--block print__column">
+        <p>現場與模型核對不相符</p>
         <printItem
-          class="print__column"
-          v-for="(mission, index) in missionsData"
-          :key="index+1"
+          class="print__column print__column--borderless"
+          v-for="(mission, index) in missionsWithStatusNo"
+          :key="index+10"
           :mission="mission" />
       </li>
-
-      <li class="print__row print__column">查驗人員簽名：</li>
+      <!-- 簽名 -->
+      <li class="print__row print__column signature">查驗人員簽名：</li>
     </ul>
 
   </div>
@@ -109,6 +113,14 @@ export default {
     ...mapState({
       modelName: state => state.modelState.modelName,
     }),
+    missionsWithStatusYes () {
+      if (!this.missionsData || this.missionsData.length === 0) return
+      return this.missionsData.filter(mission => mission.status === '符合')
+    },
+    missionsWithStatusNo () {
+      if (!this.missionsData || this.missionsData.length === 0) return
+      return this.missionsData.filter(mission => mission.status === '不符合')
+    },
     date () {
       if (!this.missionsData || this.missionsData.length === 0) return
       return this.missionsData[0].date.replace('-', '年').replace('-', '月').concat('日')
@@ -184,6 +196,9 @@ export default {
         }
       })
     },
+    printPage () {
+      window.print()
+    }
   },
   watch: {
     checkboxType (val) {
@@ -212,28 +227,45 @@ p
   text-align: left
   background-color: #fff
   border: 1px solid $bd_btn_default
-  &__row
-    // margin: 4px 0
-    display: flex
-    // justify-content: flex-start
-    // border: 1px solid #000
   &__column
     padding: 4px 6px
     flex: 1
-    border: 1px solid #000
+    border-color: #000
+    border-style: solid
+    border-width: 1px 1px 0 0
+    &--borderless
+      border: none
+  &__row
+    display: flex
+    border-left: 1px solid #000
+    &:nth-last-child(1)
+      border-bottom: 1px solid #000
+    &--block
+      display: block
 
-.result
-  &__left
-    flex: 1
-  &__middle
-    flex: 1
-  &__right
-    flex: 2
+.problem
+  display: flex
+  > pre
+    margin: 0
+
+.signature
+  height: 70px
+  display: flex
+  flex-direction: column
+  justify-content: flex-end
 
 @media print
-  @page
-    size: A4 portrait // 大小、方向 portrait/landscape
-    margin: 0.5cm
-    orphans:4
-    widows:2
+  // @page
+  //   size: A4 portrait // 大小、方向 portrait/landscape
+  //   margin: 0.5cm
+  //   orphans:4
+  //   widows:2
+
+  .print
+    width: 100%
+    margin: 0
+    padding: 0
+    border: none
+    &__controls
+      display: none
 </style>
