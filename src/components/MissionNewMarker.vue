@@ -29,6 +29,7 @@ import { mapState } from 'vuex'
 import { markersDB } from '../config/db'
 import NewMarkerForm from './NewForm'
 import { MarkerArea } from 'markerjs'
+import SHA1 from '../config/sha'
 
 export default {
   name: 'AddNewMarker',
@@ -83,7 +84,9 @@ export default {
         renderAtNaturalSize: true // 使用圖片原始尺寸
       })
       // markjs.toolbars = markjs.toolbars.slice(0, 9)
-      markjs.show(dataUrl => this.imgMarkedDataUrl = dataUrl)
+      markjs.show(dataUrl => {
+        this.convertBase64ToPng(dataUrl)
+      })
 
       // 調整 toolbar 位置
       let toolbar = sectionAdd.querySelector('.markerjs-toolbar')
@@ -92,6 +95,29 @@ export default {
         top: toolbar.offsetTop + 25,
       }
       toolbar.style.cssText = `position: absolute; left: ${position.left}px; top: ${position.top}px; z-index: 9;`
+    },
+    convertBase64ToPng (dataUrl) {
+      let vm = this
+      let timestamp = Math.floor(Date.now() / 1000)
+      let api_secret = 'yynjtJYNqqHy2XWvBh7x4taVNjI'
+      let str = `timestamp=${timestamp}${api_secret}` // 規定最後須加上 api_secret
+
+      // 將 base64:image 上傳到 cloudinary 轉換成實體圖片
+      return fetch('https://api.cloudinary.com/v1_1/ctcimage/image/upload', {
+        method: 'POST',
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify({
+          timestamp: timestamp, // 時間戳記 required
+          file: dataUrl, // 欲轉換的 base64 編碼
+          api_key: '653999464428459',
+          signature: SHA1(str) // 轉換後的 SHA1 字串
+        })
+      })
+      .catch(err => console.log(err))
+      .then(res => res.json())
+      .then(res => vm.imgMarkedDataUrl = res.url)
     },
     updateImgMarkedToDB () {
       let vm = this
@@ -114,6 +140,7 @@ export default {
     },
     imgMarkedDataUrl (val) {
       if (!val) return
+      if (val.match('base64')) return
       this.updateImgMarkedToDB()
     }
   },

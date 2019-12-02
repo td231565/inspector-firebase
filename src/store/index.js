@@ -90,7 +90,6 @@ const modelState = {
         })
     },
     updateModelMarkersData ({ state, commit }) {
-      let isAllImgConverted = checkImgConvert()
       // 確認圖片是否皆已處理完畢
       function checkImgConvert () {
         let check = true
@@ -100,14 +99,23 @@ const modelState = {
             if (itemType.toString().toLowerCase() === 'object') check = false
           })
         })
+        // let image = state.selectedMarkerImage
+        // console.log(image)
+        // if (image.match('base64')) {
+        //   check = false
+        //   dispatch('uploadImgToServer', image)
+        // }
         return check
       }
+
+      let isAllImgConverted = checkImgConvert()
       if (!isAllImgConverted) return
 
       // 上傳資料至 DB
       let data = state.selectedMarkerData
       data['plans'] = state.plans
       data['photos'] = state.photos
+      // data['image'] = state.selectedMarkerImage
 
       let modelName = state.modelName
       let markerId = state.selectedMarker
@@ -152,9 +160,20 @@ const modelState = {
     },
     // 上傳圖片到雲端: 使用第三方服務 Cloudinary
     uploadImgToServer ({ commit, dispatch }, data) {
+      // let dataIsObject = true
+      // let url = ''
+      
+      // if (typeof(data).toString() === 'object') {
+      //   url = data.url
+      // } else {
+      //   url = data
+      //   dataIsObject = false
+      // }
+
       let timestamp = Math.floor(Date.now() / 1000)
       let api_secret = 'yynjtJYNqqHy2XWvBh7x4taVNjI'
       let str = `timestamp=${timestamp}${api_secret}` // 規定最後須加上 api_secret
+
       // 將 base64:image 上傳到 cloudinary 轉換成實體圖片
       return fetch('https://api.cloudinary.com/v1_1/ctcimage/image/upload', {
         method: 'POST',
@@ -171,15 +190,20 @@ const modelState = {
       .catch(err => console.log(err))
       .then(res => res.json())
       .then(res => {
-        let payload = {
-          picArray: data.picArray,
-          index: data.index,
-          url: res.url,
-          text: data.text
-        }
-        // console.log('image uploaded: ' + res.url)
-        commit('setUploadPictureToArray', payload)
-      }).then(() => {
+        // if (dataIsObject) {
+          let payload = {
+            picArray: data.picArray,
+            index: data.index,
+            url: res.url,
+            text: data.text
+          }
+          // console.log('image uploaded: ' + res.url)
+          commit('setUploadPictureToArray', payload)
+        // } else {
+        //   commit('setSelectedMarkerImage', res.url)
+        // }
+      })
+      .then(() => {
         dispatch('updateModelMarkersData')
       })
     }
