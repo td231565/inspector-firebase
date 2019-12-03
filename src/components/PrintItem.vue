@@ -1,7 +1,7 @@
 <template>
-  <table class="printItem" id="pictures" width="75%" border="1">
-    <tr>
-      <td colspan="6"><u class="printItem__title">{{ mission.name }}</u></td>
+  <table class="printItem" id="pictures" width="100%" border="1">
+    <tr class="printItem__row">
+      <td class="printItem__col" colspan="6"><u class="printItem__title">{{ mission.name }}</u></td>
     </tr>
 
     <tr class="printItem__row">
@@ -33,9 +33,11 @@ export default {
   },
   data () {
     return {
-      imageInlineCss: 'text-align: right; width: 207px; border: 0; text-decoration:none; vertical-align: baseline;',
+      imageInlineCss: '',
       imageWidth: 250,
       imageHeight: 187
+      // imageWidth: '',
+      // imageHeight: ''
     }
   },
   computed: {
@@ -66,6 +68,7 @@ export default {
     flex: 1
   &__image
     width: 100%
+    height: auto
   &__text
     margin: 0
 
