@@ -9,20 +9,22 @@
 
     <h1 class="print__header">BIM 自主查驗表</h1>
 
-    <table class="print__main" border="1" width="100%" style="width: 100%;">
+    <table class="print__main"
+      border="1" width="100%"
+      style="width: 100%; mso-para-margin: 0; ">
       <!-- 查驗項目基本資料 -->
       <tr class="print__row print__column">
-        <td colspan="3">工程名稱：{{ projectName }}</td>
+        <td colspan="6">工程名稱：{{ projectName }}</td>
       </tr>
       <tr class="print__row">
-        <td class="print__column print__column__left">查驗日期：{{ date }}</td>
-        <td class="print__column print__column__right">編號：</td>
+        <td class="print__column print__column__left" colspan="3">查驗日期：{{ date }}</td>
+        <td class="print__column print__column__right" colspan="3">編號：</td>
       </tr>
       <tr class="print__row print__column">
-        <td colspan="3">查驗項目：{{ modelInfo.modelName }}</td>
+        <td colspan="6">查驗項目：{{ modelInfo.modelName }}</td>
       </tr>
       <tr class="print__row print__column">
-        <td colspan="3">
+        <td colspan="6">
           <span>查驗類型：</span>
           <input type="checkbox" v-model="checkboxAr" disabled /><label>建築</label>
           <input type="checkbox" v-model="checkboxSt" disabled /><label>結構</label>
@@ -31,55 +33,58 @@
         </td>
       </tr>
       <tr class="print__row">
-        <td class="print__column">位置/圖號：{{ issue }}</td>
-        <td class="print__column">查驗人員：{{ inspector }}</td>
-        <td class="print__column">隨行人員：{{ accompany }}</td>
+        <td class="print__column" colspan="2">位置/圖號：{{ issue }}</td>
+        <td class="print__column" colspan="2">查驗人員：{{ inspector }}</td>
+        <td class="print__column" colspan="2">隨行人員：{{ accompany }}</td>
       </tr>
       <!-- 查驗內容結果 -->
       <tr class="print__row print__column">
-        <td colspan="3">查驗內容結果</td>
+        <td colspan="6">查驗內容結果</td>
       </tr>
-      <tr class="print__row">
-        <td class="print__column">
-          <p>自主檢查紀錄是否提送：</p>
-          <div>
-            <input type="checkbox" v-model="selfCheckYes" disabled /><label>符合</label>
-            <input type="checkbox" v-model="selfCheckNo" disabled /><label>不符合</label>
-          </div>
-          <p>圖說與模型是否一致：</p>
-          <div>
-            <input type="checkbox" v-model="statusYes" disabled /><label>符合</label>
-            <input type="checkbox" v-model="statusNo" disabled /><label>不符合</label>
-          </div>
-        </td>
 
-        <td class="print__column">
-          <p>不符合處之檢核結果說明：</p>
-          <div class="problem"
-            v-for="(mission, index) in missionsWithStatusNo"
-            :key="index+20">
-            <p>{{ mission.name }}：</p>
-            <pre v-html="mission.problem"></pre>
-          </div>
+      <tr class="print__row">
+        <td colspan="2">自主檢查紀錄是否提送：</td>
+        <td colspan="2">圖說與模型是否一致：</td>
+        <td colspan="2">不符合處之檢核結果說明：</td>
+      </tr>
+
+      <tr class="print__row">
+        <td colspan="2">
+          <input type="checkbox" v-model="selfCheckYes" disabled /><label>符合</label>
+          <input type="checkbox" v-model="selfCheckNo" disabled /><label>不符合</label>
+        </td>
+        <td colspan="2">
+          <input type="checkbox" v-model="statusYes" disabled /><label>符合</label>
+          <input type="checkbox" v-model="statusNo" disabled /><label>不符合</label>
+        </td>
+        <td colspan="2" class="problem"
+          v-for="(mission, index) in missionsWithStatusNo"
+          :key="index+20">
+          <p>{{ mission.name }}：</p>
+          <pre v-html="mission.problem"></pre>
         </td>
       </tr>
       <!-- 查驗意見與圖片 -->
       <tr class="print__row print__column">
-        <td>查驗意見</td>
+        <td  colspan="6">查驗意見</td>
       </tr>
       <tr class="print__row print__row--block print__column">
-          <p>現場與模型核對皆相符</p>
+        <td colspan="6">現場與模型核對皆相符</td>
+      </tr>
+      <tr>
+        <td colspan="6" style="width: 100%">
           <printItem
             class="print__column print__column--borderless"
             v-for="(mission, index) in missionsWithStatusYes"
             :key="index+1"
             :mission="mission" />
-        <!-- <td style="width: 100%">
-        </td> -->
+        </td>
       </tr>
       <tr class="print__row print__row--block print__column">
-        <td>
-          <p>現場與模型核對不相符</p>
+        <td colspan="6">現場與模型核對不相符</td>
+      </tr>
+      <tr>
+        <td colspan="6">
           <PrintItem
             class="print__column print__column--borderless"
             v-for="(mission, index) in missionsWithStatusNo"
@@ -89,7 +94,7 @@
       </tr>
       <!-- 簽名 -->
       <tr class="print__row print__column signature">
-        <td>查驗人員簽名：</td>
+        <td colspan="6">查驗人員簽名：</td>
       </tr>
     </table>
 

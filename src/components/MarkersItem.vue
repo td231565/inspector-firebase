@@ -1,6 +1,6 @@
 <template>
   <div class="markerItem absolute--top" ref="mark" @click="selectMission(mark.id)">
-    <img class="markerItem__img" src="../assets/camera_marker.png" alt="">
+    <img class="markerItem__icon" src="../assets/camera_marker.png" alt="">
     <p class="markerItem__text">{{ mark.name }}</p>
   </div>
 </template>
@@ -43,7 +43,7 @@ export default {
   padding: 0
   text-align: center
   // border: 1px solid red
-  &__img
+  &__icon
     width: 28px
     height: 28px
     margin: 0
@@ -53,6 +53,6 @@ export default {
     margin: 0
     padding: 2px 4px
     font-size: 0.8rem
-    background-color: rgba(#fff, 0.8)
+    background-color: rgba($bg_stepBar, 0.3)
     cursor: pointer
 </style>
