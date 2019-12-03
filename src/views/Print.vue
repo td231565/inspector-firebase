@@ -1,5 +1,5 @@
 <template>
-  <div class="print" ref="printTable" style="mso-margin: 1pt;">
+  <div class="print" ref="printTable">
     <div class="print__controls flex--right">
       <p v-if="errorText">{{ errorText }}</p>
       <button class="btn btn__square btn__square--success" @click="printPage">列印</button>
@@ -9,22 +9,20 @@
 
     <h1 class="print__header">BIM 自主查驗表</h1>
 
-    <table class="print__main"
-      border="1" width="100%"
-      style="width: 100%; mso-para-margin: 0; ">
+    <table class="print__main" border="1" width="100%">
       <!-- 查驗項目基本資料 -->
-      <tr class="print__row print__column">
-        <td colspan="6">工程名稱：{{ projectName }}</td>
+      <tr class="print__row">
+        <td class="print__column" colspan="6">工程名稱：{{ projectName }}</td>
       </tr>
       <tr class="print__row">
-        <td class="print__column print__column__left" colspan="3">查驗日期：{{ date }}</td>
-        <td class="print__column print__column__right" colspan="3">編號：</td>
+        <td class="print__column" colspan="3">查驗日期：{{ date }}</td>
+        <td class="print__column" colspan="3">編號：</td>
       </tr>
-      <tr class="print__row print__column">
-        <td colspan="6">查驗項目：{{ modelInfo.modelName }}</td>
+      <tr class="print__row">
+        <td class="print__column" colspan="6">查驗項目：{{ modelInfo.modelName }}</td>
       </tr>
-      <tr class="print__row print__column">
-        <td colspan="6">
+      <tr class="print__row">
+        <td class="print__column" colspan="6">
           <span>查驗類型：</span>
           <input type="checkbox" v-model="checkboxAr" disabled /><label>建築</label>
           <input type="checkbox" v-model="checkboxSt" disabled /><label>結構</label>
@@ -38,63 +36,69 @@
         <td class="print__column" colspan="2">隨行人員：{{ accompany }}</td>
       </tr>
       <!-- 查驗內容結果 -->
-      <tr class="print__row print__column">
-        <td colspan="6">查驗內容結果</td>
+      <tr class="print__row">
+        <td class="print__column" colspan="6">查驗內容結果</td>
       </tr>
 
       <tr class="print__row">
-        <td colspan="2">自主檢查紀錄是否提送：</td>
-        <td colspan="2">圖說與模型是否一致：</td>
-        <td colspan="2">不符合處之檢核結果說明：</td>
+        <td class="print__column" colspan="3">自主檢查紀錄是否提送：</td>
+        <td class="print__column" colspan="3">不符合處之檢核結果說明：</td>
       </tr>
 
       <tr class="print__row">
-        <td colspan="2">
+        <td class="print__column" colspan="3">
           <input type="checkbox" v-model="selfCheckYes" disabled /><label>符合</label>
           <input type="checkbox" v-model="selfCheckNo" disabled /><label>不符合</label>
         </td>
-        <td colspan="2">
+        <td rowspan="3" colspan="3" class="problem print__column">
+          <div class="problem__item"
+            v-for="(mission, index) in missionsWithStatusNo"
+            :key="index+20">
+            <p>{{ mission.name }}：</p>
+            <pre class="problem__item__text" v-html="mission.problem">1</pre>
+          </div>
+        </td>
+      </tr>
+
+      <tr class="print__row">
+        <td class="print__column" colspan="3">圖說與模型是否一致：</td>
+      </tr>
+
+      <tr class="print__row">
+        <td class="print__column" colspan="3">
           <input type="checkbox" v-model="statusYes" disabled /><label>符合</label>
           <input type="checkbox" v-model="statusNo" disabled /><label>不符合</label>
         </td>
-        <td colspan="2" class="problem"
-          v-for="(mission, index) in missionsWithStatusNo"
-          :key="index+20">
-          <p>{{ mission.name }}：</p>
-          <pre v-html="mission.problem"></pre>
-        </td>
       </tr>
       <!-- 查驗意見與圖片 -->
-      <tr class="print__row print__column">
-        <td  colspan="6">查驗意見</td>
+      <tr class="print__row">
+        <td class="print__column" colspan="6">查驗意見</td>
       </tr>
-      <tr class="print__row print__row--block print__column">
-        <td colspan="6">現場與模型核對皆相符</td>
+      <tr class="print__row">
+        <td class="print__column" colspan="6">現場與模型核對皆相符</td>
       </tr>
-      <tr>
-        <td colspan="6" style="width: 100%">
+      <tr class="print__row">
+        <td class="print__column" colspan="6">
           <printItem
-            class="print__column print__column--borderless"
             v-for="(mission, index) in missionsWithStatusYes"
             :key="index+1"
             :mission="mission" />
         </td>
       </tr>
-      <tr class="print__row print__row--block print__column">
-        <td colspan="6">現場與模型核對不相符</td>
+      <tr class="print__row">
+        <td class="print__column" colspan="6">現場與模型核對不相符</td>
       </tr>
-      <tr>
-        <td colspan="6">
+      <tr class="print__row">
+        <td class="print__column" colspan="6">
           <PrintItem
-            class="print__column print__column--borderless"
             v-for="(mission, index) in missionsWithStatusNo"
             :key="index+10"
             :mission="mission" />
         </td>
       </tr>
       <!-- 簽名 -->
-      <tr class="print__row print__column signature">
-        <td colspan="6">查驗人員簽名：</td>
+      <tr class="print__row signature">
+        <td class="print__column" colspan="6">查驗人員簽名：</td>
       </tr>
     </table>
 
@@ -105,8 +109,8 @@
 import { mapState } from 'vuex'
 import { db } from '../config/db'
 import PrintItem from '../components/PrintItem'
-// import saveDoc from '../config/saveDoc'
-import html2Doc from '../config/html2doc'
+import saveDoc from '../config/saveDoc'
+// import html2Doc from '../config/html2doc'
 
 export default {
   name: 'Print',
@@ -220,8 +224,10 @@ export default {
       window.print()
     },
     exportToDoc () {
+      // let table = document.getElementById('printTable')
       let table = this.$refs.printTable
-      html2Doc(table, 'BIM自主查驗報表')
+      // html2Doc(table, 'BIM自主查驗報表')
+      saveDoc(table, 'BIM自主查驗報表')
     }
   },
   watch: {
@@ -241,11 +247,7 @@ export default {
 
 <style lang="sass" scoped>
 table, tr
-  // border: 1px solid black
   border-collapse: collapse
-
-table
-  width: 100%
 
 p
   margin: 0
@@ -276,8 +278,10 @@ p
 
 .problem
   display: flex
-  > pre
-    margin: 0
+  &__item
+    display: inline-block
+    &__text
+      margin: 0
 
 .signature
   height: 70px
@@ -289,11 +293,6 @@ p
   @page
     .print
       mso-margin: 0.2cm
-      // mso-page-orientation: landscape
-    // size: A4 landscape // 大小、方向 portrait/landscape
-  // margin: 0.5cm
-  //   orphans:4
-  //   widows:2
 
   .print
     width: 100%

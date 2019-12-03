@@ -1,5 +1,13 @@
 export default function Export2Doc (element, filename = '') {
-  var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+  var preHtml = `
+    <html
+      xmlns:o='urn:schemas-microsoft-com:office:office'
+      xmlns:w='urn:schemas-microsoft-com:office:word'
+      xmlns='http://www.w3.org/TR/REC-html40'>
+      <head><meta charset='utf-8'>
+        <title>BIM 自主查驗報表</title>
+      </head>
+      <body>`;
   var postHtml = "</body></html>";
   var html = preHtml + element.innerHTML + postHtml;
   var blob = new Blob(['\ufeff', html], { type: 'application/msword' });

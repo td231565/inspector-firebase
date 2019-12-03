@@ -1,40 +1,72 @@
 <template>
-  <div class="printItem" style="width: 100%">
-    <u class="printItem__title">{{ mission.name }}</u><br />
-    <div class="printItem__block">
-      <PrintItemblock class="printItem__block__image" :imgAndText="mission.image" />
-      <PrintItemblock class="printItem__block__image"
-        v-for="(plan, index) in mission.plans" :key="index+1" :imgAndText="plan" />
-      <PrintItemblock class="printItem__block__image"
-        v-for="(photo, index) in mission.photos" :key="index+10" :imgAndText="photo" />
-    </div>
-  </div>
+  <table class="printItem" id="pictures" width="75%" border="1">
+    <tr>
+      <td colspan="6"><u class="printItem__title">{{ mission.name }}</u></td>
+    </tr>
+
+    <tr class="printItem__row">
+      <td class="printItem__col" colspan="2">
+        <img class="printItem__image" :src="image" alt="" :style="imageInlineCss" :width="imageWidth" :height="imageHeight">
+      </td>
+      <td class="printItem__col" colspan="2">
+        <img class="printItem__image" :src="picturePlan" alt="" :style="imageInlineCss" :width="imageWidth" :height="imageHeight">
+      </td>
+      <td class="printItem__col" colspan="2">
+        <img class="printItem__image" :src="picturePhoto" alt="" :style="imageInlineCss" :width="imageWidth" :height="imageHeight">
+      </td>
+    </tr>
+
+    <tr class="printItem__row">
+      <td class="printItem__col" colspan="2"></td>
+      <td class="printItem__col" colspan="2"><pre class="printItem__text" v-html="textPlan"></pre></td>
+      <td class="printItem__col" colspan="2"><pre class="printItem__text" v-html="textPhoto"></pre></td>
+    </tr>
+
+  </table>
 </template>
 
 <script>
-import PrintItemblock from './PrintItemBlock'
 export default {
   name: 'PrintItem',
-  components: {
-    PrintItemblock
-  },
   props: {
     mission: Object
   },
+  data () {
+    return {
+      imageInlineCss: 'text-align: right; width: 207px; border: 0; text-decoration:none; vertical-align: baseline;',
+      imageWidth: 250,
+      imageHeight: 187
+    }
+  },
   computed: {
-    
+    image () {
+      return this.mission.image
+    },
+    picturePlan () {
+      return this.mission.plans[0].split(';')[0]
+    },
+    picturePhoto () {
+      return this.mission.photos[0].split(';')[0]
+    },
+    textPlan () {
+      return this.mission.plans[0].split(';')[1]
+    },
+    textPhoto () {
+      return this.mission.photos[0].split(';')[1]
+    }
   }
 }
 </script>
 
 <style lang="sass" scoped>
 .printItem
-  &__block
+  &__row
     display: flex
-    justify-content: space-between
-    &__image
-      width: 33%
-      // height: auto
-      // flex: 1
+  &__col
+    flex: 1
+  &__image
+    width: 100%
+  &__text
+    margin: 0
 
 </style>

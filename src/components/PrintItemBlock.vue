@@ -1,9 +1,11 @@
 <template>
   <div class="block">
-    <div class="block__imageBlock">
+    <td class="block__imageBlock">
       <img class="block__image absolute--top" :src="image" alt="">
-    </div>
-    <pre class="block__text" v-html="text"></pre>
+    </td>
+    <td>
+      <pre class="block__text" v-html="text"></pre>
+    </td>
   </div>
 </template>
 
