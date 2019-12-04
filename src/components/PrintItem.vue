@@ -1,7 +1,9 @@
 <template>
   <table class="printItem" id="pictures" width="100%" border="1">
     <tr class="printItem__row">
-      <td class="printItem__col" colspan="6"><u class="printItem__title">{{ mission.name }}</u></td>
+      <td class="printItem__col" colspan="6">
+        <u class="printItem__title">{{ mission.floor }} - {{ mission.issue }} - {{ mission.name }}</u>
+      </td>
     </tr>
 
     <tr class="printItem__row">

@@ -9,12 +9,10 @@ export default function saveDoc(dom, filename) {
   // A4 use: size: 841.95pt 595.35pt;
   css = (
     '<style>' +
-    '@page WordSection1 {size: 841.95pt 595.35pt; margin: 36.0pt 36.0pt 36.0pt 36.0pt; mso-page-orientation: portrait;}' +
+    '@page WordSection1 {size: 841.95pt 595.35pt; mso-page-orientation: portrait; margin: 36.0pt 36.0pt 36.0pt 36.0pt;}' +
     'div.WordSection1 {page: WordSection1;}' +
     'table {border-collapse: collapse;}' + 
     'td {border: 1px #000 solid; padding: 2px 8px;}' +
-    '@page Image1 {width: 250pt; height: 187pt;}' +
-    'img {page: Image1;}' +
     '</style>'
   );
 
