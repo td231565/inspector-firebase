@@ -3,8 +3,9 @@
     <h3>步驟2：請選擇或拍攝-施工圖</h3>
 
     <PictureList :pictures="plans"
-      @saveAllPhotoTextList="savePlanListToVuex"
-      @uploadLocalPicture="uploadLocalPicture" />
+      @uploadLocalPicture="uploadLocalPicture"
+      @deletePicture="deletePicture"
+      @updatePicture="updatePictureToPlan" />
   </section>
 </template>
 
@@ -27,19 +28,23 @@ export default {
       selectedMarkerData: state => state.modelState.selectedMarkerData
     }),
     plans () {
-      // if (!this.selectedMarkerData) return
       return this.selectedMarkerData.plans
     }
   },
   methods: {
     ...mapMutations({
-      updatePlans: 'setSelectedMarkerPlans'
+      addPlan: 'addPlanToSelectedMarker',
+      deletePlan: 'deletePlanFromSelectedMarker',
+      updatePlan: 'updatePlanToSelectedMarker'
     }),
-    savePlanListToVuex (data) {
-      this.updatePlans(data)
-    },
     uploadLocalPicture (data) {
-      this.updatePlans(data)
+      this.addPlan(data)
+    },
+    deletePicture (index) {
+      this.deletePlan(index)
+    },
+    updatePictureToPlan (data) {
+      this.updatePlan(data)
     }
   }
 }

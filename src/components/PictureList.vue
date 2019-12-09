@@ -9,8 +9,9 @@
     <PictureItem v-for="(picture, index) in pictures"
       :key="index+1"
       :picture="picture"
-      @savePhotoText="addToList"
-      @deletePicture="deleteExistPicture" />
+      :index="index"
+      @updatePhotoText="updatePicture"
+      @deletePicture="deletePicture" />
   </ul>
 </template>
 
@@ -28,8 +29,7 @@ export default {
   },
   data () {
     return {
-      imgUploadList: [],
-      allPhotoTextList: [],
+
     }
   },
   computed: {
@@ -46,34 +46,16 @@ export default {
       let reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = ev => {
-        let uploadImg = [ev.target.result, '']
-        this.$emit('uploadLocalPicture', uploadImg)
+        let img = [ev.target.result, '']
+        this.$emit('uploadLocalPicture', img)
       }
     },
-    clearExistList () {
-      this.allPhotoTextList = []
+    updatePicture (data) {
+      this.$emit('updatePicture', data)
     },
-    addToList (combinedPhotoText) {
-      this.allPhotoTextList.push(combinedPhotoText)
-    },
-    saveAllPhotoTextList () {
-      this.$emit('saveAllPhotoTextList', this.allPhotoTextList)
-    },
-    deleteUploadPicture (imgUrl) {
-      let index = this.imgUploadList.indexOf(imgUrl)
-      this.imgUploadList.splice(index, 1)
-    },
-    deleteExistPicture (imgUrl) {
-      let index = this.pictures.indexOf(imgUrl)
-      this.pictures.splice(index, 1)
+    deletePicture (index) {
+      this.$emit('deletePicture', index)
     }
-  },
-  activated () {
-    console.log(this.pictures)
-    this.clearExistList()
-  },
-  deactivated () {
-    this.saveAllPhotoTextList()
   }
 }
 </script>

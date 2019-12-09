@@ -47,21 +47,24 @@ const modelState = {
     // 每次新增任務，還是單獨進行，判斷圖片是否轉檔，更新到DB
   },
   mutations: {
-    resetMarkerList (state) {
-      return state.markerList = []
-    },
-    setMarkerList (state, item) {
-      return state.markerList.push(item)
-    },
+    // 選擇模型 (查驗項目)
     setModelPath (state, modelPath) {
       return state.modelPath = modelPath
     },
     setModelName (state, modelName) {
       return state.modelName = modelName
     },
+    // 儲存 markers (查驗點)
+    setMarkerList (state, item) {
+      return state.markerList.push(item)
+    },
+    resetMarkerList (state) {
+      return state.markerList = []
+    },
     setSelectedMarkerImage (state, image) {
       return state.selectedMarkerImage = image
     },
+    // 選擇 marker (查驗點)
     setSelectedMarkerData (state, data) {
       // 沒有選擇任務時，傳入空值
       if (!data) {
@@ -76,12 +79,30 @@ const modelState = {
         state.selectedMarkerData = data
       }
     },
-    setSelectedMarkerPlans (state, data) {
-      return state.selectedMarkerData.plans.push(data)
+    // 控制圖片新增/移除/更新 (還在本地端)
+    addPlanToSelectedMarker (state, pictureItem) {
+      state.selectedMarkerData.plans.push(pictureItem)
     },
-    setSelectedMarkerPhotos (state, data) {
-      return state.selectedMarkerData.photos.push(data)
+    addPhotoToSelectedMarker (state, pictureItem) {
+      state.selectedMarkerData.photos.push(pictureItem)
     },
+    deletePlanFromSelectedMarker (state, index) {
+      state.selectedMarkerData.plans.splice(index, 1)
+    },
+    deletePhotoFromSelectedMarker (state, index) {
+      state.selectedMarkerData.photos.splice(index, 1)
+    },
+    updatePlanToSelectedMarker (state, data) {
+      let index = data.index
+      let pictureItem = data.item
+      state.selectedMarkerData.plans.splice(index, 1, pictureItem)
+    },
+    updatePhotoToSelectedMarker (state, data) {
+      let index = data.index
+      let pictureItem = data.item
+      state.selectedMarkerData.photos.splice(index, 1, pictureItem)
+    },
+    // 圖片文字整合成字串 (給Firebase的格式)
     setUploadPictureToArray (state, data) {
       // console.log(data)
       state[data.picArray][data.index] = data.url + ';' + data.text
