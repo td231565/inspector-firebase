@@ -1,7 +1,7 @@
 <template>
   <div class="add absolute--top" ref="sectionAdd">
     <!-- 本次查驗目標圖片 -->
-    <img :src="selectedMarkerImage" alt="平面圖" ref="img">
+    <img :src="modelImage" alt="平面圖" ref="img">
 
     <div class="absolute--top" :class="{ add__cover: addStep !== 3}" ref="edit">
       <!-- 新增查驗點標記 -->
@@ -16,7 +16,7 @@
 
       <!-- 新增查驗點註記 -->
       <section class="add__section add__annotation" v-if="addStep === 3">
-        <img class="add__annotation__img" :src="imgMarkedDataUrl">
+        <img class="add__annotation__img" :src="annotatedImage">
       </section>
 
     </div>
@@ -25,7 +25,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { format } from 'date-fns'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import { markersDB } from '../config/db'
 import NewMarkerForm from './NewForm'
 import { MarkerArea } from 'markerjs'
@@ -41,16 +42,23 @@ export default {
       addStep: 1,
       position: null,
       newMarkerId: '',
-      imgMarkedDataUrl: ''
+      annotatedImage: ''
     }
   },
   computed: {
     ...mapState({
-      selectedMarkerImage: state => state.modelState.selectedMarkerImage,
-      modelName: state => state.modelState.modelName
+      modelImage: state => state.modelState.modelImage,
+      modelName: state => state.modelState.modelName,
+      markerList: state => state.modelState.markerList,
     })
   },
   methods: {
+    ...mapMutations({
+      setSelectedMarkerData: 'setSelectedMarkerData'
+    }),
+    ...mapActions({
+      getMarkerList: 'getMarkerList'
+    }),
     addingNewMarker (e) {
       if (this.addStep !== 1) return
       this.position = {
@@ -59,19 +67,29 @@ export default {
       }
       this.addStep = 2
     },
+    createNewId () {
+      let date = format(new Date(), 'yyyyMMdd')
+      let time = format(new Date(), 'HH-mm-ss').split('-')
+      let hour = time[0]
+      let min = time[1]
+      let sec = time[2]
+      let stamp = new Date().valueOf()
+      return `${date}h${hour}m${min}s${sec}-${stamp}`
+    },
     addMarkerDataToDB (info) {
+      let id = this.createNewId()
+      let modelName = this.modelName
+      this.newMarkerId = id
       info.point = [this.position.left, this.position.top]
-      markersDB.collection(this.modelName).add(info)
-      .then(res => {
+      info.id = id
+
+      markersDB.collection(modelName).doc(id).set(info)
+      .then(() => {
         console.log('add marker success')
         this.addStep = 3
-        this.newMarkerId = res.id
       }).catch(err => {
-        console.log(err.code)
+        console.log(err)
       })
-    },
-    addMarkerCoverImageToDB () {
-
     },
     // 設定 Mark.js 介面
     addAnnotationOnImage () {
@@ -117,17 +135,33 @@ export default {
       })
       .catch(err => console.log(err))
       .then(res => res.json())
-      .then(res => vm.imgMarkedDataUrl = res.url)
+      .then(res => {
+        vm.annotatedImage = res.url
+        vm.updateImgMarkedToDB()
+      })
     },
+    // 選擇新增好的任務 (查驗點)
+    selectCurrentMarker (id) {
+      this.markerList.map(marker => {
+        if (marker.id === id) {
+          this.setSelectedMarkerData(marker)
+          this.$emit('finishAddingMarker')
+        }
+      })
+    },
+    // 更新標註圖片到DB
     updateImgMarkedToDB () {
-      let vm = this
-      markersDB.collection(this.modelName).doc(this.newMarkerId).set({
-        image: vm.imgMarkedDataUrl
-      }, { merge: true }).then(() => {
+      let modelName = this.modelName
+      let image = this.annotatedImage
+      let id = this.newMarkerId
+
+      markersDB.collection(modelName).doc(id).set({ image }, { merge: true })
+      .catch(err => console.log(err))
+      .then(() => {
         console.log('new image')
-        this.$emit('finishAddingMarker', vm.newMarkerId)
-      }).catch(err => {
-        console.log(err.code)
+        this.getMarkerList().then(() => {
+          this.selectCurrentMarker(id)
+        })
       })
     },
     resetAddStep () {
@@ -137,11 +171,6 @@ export default {
   watch: {
     addStep (val) {
       if (val === 3) this.addAnnotationOnImage()
-    },
-    imgMarkedDataUrl (val) {
-      if (!val) return
-      if (val.match('base64')) return
-      this.updateImgMarkedToDB()
     }
   },
   beforeDestroy () {

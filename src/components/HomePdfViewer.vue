@@ -7,7 +7,7 @@
 
       <!-- 標記圖層: 放置各查驗點的標記 -->
       <div class="pdfviewer__imgLayer__markersLayer absolute--top" v-if="isPdfLoaded && stepNow === 1">
-        <MarkerItem v-for="(mark, index) in markersList" :key="index+1"
+        <MarkerItem v-for="(mark, index) in markerList" :key="index+1"
           :mark="mark" @stepNext="stepNext" />
       </div>
 
@@ -29,7 +29,6 @@ import pdf from 'vue-pdf'
 import AddNewMarker from './MissionNewMarker'
 import MarkerItem from './MarkersItem'
 import { mapState, mapMutations } from 'vuex'
-import { db } from '../config/db'
 
 export default {
   name: 'HomePdfViewer',
@@ -45,14 +44,13 @@ export default {
     return {
       isPdfLoaded: false,
       img: '',
-      markersList: []
     }
   },
   computed: {
     ...mapState({
       modelName: state => state.modelState.modelName,
       modelPath: state => state.modelState.modelPath,
-      selectedMarkerImage: state => state.modelState.selectedMarkerImage,
+      markerList: state => state.modelState.markerList,
       selectedMarkerData: state => state.modelState.selectedMarkerData,
       isAddNewMarker: state => state.modelState.isAddNewMarker,
     }),
@@ -65,37 +63,21 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setSelectedMarkerImage: 'setSelectedMarkerImage',
+      setModelImage: 'setModelImage',
       addingNewMarker: 'addingNewMarker',
       setSelectedMarker: 'setSelectedMarker'
     }),
     pageLoaded () {
       this.img = document.querySelector('canvas').toDataURL()
-      this.setSelectedMarkerImage(this.img)
+      this.setModelImage(this.img)
       this.isPdfLoaded = true
       this.$emit('pdfLoaded')
-    },
-    getMarkersListFromDB () {
-      let vm = this
-      let modelName = vm.modelName
-
-      db.collection('markersData').doc('gugci_d')
-        .collection(modelName).onSnapshot(docs => {
-          vm.markersList = []
-          docs.forEach(doc => {
-            if (doc.id === 'modelInfo') return
-            let docData = doc.data()
-            docData.id = doc.id
-            vm.markersList.push(docData)
-          })
-        })
     },
     stepNext () {
       this.$emit('stepNext')
     },
-    finishAddingMarker (id) {
+    finishAddingMarker () {
       this.addingNewMarker(false)
-      this.setSelectedMarker(id)
       this.stepNext()
     }
   },
@@ -105,7 +87,6 @@ export default {
       // console.log(data.numPages)
       vm.pageLoaded()
     })
-    this.getMarkersListFromDB()
   }
 }
 </script>

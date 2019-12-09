@@ -36,7 +36,7 @@ const modelState = {
   state: {
     modelPath: 'https://firebasestorage.googleapis.com/v0/b/sme-markers-data-demo.appspot.com/o/test_plan_C.pdf?alt=media&token=8b074837-e93b-4cc2-8a3e-0a6dadc8e9aa',
     modelName: 'gugci_d_22f_flat',
-    selectedMarkerImage: '',
+    modelImage: '',
     selectedMarkerData: null,
     plans: [],
     photos: [],
@@ -61,8 +61,8 @@ const modelState = {
     resetMarkerList (state) {
       return state.markerList = []
     },
-    setSelectedMarkerImage (state, image) {
-      return state.selectedMarkerImage = image
+    setModelImage (state, image) {
+      return state.modelImage = image
     },
     // 選擇 marker (查驗點)
     setSelectedMarkerData (state, data) {
@@ -119,7 +119,7 @@ const modelState = {
       commit('resetMarkerList')
 
       let modelName = state.modelName
-      markersDB.collection(modelName).get()
+      return markersDB.collection(modelName).get()
       .then(docs => {
         docs.forEach(doc => {
           if (doc.id === 'modelInfo') return
@@ -222,9 +222,21 @@ const modelState = {
   }
 }
 
+const systemState = {
+  state: {
+    isLoading: false
+  },
+  mutations: {
+    setLoading (state, boolean) {
+      state.isLoading = boolean
+    }
+  }
+}
+
 export default new Vuex.Store({
   modules: {
     userState,
-    modelState
+    modelState,
+    systemState
   }
 })

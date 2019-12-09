@@ -121,7 +121,6 @@ export default {
     getMissionData () {
       this.name = this.missionData.name
       this.floor = this.missionData.floor
-      // this.inspector = this.userInfo.name || ''
       this.selectedInspector = this.missionData.inspector
       this.accompany = this.missionData.accompany
       this.date = this.missionData.date

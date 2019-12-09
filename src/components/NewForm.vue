@@ -44,6 +44,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      addingNewMarker: 'addingNewMarker'
+    }),
     setMarkerInfo () {
       let info = {
         name: this.name,
@@ -51,12 +54,20 @@ export default {
         issue: this.issue,
         createDate: this.createDate,
         creator: this.creator,
+        accompany: '',
+        category: '',
+        date: '',
+        image: '',
+        inspector: '',
+        photos: [],
+        plans: [],
+        point: [],
+        problem: '',
+        selfCheckState: '',
+        status: ''
       }
       this.$emit('addMarkerInfo', info)
     },
-    ...mapMutations({
-      addingNewMarker: 'addingNewMarker'
-    }),
     cancelAddNewMarker () {
       this.addingNewMarker(false)
     }

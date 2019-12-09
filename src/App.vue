@@ -10,6 +10,7 @@
       @gotoPrint="gotoPrint"
       @finishPrint="gotoHome" />
     <!-- <Print v-if="isPrint" v-show="true" /> -->
+    <Loading v-if="isLoading" />
   </div>
 </template>
 
@@ -39,6 +40,7 @@ export default {
   computed: {
     ...mapState({
       userAuth: state => state.userState.userAuth,
+      isLoading: state => state.systemState.isLoading,
     })
   },
   methods: {

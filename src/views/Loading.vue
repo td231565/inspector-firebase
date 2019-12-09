@@ -6,12 +6,15 @@
 
 <script>
 export default {
-  name: 'loading',
-  
+  name: 'loading'
 }
 </script>
 
 <style lang="sass" scoped>
 .loading
+  width: 100%
   height: 100vh
+  position: fixed
+  left: 0
+  top: 0
 </style>

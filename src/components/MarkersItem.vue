@@ -1,5 +1,5 @@
 <template>
-  <div class="markerItem absolute--top" ref="mark" @click="selectMission(mark.id)">
+  <div class="markerItem absolute--top" ref="mark" @click="selectMission(mark)">
     <img class="markerItem__icon" src="../assets/camera_marker.png" alt="">
     <p class="markerItem__text">{{ mark.name }}</p>
   </div>
@@ -21,11 +21,10 @@ export default {
       markObj.style.cssText = `left: ${leftFixed}px; top: ${top}px;`
     },
     ...mapMutations({
-      setSelectedMarker: 'setSelectedMarker',
-      setSelectedMarkerImage: 'setSelectedMarkerImage'
+      setSelectedMarkerData: 'setSelectedMarkerData'
     }),
-    selectMission (id) {
-      this.setSelectedMarker(id)
+    selectMission (mark) {
+      this.setSelectedMarkerData(mark)
       this.$emit('stepNext')
     }
   },
