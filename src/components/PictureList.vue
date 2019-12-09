@@ -2,24 +2,20 @@
   <ul class="photos">
     <li class="photos__item">
       <label for="pictureUpload" class="photos__item__block photos__item__block--camera">
-        <input type="file" id="pictureUpload" accept="image/*" multiple @change="handelFileUploadFromLocal">
+        <input type="file" id="pictureUpload" accept="image/*" @change="handelLocalFileUpload">
       </label>
     </li>
     <!-- insert new itemBox -->
     <PictureItem v-for="(picture, index) in pictures"
       :key="index+1"
       :picture="picture"
-      @savePhotoText="saveToList"
+      @savePhotoText="addToList"
       @deletePicture="deleteExistPicture" />
-    <PictureItem v-for="(img, index) in imgUploadList"
-      :key="index+20"
-      :picture="img"
-      @savePhotoText="saveToList"
-      @deletePicture="deleteUploadPicture" />
   </ul>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import PictureItem from './PictureItem'
 
 export default {
@@ -33,29 +29,31 @@ export default {
   data () {
     return {
       imgUploadList: [],
-      allPhotoTextList: []
+      allPhotoTextList: [],
     }
   },
   computed: {
-
+    ...mapState({
+      selectedMarkerData: state => state.modelState.selectedMarkerData
+    })
   },
   methods: {
     // 處理本機上傳圖片
-    handelFileUploadFromLocal (e) {
+    handelLocalFileUpload (e) {
       let file = e.target.files[0]
       if (!file) return
 
       let reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = ev => {
-        let uploadImg = ev.target.result
-        this.imgUploadList.push(uploadImg)
+        let uploadImg = [ev.target.result, '']
+        this.$emit('uploadLocalPicture', uploadImg)
       }
     },
     clearExistList () {
       this.allPhotoTextList = []
     },
-    saveToList (combinedPhotoText) {
+    addToList (combinedPhotoText) {
       this.allPhotoTextList.push(combinedPhotoText)
     },
     saveAllPhotoTextList () {
@@ -71,6 +69,7 @@ export default {
     }
   },
   activated () {
+    console.log(this.pictures)
     this.clearExistList()
   },
   deactivated () {

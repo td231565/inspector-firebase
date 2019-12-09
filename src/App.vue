@@ -60,9 +60,10 @@ export default {
       setUserInfo: 'setUserInfo'
     }),
     ...mapActions({
-      detectUserGroup: 'detectUserGroup'
+      detectUserGroup: 'detectUserGroup',
+      // getMarkerList: 'getMarkerList'
     }),
-    watchState () {
+    watchUserState () {
       let vm = this
 
       // 登入狀態有'變化'才會反應
@@ -130,7 +131,8 @@ export default {
     }
   },
   created () {
-    this.watchState()
+    // this.getMarkerList()
+    this.watchUserState()
     this.isPrint = false
   }
 }

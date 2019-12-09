@@ -25,13 +25,13 @@ export default {
       selectedMarkerData: state => state.modelState.selectedMarkerData
     }),
     photos () {
-      if (!this.selectedMarkerData) return
+      // if (!this.selectedMarkerData) return
       return this.selectedMarkerData.photos
     }
   },
   methods: {
     ...mapMutations({
-      updatePhotos: 'setPhotos'
+      updatePhotos: 'setSelectedMarkerPhotos'
     }),
     savePhotoListToVuex (data) {
       this.updatePhotos(data)

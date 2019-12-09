@@ -20,33 +20,32 @@ export default {
     PopFrame
   },
   props: {
-    picture: String
+    picture: Array
   },
   data () {
     return {
-      pictureImg: '',
-      pictureText: '',
       isChoosed: false
     }
   },
   computed: {
     combinePhotoText () {
       return [this.pictureImg, this.pictureText]
+    },
+    pictureImg () {
+      return this.picture[0]
+    },
+    pictureText: {
+      get () {
+        return this.picture[1]
+      },
+      set (val) {
+        return val
+      }
     }
   },
   methods: {
-    loadPicture () {
-      if (!this.picture) return
-
-      let picture = this.picture
-      let isBase64 = picture.match('base64')
-
-      this.pictureImg = (isBase64) ? picture : picture.split(';')[0]
-      this.pictureText = (isBase64) ? '' : picture.split(';')[1]
-    },
     choosePhoto (e) {
       if (e.target.className.match('btn__delete')) return
-      // this.$store.commit('setChoosedPhoto', this.pictureImg)
       this.isChoosed = true
     },
     unChoosePhoto () {
@@ -60,13 +59,8 @@ export default {
       this.$emit('deletePicture', imgUrl)
     }
   },
-  watch: {
-    picture () {
-      this.loadPicture()
-    }
-  },
   mounted () {
-    this.loadPicture()
+
   },
   deactivated () {
     this.savePhotoText()

@@ -1,0 +1,1 @@
+// 儲存資料至 localStorage

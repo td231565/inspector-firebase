@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { db } from '../config/db'
+import { db, markersDB } from '../config/db'
 import SHA1 from '../config/sha'
 
 Vue.use(Vuex)
@@ -36,15 +36,23 @@ const modelState = {
   state: {
     modelPath: 'https://firebasestorage.googleapis.com/v0/b/sme-markers-data-demo.appspot.com/o/test_plan_C.pdf?alt=media&token=8b074837-e93b-4cc2-8a3e-0a6dadc8e9aa',
     modelName: 'gugci_d_22f_flat',
-    selectedMarker: '',
     selectedMarkerImage: '',
     selectedMarkerData: null,
     plans: [],
     photos: [],
     isMarkerUpdated: null,
-    isAddNewMarker: false
+    isAddNewMarker: false,
+    // 新的資料流向: 把所有任務都放在 vuex，再從這裡拿
+    markerList: []
+    // 每次新增任務，還是單獨進行，判斷圖片是否轉檔，更新到DB
   },
   mutations: {
+    resetMarkerList (state) {
+      return state.markerList = []
+    },
+    setMarkerList (state, item) {
+      return state.markerList.push(item)
+    },
     setModelPath (state, modelPath) {
       return state.modelPath = modelPath
     },
@@ -54,17 +62,25 @@ const modelState = {
     setSelectedMarkerImage (state, image) {
       return state.selectedMarkerImage = image
     },
-    setSelectedMarker (state, selectedMarkerId) {
-      return state.selectedMarker = selectedMarkerId
-    },
     setSelectedMarkerData (state, data) {
-      return state.selectedMarkerData = data
+      // 沒有選擇任務時，傳入空值
+      if (!data) {
+        state.selectedMarkerData = null
+      } else {
+        // 選擇任務後，先將字串轉成陣列
+        ['plans', 'photos'].forEach(picArray => {
+          data[picArray] = data[picArray].map(item => {
+            return item = item.split(';')
+          })
+        })
+        state.selectedMarkerData = data
+      }
     },
-    setPlans (state, data) {
-      return state.plans = data
+    setSelectedMarkerPlans (state, data) {
+      return state.selectedMarkerData.plans.push(data)
     },
-    setPhotos (state, data) {
-      return state.photos = data
+    setSelectedMarkerPhotos (state, data) {
+      return state.selectedMarkerData.photos.push(data)
     },
     setUploadPictureToArray (state, data) {
       // console.log(data)
@@ -78,16 +94,19 @@ const modelState = {
     }
   },
   actions: {
-    getModelMarkersData ({ state, commit }) {
-      // console.log(state.selectedMarker)
+    getMarkerList ({ state, commit }) {
+      commit('resetMarkerList')
+
       let modelName = state.modelName
-      let markerId = state.selectedMarker
-      db.collection('markersData').doc('gugci_d')
-        .collection(modelName).doc(markerId).get().then(doc => {
+      markersDB.collection(modelName).get()
+      .then(docs => {
+        docs.forEach(doc => {
+          if (doc.id === 'modelInfo') return
           let docData = doc.data()
-          commit('setSelectedMarkerData', docData)
-          // console.log(state.selectedMarkerData)
+          docData['id'] = doc.id
+          commit('setMarkerList', docData)
         })
+      })
     },
     updateModelMarkersData ({ state, commit }) {
       // 確認圖片是否皆已處理完畢
@@ -111,10 +130,9 @@ const modelState = {
       data['photos'] = state.photos
 
       let modelName = state.modelName
-      let markerId = state.selectedMarker
+      let markerId = data.id
 
-      db.collection('markersData').doc('gugci_d')
-        .collection(modelName).doc(markerId)
+      markersDB.collection(modelName).doc(markerId)
         .set(data, { merge: true }).then(() => {
           console.log('update data to DB success')
           commit('setMarkerUpdated', true)

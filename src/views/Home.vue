@@ -12,7 +12,9 @@
 
     <div class="home__bottom" ref="bottom">
       <keep-alive :include="aliveInclude">
-        <component :is="steps[stepNow-1]" @stepNext="stepNext" @stepToFirst="stepToFirst" />
+        <transition name="step-fade" mode="out-in">
+          <component :is="steps[stepNow-1]" @stepNext="stepNext" @stepToFirst="stepToFirst" />
+        </transition>
       </keep-alive>
     </div>
 
@@ -20,7 +22,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState /*, mapActions */ } from 'vuex'
 import Viewer from '../components/HomeViewer.vue'
 import PdfViewer from '../components/HomePdfViewer.vue'
 import StateBar from '../components/HomeStateBar.vue'
@@ -60,16 +62,16 @@ export default {
       // console.log(topHeight)
       bottom.style.paddingTop = topHeight + 'px'
     },
-    ...mapActions({
-      getMarkerDataFromDB: 'getModelMarkersData'
-    }),
+    // ...mapActions({
+    //   getMarkerDataFromDB: 'getModelMarkersData'
+    // }),
     stepPrev () {
       if (this.stepNow === 1) return
       return this.stepNow--
     },
     stepNext () {
       if (this.stepNow === this.steps.length) return
-      if (this.stepNow === 1) this.getMarkerDataFromDB()
+      // if (this.stepNow === 1) this.getMarkerDataFromDB()
       return this.stepNow++
     },
     stepToFirst () {
@@ -117,4 +119,10 @@ export default {
 
 .viewerLayer
   position: relative
+
+.step-fade-enter-active, .step-fade-leave-active
+  transition: opacity .15s ease
+
+.step-fade-enter, .step-fade-leave-to
+  opacity: 0
 </style>

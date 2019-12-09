@@ -144,7 +144,9 @@ export default {
     updateMission () {
       this.setErrorTextContent('')
 
-      if (this.inspector !== this.selectedInspector) {
+      let currentUserName = this.userInfo.name
+
+      if (currentUserName !== this.selectedInspector) {
         this.setErrorTextContent('查驗人員需為本人')
       } else if (!this.date) {
         this.setErrorTextContent('請輸入日期')
@@ -164,7 +166,8 @@ export default {
           inspector: this.selectedInspector,
           problem: this.problem,
           selfCheckState: this.selfCheckState,
-          status: this.status
+          status: this.status,
+          id: this.missionData.id
         }
         this.setSendTextContent('上傳中... ')
         this.setSelectedMarkerData(newMissionData)
@@ -187,8 +190,8 @@ export default {
       if (value === true) {
         this.setSendTextContent('上傳成功！')
         // 跳回第一頁
-        this.$emit('stepToFirst')
         this.setMarkerUpdated(null)
+        this.$emit('stepToFirst')
       } else if (value === false) {
         this.setSendTextContent('上傳失敗')
       }

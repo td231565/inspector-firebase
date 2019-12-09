@@ -5,13 +5,12 @@
       <img class="missions__header__icon" src="../assets/camera_marker.png" alt="模型標記">
     </h3>
 
-    <MissionsList :missionList="missionList" @stepNext="stepNext" />
+    <MissionsList :missionList="markerList" @stepNext="stepNext" />
   </section>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
-import { db } from '../config/db'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import MissionsList from './MissionsList.vue'
 
 export default {
@@ -26,23 +25,15 @@ export default {
   },
   computed: {
     ...mapState({
+      markerList: state => state.modelState.markerList,
       modelName: state => state.modelState.modelName,
       modelPath: state => state.modelState.modelPath
     }),
   },
   methods: {
-    getModelMissionsFromDB () {
-      let vm = this
-      db.collection('markersData').doc('gugci_d')
-        .collection(vm.modelName).onSnapshot(docs => {
-          vm.missionList = []
-          docs.forEach(doc => {
-            let docData = doc.data()
-            if (!docData.name) return
-            vm.missionList.push(doc)
-          })
-        })
-    },
+    ...mapActions({
+      getMarkerList: 'getMarkerList'
+    }),
     stepNext () {
       this.$emit('stepNext')
     },
@@ -54,12 +45,14 @@ export default {
     }
   },
   watch: {
-    modelName () {
-      this.getModelMissionsFromDB()
+    modelName: {
+      handler () {
+        this.getMarkerList()
+      },
+      immediate: true
     }
   },
   created () {
-    this.getModelMissionsFromDB()
     this.clearMarkerData()
   }
 }
