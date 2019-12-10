@@ -18,14 +18,11 @@ module.exports = {
     }
   },
 
-  // lintOnSave: false
+  pages: {
+    index: {
+      title: 'BIM 自主查驗系統'
+    }
+  }
 
-  // pluginOptions: {
-  //   'style-resources-loader': {
-  //     preProcessor: 'sass',
-  //     patterns: [
-  //       path.resolve(__dirname, 'src/sass/*.sass'),
-  //     ]
-  //   }
-  // }
+  // lintOnSave: false
 }

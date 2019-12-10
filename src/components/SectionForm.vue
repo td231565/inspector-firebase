@@ -166,7 +166,7 @@ export default {
           problem: this.problem,
           selfCheckState: this.selfCheckState,
           status: this.status,
-          id: this.missionData.id
+          // id: this.missionData.id
         }
         this.setSendTextContent('上傳中... ')
         this.setSelectedMarkerData(newMissionData)

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { db, markersDB } from '../config/db'
-import SHA1 from '../config/sha'
+import Cloudinary from '../config/cloudinary'
 
 Vue.use(Vuex)
 
@@ -40,8 +40,8 @@ const modelState = {
     selectedMarkerData: null,
     plans: [],
     photos: [],
+    // 依 Firestore 回傳值，確定上傳成功/失敗
     isMarkerUpdated: null,
-    isAddNewMarker: false,
     // 新的資料流向: 把所有任務都放在 vuex，再從這裡拿
     markerList: []
     // 每次新增任務，還是單獨進行，判斷圖片是否轉檔，更新到DB
@@ -109,9 +109,6 @@ const modelState = {
     },
     setMarkerUpdated (state, boolean) {
       return state.isMarkerUpdated = boolean
-    },
-    addingNewMarker (state, boolean) {
-      return state.isAddNewMarker = boolean
     }
   },
   actions: {
@@ -192,26 +189,7 @@ const modelState = {
     },
     // 上傳圖片到雲端: 使用第三方服務 Cloudinary
     uploadImgToServer ({ commit, dispatch }, data) {
-      let timestamp = Math.floor(Date.now() / 1000)
-      let api_secret = 'yynjtJYNqqHy2XWvBh7x4taVNjI'
-      let str = `timestamp=${timestamp}${api_secret}` // 規定最後須加上 api_secret
-
-      // 將 base64:image 上傳到 cloudinary 轉換成實體圖片
-      return fetch('https://api.cloudinary.com/v1_1/ctcimage/image/upload', {
-        method: 'POST',
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        }),
-        body: JSON.stringify({
-          timestamp: timestamp, // 時間戳記 required
-          file: data.url, // 欲轉換的 base64 編碼
-          api_key: '653999464428459',
-          signature: SHA1(str) // 轉換後的 SHA1 字串
-        })
-      })
-      .catch(err => console.log(err))
-      .then(res => res.json())
-      .then(res => {
+      Cloudinary(data.url).then(res => {
         data['url'] = res.url
         commit('setUploadPictureToArray', data)
       })
@@ -224,11 +202,15 @@ const modelState = {
 
 const systemState = {
   state: {
-    isLoading: false
+    isLoading: false,
+    isAddNewMarker: false
   },
   mutations: {
     setLoading (state, boolean) {
       state.isLoading = boolean
+    },
+    addingNewMarker (state, boolean) {
+      return state.isAddNewMarker = boolean
     }
   }
 }

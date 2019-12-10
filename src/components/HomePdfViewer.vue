@@ -52,7 +52,7 @@ export default {
       modelPath: state => state.modelState.modelPath,
       markerList: state => state.modelState.markerList,
       selectedMarkerData: state => state.modelState.selectedMarkerData,
-      isAddNewMarker: state => state.modelState.isAddNewMarker,
+      isAddNewMarker: state => state.systemState.isAddNewMarker,
     }),
     missionImg () {
       return (this.selectedMarkerData) ? this.selectedMarkerData.image : ''
@@ -65,7 +65,7 @@ export default {
     ...mapMutations({
       setModelImage: 'setModelImage',
       addingNewMarker: 'addingNewMarker',
-      setSelectedMarker: 'setSelectedMarker'
+      // setSelectedMarker: 'setSelectedMarker'
     }),
     pageLoaded () {
       this.img = document.querySelector('canvas').toDataURL()
