@@ -1,4 +1,4 @@
-# newp
+# BIM
 
 ## Project setup
 ```

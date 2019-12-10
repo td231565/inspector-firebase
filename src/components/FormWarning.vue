@@ -32,12 +32,15 @@ export default {
   computed: {
     ...mapState({
       modelName: state => state.modelState.modelName,
-      selectedMarker: state => state.modelState.selectedMarker
+      selectedMarkerData: state => state.modelState.selectedMarkerData
     })
   },
   methods: {
     doDelete () {
-      markersDB.collection(this.modelName).doc(this.selectedMarker).delete()
+      let id = this.selectedMarkerData.id
+      let modelName = this.modelName
+
+      markersDB.collection(modelName).doc(id).delete()
       .then(() => {
         console.log('delete data successful')
         this.$emit('revealWarning', null)

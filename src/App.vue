@@ -24,6 +24,9 @@ import Print from './views/Print'
 
 export default {
   name: 'app',
+  metaInfo: {
+    title: 'BIM 自主查驗系統'
+  },
   components: {
     Home,
     Landing,
@@ -44,6 +47,14 @@ export default {
     })
   },
   methods: {
+    ...mapMutations({
+      setUserAuth: 'setUserAuth',
+      setUserInfo: 'setUserInfo',
+      setLoading: 'setLoading'
+    }),
+    ...mapActions({
+      detectUserGroup: 'detectUserGroup',
+    }),
     gotoHome () {
       this.viewPath = Home
     },
@@ -52,19 +63,12 @@ export default {
     },
     gotoLoading () {
       this.viewPath = Loading
+      // this.setLoading(true)
     },
     gotoPrint () {
       this.viewPath = Print
       this.isPrint = true
     },
-    ...mapMutations({
-      setUserAuth: 'setUserAuth',
-      setUserInfo: 'setUserInfo'
-    }),
-    ...mapActions({
-      detectUserGroup: 'detectUserGroup',
-      // getMarkerList: 'getMarkerList'
-    }),
     watchUserState () {
       let vm = this
 
@@ -133,7 +137,6 @@ export default {
     }
   },
   created () {
-    // this.getMarkerList()
     this.watchUserState()
     this.isPrint = false
   }
