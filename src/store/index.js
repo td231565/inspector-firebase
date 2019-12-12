@@ -37,15 +37,10 @@ const modelState = {
     modelName: 'gugci_d_22f_flat',
     modelImage: '',
     selectedMarkerData: null,
-    // updateQuene: [],
-    // 下面兩個將棄用
-    // plans: [],
-    // photos: [],
     // 依 Firestore 回傳值，確定上傳成功/失敗
     isMarkerUpdated: null,
     // 新的資料流向: 把所有任務都放在 vuex，再從這裡拿
     markerList: []
-    // 每次新增任務，還是單獨進行，判斷圖片是否轉檔，更新到DB
   },
   getters: {
     modelName (state) {
@@ -100,18 +95,6 @@ const modelState = {
       let pictureItem = data.item
       return state.selectedMarkerData.photos.splice(index, 1, pictureItem)
     },
-    // 任務等待清單
-    // addMissionToQuene (state, mission) {
-    //   state.updateQuene.push(mission)
-    // },
-    // clearQuene (state) {
-    //   state.updateQuene = []
-    // },
-    // 圖片文字整合成字串 (給Firebase的格式)
-    // setUploadPictureToArray (state, data) {
-    //   // console.log(data)
-    //   state[data.picArray][data.index] = data.url + ';' + data.text
-    // },
     setMarkerUpdated (state, boolean) {
       return state.isMarkerUpdated = boolean
     }
@@ -120,8 +103,8 @@ const modelState = {
     getMarkerList ({ state, commit }) {
       let modelName = state.modelName
 
-      return markersDB.collection(modelName)
-      .onSnapshot(docs => {
+      return markersDB.collection(modelName).get()
+      .then(docs => {
         commit('resetMarkerList')
         docs.forEach(doc => {
           if (doc.id === 'modelInfo') return
@@ -135,12 +118,7 @@ const modelState = {
           commit('setMarkerList', docData)
         })
       })
-    },
-    // updateFromQueneToDB ({ state, dispatch }) {
-    //   state.updateQuene.forEach(missionData => {
-    //     dispatch('checkPictureConvert', missionData)
-    //   })
-    // }
+    }
   }
 }
 

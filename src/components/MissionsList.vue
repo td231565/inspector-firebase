@@ -5,11 +5,11 @@
       :key="index+1"
       @click="selectMission(mission)">
       <div class="missionList__item__pic">
-        <img :src="mission.image" :alt="mission.name">
+        <img class="absolute--center" :src="mission.image" :alt="mission.name">
       </div>
-      <div class="missionList__item__textArea">
-        <p class="missionList__item__textArea__date">{{ mission.date }}</p>
-        <p class="missionList__item__textArea__name">{{ mission.floor }}_{{ mission.issue }}_{{ mission.name }}</p>
+      <div class="missionList__item__text">
+        <p class="missionList__item__text__date">{{ mission.date }}</p>
+        <p class="missionList__item__text__name">{{ mission.floor }}_{{ mission.issue }}_{{ mission.name }}</p>
       </div>
     </li>
   </ul>
@@ -50,7 +50,6 @@ export default {
   margin: auto
   margin-bottom: 0
   display: flex
-  justify-content: flex-start
   flex-wrap: wrap
 
   @include ae1100
@@ -61,9 +60,8 @@ export default {
     width: 100%
 
   &__item
-    width: 32%
-    max-width: 265px
-    margin: 0.66%
+    width: 31%
+    margin: 1%
     border: 1px solid $bd_input_default
     border-radius: 10px
     overflow: hidden
@@ -74,14 +72,11 @@ export default {
 
     @include ae1100
       opacity: 1
-    @include ae768
-      max-width: 174px
 
     &__pic
       width: 100%
-      height: 160px
-      display: flex
-      justify-content: center
+      padding-top: 75%
+      position: relative
       overflow: hidden
 
       @include ae768
@@ -90,20 +85,14 @@ export default {
       img
         max-width: 100%
         display: block // 消除 img 底部與 div 間的空白
-    &__textArea
+    &__text
       margin: 10px
       position: relative
       > p
         margin: 3px 0
-      &__floor
-        position: absolute
-        top: 0
-        right: 0
-        font-size: 13px
-        color: #808080
       &__name
-        color: #005dba
+        color: $text_strong
         font-weight: 900
       &__date
-        color: #505050
+        color: $text_hint
 </style>

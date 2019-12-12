@@ -1,7 +1,9 @@
 <template>
   <div class="home">
     <div class="home__top" ref="top">
-      <StateBar @signOutGuess="signOutGuess" />
+      <StateBar :getQuene="getQuene"
+        @signOutGuess="signOutGuess"
+        @stepToFirst="stepToFirst" />
       <!-- <Viewer /> -->
       <PdfViewer :stepNow="stepNow" :isAddNewMarker="isAddNewMarker"
         @pdfLoaded="detectTopHeight" @stepNext="stepNext"/>
@@ -13,7 +15,10 @@
     <div class="home__bottom" ref="bottom">
       <keep-alive :include="aliveInclude">
         <transition name="step-fade" mode="out-in">
-          <component :is="steps[stepNow-1]" @stepNext="stepNext" @stepToFirst="stepToFirst" />
+          <component :is="steps[stepNow-1]"
+            @stepNext="stepNext"
+            @stepToFirst="stepToFirst"
+            @addMissionToQuene="addMissionToQuene" />
         </transition>
       </keep-alive>
     </div>
@@ -45,6 +50,7 @@ export default {
     return {
       stepNow: 1,
       steps: [Missions, Plans, Photos, Form],
+      getQuene: false
     }
   },
   computed: {
@@ -83,6 +89,10 @@ export default {
     },
     gotoPrint () {
       this.$emit('gotoPrint')
+    },
+    addMissionToQuene () {
+      this.getQuene = true
+      setTimeout(() => this.getQuene = false, 1000)
     }
   }
 }

@@ -6,32 +6,54 @@
       <label class="form__items__title" v-if="!isSmallScreen">請選擇查驗目標</label>
       <select class="form__items__cells" @change="selectModel" v-model="currentModelName">
         <option :value="model"
-          v-for="model in modelList.models"
-          :key="modelList.models.indexOf(model)"
+          v-for="(model, index) in modelList.models"
+          :key="index+1"
           >{{ model }}</option>
       </select>
     </div>
 
-    <div class="state__column state__column__right state__user">
-      <span>您好，</span>
-      <span class="state__user__name">{{ username }}</span>
-      <button class="btn btn__square" @click="signout">登出</button>
+    <div class="state__column state__column__right">
+      <div class="state__quene flex--right" @click="switchQuene" v-if="queneLength !== 0">
+        <div class="state__quene__icon"
+          title="待上傳清單"
+          :data-quene="queneLength"></div>
+      </div>
+      <div class="state__user flex--right">
+        <span>您好，</span>
+        <span class="state__user__name">{{ username }}</span>
+        <button class="btn btn__square" @click="signout">登出</button>
+      </div>
     </div>
     
+    <QueneForm v-if="showQuene"
+      :quene="quene"
+      @closePop="switchQuene"
+      @checkQuene="checkQuene"
+      @stepToFirst="stepToFirst" />
   </div>
 </template>
 
 <script>
 import { db, fireAuth } from '../config/db'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
+import { quene } from '../config/uploadQuene'
+import QueneForm from './queneForm'
 
 export default {
   name: 'stateBar',
+  components: {
+    QueneForm
+  },
+  props: {
+    getQuene: Boolean
+  },
   data () {
     return {
       modelList: [],
       currentModelName: '',
-      isSmallScreen: false
+      isSmallScreen: false,
+      quene: quene,
+      showQuene: false
     }
   },
   computed: {
@@ -41,12 +63,18 @@ export default {
       modelPath: state => state.modelState.modelPath
     }),
     username () {
-      let name = '訪客'
-      if (this.userInfo) name = this.userInfo.name
-      return name
+      return (this.userInfo) ? this.userInfo.name : '訪客'
+    },
+    queneLength () {
+      return this.quene.length
+      // return 3
     }
   },
   methods: {
+    ...mapMutations({
+      setModelPath: 'setModelPath',
+      setModelName: 'setModelName'
+    }),
     signout () {
       if (!this.userInfo) this.$emit('signOutGuess')
       fireAuth.signOut()
@@ -57,18 +85,32 @@ export default {
       db.collection('markersData').doc('gugci_d')
         .collection(modelName).doc('modelInfo').get().then(doc => {
           let modelPath = doc.data().modelPath
-          vm.$store.commit('setModelPath', modelPath)
-          vm.$store.commit('setModelName', modelName)
+          this.setModelPath(modelPath)
+          this.setModelName(modelName)
         })
     },
     detectDeviceWidth () {
       if (screen.width < 768) this.isSmallScreen = true
+    },
+    switchQuene () {
+      this.showQuene = !this.showQuene
+    },
+    checkQuene () {
+      if (this.quene.length !== 0) {
+        setTimeout(() => this.quene = quene, 1000)
+      }
+    },
+    stepToFirst () {
+      this.$emit('stepToFirst')
     }
   },
   watch: {
     modelList (/* modelList */) {
       // this.currentModelName = modelList.models[0]
       this.currentModelName = this.modelName
+    },
+    getQuene () {
+      this.quene = quene
     }
   },
   created () {
@@ -100,14 +142,39 @@ export default {
       justify-content: flex-end
   &__user
     &__name
-      color: $text_link
+      font-weight: 600
+      color: $text_strong
       // cursor: pointer
+  &__quene
+    &__icon
+      width: 1.6rem
+      height: 1.6rem
+      position: relative
+      background-image: url(../assets/document.svg)
+      background-size: cover
+      &::after
+        @extend .pseudo
+        width: 15px
+        height: 15px
+        padding-top: 2px
+        position: absolute
+        top: -1px
+        left: -2px
+        content: attr(data-quene)
+        font-size: 0.6rem
+        color: #fff
+        background-color: red
+        border-radius: 99rem
 
 .form__items
   &__title, &__cells
     width: 50%
 
 .btn
+  height: auto
+  padding: 0 4px
+  border: none
   &:hover
-    border-color: $bd_input_focus
+    color: #fff
+    background-color: $bg_cover_layer
 </style>

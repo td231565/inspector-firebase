@@ -58,8 +58,9 @@ const fireAuthSignUp = profile => {
 }
 
 const fireAuthSignIn = (email, pwd) => {
-  return fireAuth.signInWithEmailAndPassword(email, pwd).then(() => {
+  return fireAuth.signInWithEmailAndPassword(email, pwd).then(res => {
     console.log('user login success')
+    return res.user
   })
 }
 

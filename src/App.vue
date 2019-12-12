@@ -10,7 +10,7 @@
       @gotoPrint="gotoPrint"
       @finishPrint="gotoHome" />
     <!-- <Print v-if="isPrint" v-show="true" /> -->
-    <Loading v-if="isLoading" />
+    <Loading v-if="isLoading"></Loading>
   </div>
 </template>
 

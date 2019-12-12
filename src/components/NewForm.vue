@@ -1,6 +1,5 @@
 <template>
   <form @submit.prevent>
-  <!-- TODO 測試submit -->
     <ul class="form">
       <h4 class="form__title">新查驗點資訊</h4>
 

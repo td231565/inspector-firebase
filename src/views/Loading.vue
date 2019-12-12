@@ -2,7 +2,9 @@
   <div class="loading flex--center">
     <div class="loading__content">
       <div class="loading__content__circle"></div>
-      <h1 class="loading__content__text">Loading...</h1>
+      <h1 class="loading__content__text">
+        <slot>Loading...</slot>
+      </h1>
     </div>
   </div>
 </template>

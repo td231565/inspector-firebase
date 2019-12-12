@@ -12,6 +12,7 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 import MissionsList from '../components/MissionsList.vue'
+import InternetConnection from '../config/connection'
 
 export default {
   name: 'SectionMissions',
@@ -47,7 +48,8 @@ export default {
   watch: {
     modelName: {
       handler () {
-        this.getMarkerList()
+        let connection = InternetConnection()
+        if (connection) this.getMarkerList()
       },
       immediate: true
     }

@@ -72,6 +72,7 @@ export default {
   },
   watch: {
     picture () {
+      // vuex中的list改變時，重讀url
       this.parsePicture()
     }
   },
