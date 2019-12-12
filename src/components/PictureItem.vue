@@ -1,11 +1,14 @@
 <template>
   <li class="photos__item">
-    <div class="photos__item__block photos__item__block--picture flex--center" @click="choosePhoto">
-      <img class="photos__item__block__img" :src="pictureImg" alt="">
+    <div class="photos__item__block" @click="choosePhoto">
+      <img class="photos__item__block__img absolute--center" :src="pictureImg" alt="">
       <button class="btn btn__delete" title="刪除圖片" @click="deletePicture"></button>
     </div>
-    <textarea class="photos__item__text" placeholder="請輸入抽查意見"
-      v-model="pictureText"></textarea>
+    <div class="photos__item__text">
+      <textarea class="photos__item__text__textarea" placeholder="請輸入抽查意見"
+        v-model="pictureText" :disabled="!isEdit"></textarea>
+      <div class="photos__item__text__control" @click="switchEdit">{{ controlStatus }}</div>
+    </div>
 
     <PopFrame :photo="pictureImg" @closePop="unChoosePhoto" v-if="isChoosed" />
   </li>
@@ -26,19 +29,22 @@ export default {
   data () {
     return {
       isChoosed: false,
-      pictureText: ''
+      pictureText: '',
+      pictureImg: '',
+      isEdit: false,
     }
   },
   computed: {
     combinePhotoText () {
       return [this.pictureImg, this.pictureText]
     },
-    pictureImg () {
-      return this.picture[0]
+    controlStatus () {
+      return (this.isEdit) ? 'done' : 'edit'
     }
   },
   methods: {
-    parsePictureText () {
+    parsePicture () {
+      this.pictureImg = this.picture[0]
       this.pictureText = this.picture[1]
     },
     choosePhoto (e) {
@@ -58,13 +64,19 @@ export default {
     deletePicture () {
       let index = this.index
       this.$emit('deletePicture', index)
+    },
+    switchEdit () {
+      this.isEdit = !this.isEdit
+      if (!this.isEdit) this.updatePhotoText()
+    }
+  },
+  watch: {
+    picture () {
+      this.parsePicture()
     }
   },
   mounted () {
-    this.parsePictureText()
-  },
-  beforeDestroy () {
-    this.updatePhotoText()
+    this.parsePicture()
   }
 }
 </script>
@@ -72,21 +84,28 @@ export default {
 <style lang="sass" scoped>
 .photos
   &__item
-    margin: 0.4%
+    margin: 0 1%
     &__block
-      &--picture
-        flex-wrap: wrap
-        img
-          max-width: 100%
-          display: block // 消除 img 底部與 div 間的空白
-        .btn__delete
-          position: absolute
-          top: 5px
-          right: 5px
+      img
+        max-width: 100%
+        display: block // 消除 img 底部與 div 間的空白
+      .btn__delete
+        position: absolute
+        top: 5px
+        right: 5px
     &__text
-      width: 100%
-      height: 60px
-      margin-top: 8px
-      padding: 6px
-      border-radius: 10px
+      position: relative
+      &__textarea
+        width: 100%
+        height: 60px
+        margin-top: 8px
+        padding: 6px
+        border-radius: 10px
+      &__control
+        position: absolute
+        bottom: 7px
+        right: 15px
+        cursor: pointer
+
+
 </style>

@@ -1,9 +1,11 @@
 <template>
   <ul class="photos">
     <li class="photos__item">
-      <label for="pictureUpload" class="photos__item__block photos__item__block--camera">
-        <input type="file" id="pictureUpload" accept="image/*" @change="handelLocalFileUpload">
-      </label>
+      <div class="photos__item__block">
+        <label for="pictureUpload" class=" photos__item__block__camera absolute--center">
+          <input type="file" id="pictureUpload" accept="image/*" @change="handelLocalFileUpload">
+        </label>
+      </div>
     </li>
     <!-- insert new itemBox -->
     <PictureItem v-for="(picture, index) in pictures"
@@ -54,6 +56,7 @@ export default {
       this.$emit('updatePicture', data)
     },
     deletePicture (index) {
+      console.log('index: ' + index)
       this.$emit('deletePicture', index)
     }
   }
@@ -70,11 +73,12 @@ export default {
   &__item
     width: 31%
     height: auto
-    margin: 0.4%
+    margin: 0 1%
     &__block
       width: 100%
-      height: 200px
-      padding: 0
+      // height: 200px
+      // padding: 0
+      padding-top: 75%
       position: relative
       background-color: rgba(#000, 0.1)
       border: 1px solid $bd_input_default
@@ -86,10 +90,10 @@ export default {
         opacity: 1
 
       @include ae768
-        height: 100px
+        // height: 100px
         opacity: 1
 
-      &--camera
+      &__camera
         display: block
         // 相機圖案
         &::after

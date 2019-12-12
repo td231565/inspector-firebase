@@ -73,30 +73,32 @@ const modelState = {
     // 選擇 marker (查驗點)
     setSelectedMarkerData (state, data) {
       // 沒有選擇任務時，傳入空值
-      state.selectedMarkerData = (!data) ? null : data
+      return state.selectedMarkerData = (!data) ? null : data
     },
-    // 控制圖片新增/移除/更新 (還在本地端)
+    // 新增/移除/更新圖片 (還在本地端)
     addPlanToSelectedMarker (state, pictureItem) {
-      state.selectedMarkerData.plans.push(pictureItem)
+      return state.selectedMarkerData.plans.push(pictureItem)
     },
     addPhotoToSelectedMarker (state, pictureItem) {
-      state.selectedMarkerData.photos.push(pictureItem)
+      return state.selectedMarkerData.photos.push(pictureItem)
     },
     deletePlanFromSelectedMarker (state, index) {
-      state.selectedMarkerData.plans.splice(index, 1)
+      console.log(state.selectedMarkerData.plans[index])
+      return state.selectedMarkerData.plans.splice(index, 1)
     },
     deletePhotoFromSelectedMarker (state, index) {
-      state.selectedMarkerData.photos.splice(index, 1)
+      console.log(state.selectedMarkerData.photos[index])
+      return state.selectedMarkerData.photos.splice(index, 1)
     },
     updatePlanToSelectedMarker (state, data) {
       let index = data.index
       let pictureItem = data.item
-      state.selectedMarkerData.plans.splice(index, 1, pictureItem)
+      return state.selectedMarkerData.plans.splice(index, 1, pictureItem)
     },
     updatePhotoToSelectedMarker (state, data) {
       let index = data.index
       let pictureItem = data.item
-      state.selectedMarkerData.photos.splice(index, 1, pictureItem)
+      return state.selectedMarkerData.photos.splice(index, 1, pictureItem)
     },
     // 任務等待清單
     // addMissionToQuene (state, mission) {

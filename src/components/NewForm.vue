@@ -1,24 +1,27 @@
 <template>
-  <ul class="form">
-    <h4 class="form__title">新查驗點資訊</h4>
+  <form @submit.prevent>
+  <!-- TODO 測試submit -->
+    <ul class="form">
+      <h4 class="form__title">新查驗點資訊</h4>
 
-    <li class="form__items">
-      <label class="form__items__title">查驗點名稱</label>
-      <input type="text" class="form__items__cells" v-model="name" />
-    </li>
-    <li class="form__items">
-      <label class="form__items__title">樓層</label>
-      <input type="text" class="form__items__cells" v-model="floor" />
-    </li>
-    <li class="form__items">
-      <label class="form__items__title">查驗項目</label>
-      <input type="text" class="form__items__cells" v-model="issue" />
-    </li>
-    <li class="form__items__footer flex--center">
-      <button class="btn btn__square" @click="setMarkerInfo">確定</button>
-      <button class="btn btn__square" @click="cancelAddNewMarker">取消</button>
-    </li>
-  </ul>
+      <li class="form__items">
+        <label class="form__items__title">查驗點名稱</label>
+        <input type="text" class="form__items__cells" v-model="name" required />
+      </li>
+      <li class="form__items">
+        <label class="form__items__title">樓層</label>
+        <input type="text" class="form__items__cells" v-model="floor" required />
+      </li>
+      <li class="form__items">
+        <label class="form__items__title">查驗項目</label>
+        <input type="text" class="form__items__cells" v-model="issue" required />
+      </li>
+      <li class="form__items__footer flex--center">
+        <button type="submit" class="btn btn__square" @click="setMarkerInfo">確定</button>
+        <button class="btn btn__square" @click="cancelAddNewMarker">取消</button>
+      </li>
+    </ul>
+  </form>
 </template>
 
 <script>

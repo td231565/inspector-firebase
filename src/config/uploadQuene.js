@@ -11,10 +11,10 @@ function uploadQueneToDB () {
     quene.forEach(mission => {
       ['plans', 'photos'].forEach(arr => {
         mission[arr].map(picture => {
-          console.log(typeof(picture))
-          console.log('before checking: ' + picture)
+          // console.log(typeof(picture))
+          // console.log('before checking: ' + picture)
           if (typeof(picture).toLowerCase() !== 'string') {
-            console.log('after checking: ' + picture)
+            // console.log('after checking: ' + picture)
             check = false
           }
         })
@@ -38,7 +38,7 @@ function uploadQueneToDB () {
       // console.log('update data to DB success')
       store.commit('setMarkerUpdated', true)
       clearQuene()
-      console.log(quene)
+      console.log('upload data success' + quene)
     }).catch(err => {
       console.log(err.code)
       store.commit('setMarkerUpdated', false)
@@ -78,12 +78,14 @@ function checkPictureConvert () {
           Cloudinary(imgDataUrl).then(res => {
             let url = res.url
             mission[arr][index] = `${url};${text}`
-            console.log(mission[arr][index])
+            console.log('convert success')
+            // console.log(mission[arr][index])
             count++
           })
         } else {
           mission[arr][index] = `${imgDataUrl};${text}`
-          console.log(mission[arr][index])
+          console.log('no need to convert')
+          // console.log(mission[arr][index])
           count++
         }
       })
@@ -104,7 +106,7 @@ function checkConnection () {
   let connection = InternetConnection()
   connection
   ? checkPictureConvert()
-  : ''
+  : console.log('offline now, quene: ' + quene)
 }
 
 function clearQuene () {
