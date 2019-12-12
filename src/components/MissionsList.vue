@@ -1,8 +1,8 @@
 <template>
   <ul class="form__item missionList">
     <li class="form__item missionList__item"
-      v-for="mission in missionList"
-      :key="missionList.indexOf(mission)"
+      v-for="(mission, index) in missionList"
+      :key="index+1"
       @click="selectMission(mission)">
       <div class="missionList__item__pic">
         <img :src="mission.image" :alt="mission.name">

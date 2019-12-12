@@ -9,10 +9,10 @@ import { firestorePlugin } from 'vuefire'
 Vue.config.productionTip = false
 
 Vue.use(firestorePlugin)
+Vue.use(VueMeta)
 
 new Vue({
   // router,
   store,
-  VueMeta,
   render: h => h(App)
 }).$mount('#app')

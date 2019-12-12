@@ -30,7 +30,7 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 import { markersDB } from '../config/db'
 import NewMarkerForm from './NewForm'
 import { MarkerArea } from 'markerjs'
-import SHA1 from '../config/sha'
+import Cloudinary from '../config/cloudinary'
 
 export default {
   name: 'AddNewMarker',
@@ -77,17 +77,18 @@ export default {
       return `${date}h${hour}m${min}s${sec}-${stamp}`
     },
     addMarkerDataToDB (info) {
-      let id = this.createNewId()
       let modelName = this.modelName
+      let id = this.createNewId()
       this.newMarkerId = id
-      info.point = [this.position.left, this.position.top]
-      info.id = id
+
+      info = Object.assign(info, {
+        point: [this.position.left, this.position.top],
+        id
+      })
 
       markersDB.collection(modelName).doc(id).set(info)
-      .then(() => {
-        console.log('add marker success')
-        this.addStep = 3
-      }).catch(err => {
+      .then(() => this.addStep = 3)
+      .catch(err => {
         console.log(err)
       })
     },
@@ -116,26 +117,7 @@ export default {
     },
     convertBase64ToPng (dataUrl) {
       let vm = this
-      let timestamp = Math.floor(Date.now() / 1000)
-      let api_secret = 'yynjtJYNqqHy2XWvBh7x4taVNjI'
-      let str = `timestamp=${timestamp}${api_secret}` // 規定最後須加上 api_secret
-
-      // 將 base64:image 上傳到 cloudinary 轉換成實體圖片
-      return fetch('https://api.cloudinary.com/v1_1/ctcimage/image/upload', {
-        method: 'POST',
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        }),
-        body: JSON.stringify({
-          timestamp: timestamp, // 時間戳記 required
-          file: dataUrl, // 欲轉換的 base64 編碼
-          api_key: '653999464428459',
-          signature: SHA1(str) // 轉換後的 SHA1 字串
-        })
-      })
-      .catch(err => console.log(err))
-      .then(res => res.json())
-      .then(res => {
+      Cloudinary(dataUrl).then(res => {
         vm.annotatedImage = res.url
         vm.updateImgMarkedToDB()
       })

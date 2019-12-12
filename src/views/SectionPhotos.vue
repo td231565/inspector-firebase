@@ -11,7 +11,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import PictureList from './PictureList'
+import PictureList from '../components/PictureList'
 
 export default {
   name: 'SectionPhotos',

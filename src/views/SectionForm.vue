@@ -72,7 +72,9 @@
 <script>
 import { format } from 'date-fns'
 import { mapState, mapActions, mapMutations } from 'vuex'
-import PopWarning from './FormWarning'
+import PopWarning from '../components/FormWarning'
+import InternetConnection from '../config/connection'
+import { addMissionToQuene } from '../config/uploadQuene'
 
 export default {
   name: 'SectionForm',
@@ -116,7 +118,7 @@ export default {
       setMarkerUpdated: 'setMarkerUpdated'
     }),
     ...mapActions({
-      updateMissionData: 'checkPictureConvert',
+      updateMissionData: 'updateFromQueneToDB',
     }),
     getMissionData () {
       this.name = this.missionData.name
@@ -140,6 +142,18 @@ export default {
     setErrorTextContent (content) {
       this.errorText = content
     },
+    checkInternetConnection (data) {
+      addMissionToQuene(data)
+
+      let icStatus = InternetConnection()
+      if (icStatus) {
+        // 連線中，上傳
+        this.setSendTextContent('上傳中... ')
+      } else {
+        // 離線，存入等待清單，增加新按鈕於連線時發送
+        this.setErrorTextContent('網路訊號不佳，變更已存入等待清單')
+      }
+    },
     updateMission () {
       this.setErrorTextContent('')
 
@@ -158,19 +172,19 @@ export default {
       } else if (!this.problem) {
         this.setErrorTextContent('請輸入檢核結果說明')
       } else {
-        let newMissionData = {
+        let data = this.missionData
+
+        data = Object.assign(data, {
           accompany: this.accompany || '',
           category: this.category,
           date: this.date,
           inspector: this.selectedInspector,
           problem: this.problem,
           selfCheckState: this.selfCheckState,
-          status: this.status,
-          // id: this.missionData.id
-        }
-        this.setSendTextContent('上傳中... ')
-        this.setSelectedMarkerData(newMissionData)
-        this.updateMissionData()
+          status: this.status
+        })
+
+        this.checkInternetConnection(data)
       }
     },
     deleteMission () {

@@ -18,11 +18,5 @@ module.exports = {
     }
   },
 
-  pages: {
-    index: {
-      title: 'BIM 自主查驗系統'
-    }
-  }
-
   // lintOnSave: false
 }

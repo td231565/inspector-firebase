@@ -11,7 +11,7 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
-import MissionsList from './MissionsList.vue'
+import MissionsList from '../components/MissionsList.vue'
 
 export default {
   name: 'SectionMissions',
@@ -20,7 +20,7 @@ export default {
   },
   data () {
     return {
-      missionList: []
+      
     }
   },
   computed: {
