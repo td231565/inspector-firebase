@@ -6,19 +6,24 @@ import store from '../store'
 let quene = []
 
 function uploadQueneToDB () {
-  let isAllImgConverted = quene.forEach(mission => {
+  function checkAllImgConvert () {
     let check = true
-    ;['plans', 'photos'].forEach(arr => {
-      mission[arr].map(picture => {
-        if (typeof(picture) !== 'string') {
-          console.log(picture)
-          check = false
-        }
+    quene.forEach(mission => {
+      ['plans', 'photos'].forEach(arr => {
+        mission[arr].map(picture => {
+          console.log(typeof(picture))
+          console.log('before checking: ' + picture)
+          if (typeof(picture).toLowerCase() !== 'string') {
+            console.log('after checking: ' + picture)
+            check = false
+          }
+        })
       })
     })
     return check
-  })
-
+  }
+  
+  let isAllImgConverted = checkAllImgConvert()
   if (!isAllImgConverted) {
     console.log('picture not convert')
     return
@@ -31,15 +36,15 @@ function uploadQueneToDB () {
     markersDB.collection(modelName).doc(id)
     .set(mission, { merge: true }).then(() => {
       // console.log('update data to DB success')
-      // commit('setMarkerUpdated', true)
+      store.commit('setMarkerUpdated', true)
       clearQuene()
+      console.log(quene)
     }).catch(err => {
       console.log(err.code)
-      // commit('setMarkerUpdated', false)
+      store.commit('setMarkerUpdated', false)
+      console.log(quene)
     })
   })
-
-  console.log(quene)
 }
 
 // function convertPicture (picture) {
@@ -58,34 +63,41 @@ function uploadQueneToDB () {
 function checkPictureConvert () {
   quene.forEach((mission) => {
     ['plans', 'photos'].forEach(arr => {
+      if (mission[arr].length === 0) {
+        console.log('no picture in array')
+        return
+      }
+
       let count = 0
 
-      mission[arr].forEach((picture) => {
+      mission[arr].forEach((picture, index) => {
         // convertPicture(picture)
         let imgDataUrl = picture[0]
         let text = picture[1]
         if (imgDataUrl.match('base64')) {
           Cloudinary(imgDataUrl).then(res => {
             let url = res.url
-            picture = `${url};${text}`
-            console.log(picture)
+            mission[arr][index] = `${url};${text}`
+            console.log(mission[arr][index])
             count++
           })
         } else {
-          picture = `${imgDataUrl};${text}`
+          mission[arr][index] = `${imgDataUrl};${text}`
+          console.log(mission[arr][index])
           count++
         }
       })
 
       setTimeout(() => {
         console.log(count)
-        uploadQueneToDB()
+        // uploadQueneToDB()
       }, 2000)
     })
+    setTimeout(() => {
+      console.log(mission)
+      uploadQueneToDB()
+    }, 2000)
   })
-  // setTimeout(() => {
-  //   uploadQueneToDB()
-  // }, 2000)
 }
 
 function checkConnection () {

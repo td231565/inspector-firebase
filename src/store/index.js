@@ -110,9 +110,9 @@ const modelState = {
     //   // console.log(data)
     //   state[data.picArray][data.index] = data.url + ';' + data.text
     // },
-    // setMarkerUpdated (state, boolean) {
-    //   return state.isMarkerUpdated = boolean
-    // }
+    setMarkerUpdated (state, boolean) {
+      return state.isMarkerUpdated = boolean
+    }
   },
   actions: {
     getMarkerList ({ state, commit }) {

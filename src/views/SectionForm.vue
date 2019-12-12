@@ -158,7 +158,7 @@ export default {
       this.setErrorTextContent('')
 
       let currentUserName = this.userInfo.name
-
+      // TODO => 試試利用 input required 把 hint 放在 dataset 利用偽元素顯示
       if (currentUserName !== this.selectedInspector) {
         this.setErrorTextContent('查驗人員需為本人')
       } else if (!this.date) {
