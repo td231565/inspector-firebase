@@ -1,9 +1,9 @@
 <template>
   <div class="add absolute--top" ref="sectionAdd">
     <!-- 本次查驗目標圖片 -->
-    <img :src="modelImage" alt="平面圖" ref="img">
+    <img class="add__img" :src="modelImage" alt="平面圖" ref="img">
 
-    <div class="absolute--top" :class="{ add__cover: addStep !== 3}" ref="edit">
+    <div class="absolute--top" :class="{ add__cover: addStep !== 3 }" ref="edit">
       <!-- 新增查驗點標記 -->
       <section class="add__section add__point" @click="addingNewMarker" v-if="addStep === 1">
         <h4 class="add__section__header">點擊圖片位置新增查驗點</h4>
@@ -50,7 +50,10 @@ export default {
       modelImage: state => state.modelState.modelImage,
       modelName: state => state.modelState.modelName,
       markerList: state => state.modelState.markerList,
-    })
+    }),
+    elementWidth () {
+      return this.$refs.sectionAdd.offsetWidth
+    }
   },
   methods: {
     ...mapMutations({
@@ -68,22 +71,23 @@ export default {
       this.addStep = 2
     },
     createNewId () {
-      let date = format(new Date(), 'yyyyMMdd')
-      let time = format(new Date(), 'HH-mm-ss').split('-')
-      let hour = time[0]
-      let min = time[1]
-      let sec = time[2]
-      let stamp = new Date().valueOf()
+      const date = format(new Date(), 'yyyyMMdd')
+      const time = format(new Date(), 'HH-mm-ss').split('-')
+      const hour = time[0]
+      const min = time[1]
+      const sec = time[2]
+      const stamp = new Date().valueOf()
       return `${date}h${hour}m${min}s${sec}-${stamp}`
     },
     addMarkerDataToDB (info) {
-      let modelName = this.modelName
-      let id = this.createNewId()
+      const modelName = this.modelName
+      const id = this.createNewId()
       this.newMarkerId = id
 
       info = Object.assign(info, {
         point: [this.position.left, this.position.top],
-        id
+        id,
+        elementWidth: this.elementWidth
       })
 
       markersDB.collection(modelName).doc(id).set(info)
@@ -155,6 +159,9 @@ export default {
       if (val === 3) this.addAnnotationOnImage()
     }
   },
+  mounted () {
+    console.log(this.elementWidth)
+  },
   beforeDestroy () {
     this.resetAddStep()
   }
@@ -163,6 +170,9 @@ export default {
 
 <style lang="sass" scoped>
 .add
+  &__img
+    width: 100%
+    display: block
   &__cover
     width: 100%
     height: 100%
@@ -176,6 +186,7 @@ export default {
   &__annotation
     text-align: center
     &__img
+      display: block
     &__toolbar
       display: flex
       z-index: 99

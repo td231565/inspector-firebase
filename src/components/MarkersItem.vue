@@ -11,12 +11,20 @@ import { mapMutations } from 'vuex'
 export default {
   name: 'MarkerItem',
   props: {
-    mark: Object
+    mark: Object,
+    currentElementWidth: Number
+  },
+  computed: {
+    elementWidth () {
+      return this.mark.elementWidth
+    }
   },
   methods: {
     setMarkerPoint () {
       let markObj = this.$refs.mark
       let [left, top] = this.mark.point
+      left = left * (this.currentElementWidth/this.elementWidth)
+      top = top * (this.currentElementWidth/this.elementWidth)
       let leftFixed = left - markObj.offsetWidth/2
       markObj.style.cssText = `left: ${leftFixed}px; top: ${top}px;`
     },

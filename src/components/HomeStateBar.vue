@@ -14,7 +14,6 @@
 
     <div class="state__column state__column__right">
       <div class="state__quene flex--right" @click="switchQuene" v-if="queneLength !== 0">
-        {{ isAddMissionToQuene }}
         <div class="state__quene__icon"
           title="待上傳清單"
           :data-quene="queneLength"></div>

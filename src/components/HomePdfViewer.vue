@@ -1,5 +1,5 @@
 <template>
-  <div class="pdfviewer">
+  <div class="pdfviewer" ref="imgLayer">
     <div class="pdfviewer__imgLayer">
       <!-- 原圖: 未選擇查驗點 或 此查驗點沒有標註圖片 -->
       <img class="pdfviewer__imgLayer__img" :src="img" :alt="missionImgName"
@@ -8,7 +8,9 @@
       <!-- 標記圖層: 放置各查驗點的標記 -->
       <div class="pdfviewer__imgLayer__markersLayer absolute--top" v-if="isPdfLoaded && stepNow === 1">
         <MarkerItem v-for="(mark, index) in markerList" :key="index+1"
-          :mark="mark" @stepNext="stepNext" />
+          :mark="mark"
+          :currentElementWidth="elementWidth"
+          @stepNext="stepNext" />
       </div>
 
       <!-- 標註過的圖片(annotated): 顯示此查驗點中標註過的圖片 -->
@@ -43,7 +45,7 @@ export default {
   data () {
     return {
       isPdfLoaded: false,
-      img: '',
+      img: ''
     }
   },
   computed: {
@@ -59,6 +61,9 @@ export default {
     },
     missionImgName () {
       return (this.selectedMarkerData) ? this.selectedMarkerData.name + '平面圖' : ''
+    },
+    elementWidth () {
+      return this.$refs.imgLayer.offsetWidth
     }
   },
   methods: {
@@ -107,6 +112,7 @@ export default {
     position: relative
     &__img
       width: 100%
+      display: block
     &__markersLayer
       width: 100%
       height: 100%

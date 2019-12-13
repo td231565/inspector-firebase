@@ -70,6 +70,10 @@ export default {
   padding: 0 2rem
   display: flex
   flex-wrap: wrap
+
+  @include ae768
+    padding: 0 1rem
+
   &__item
     width: 31%
     height: auto
