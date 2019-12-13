@@ -3,7 +3,7 @@
     <div class="home__top" ref="top">
       <StateBar :isAddMissionToQuene="isAddMissionToQuene"
         @signOutGuess="signOutGuess"
-        @FinishAddingMissionToQuene="FinishAddingMissionToQuene" />
+        @stepToFirst="stepToFirst" />
       <!-- <Viewer /> -->
       <PdfViewer :stepNow="stepNow" :isAddNewMarker="isAddNewMarker"
         @pdfLoaded="detectTopHeight" @stepNext="stepNext"/>
@@ -69,9 +69,6 @@ export default {
       // console.log(topHeight)
       bottom.style.paddingTop = topHeight + 'px'
     },
-    // ...mapActions({
-    //   getMarkerDataFromDB: 'getModelMarkersData'
-    // }),
     stepPrev () {
       if (this.stepNow === 1) return
       return this.stepNow--
@@ -91,6 +88,9 @@ export default {
     },
     addMissionToQuene () {
       this.isAddMissionToQuene = true
+      setTimeout(() => {
+        this.FinishAddingMissionToQuene()
+      }, 1000)
     },
     FinishAddingMissionToQuene () {
       this.isAddMissionToQuene = false

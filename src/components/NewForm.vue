@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent>
+  <form @submit.prevent="setMarkerInfo">
     <ul class="form">
       <h4 class="form__title">新查驗點資訊</h4>
 
@@ -16,7 +16,7 @@
         <input type="text" class="form__items__cells" v-model="issue" required />
       </li>
       <li class="form__items__footer flex--center">
-        <button type="submit" class="btn btn__square" @click="setMarkerInfo">確定</button>
+        <button type="submit" class="btn btn__square">確定</button>
         <button class="btn btn__square" @click="cancelAddNewMarker">取消</button>
       </li>
     </ul>
@@ -60,7 +60,7 @@ export default {
         category: '',
         date: '',
         image: '',
-        inspector: '',
+        inspector: '尚未查驗',
         photos: [],
         plans: [],
         point: [],

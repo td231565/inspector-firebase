@@ -98,6 +98,9 @@ export default {
     switchQuene () {
       this.showQuene = !this.showQuene
     },
+    getLatestQuene () {
+      this.quene = quene
+    },
     checkQuene () {
       let connection = InternetConnection()
       if (!connection) return
@@ -105,18 +108,19 @@ export default {
       if (this.quene.length !== 0) {
         console.log('get quene ...')
         setTimeout(() => {
-          this.quene = quene
+          this.getLatestQuene()
           return this.checkQuene()
         }, 1000)
       } else {
         console.log('quene is empty')
-        this.quene = quene
+        this.getLatestQuene()
         this.getMarkerList()
-        this.FinishAddingMissionToQuene()
+        this.stepToFirst()
+        this.switchQuene()
       }
     },
-    FinishAddingMissionToQuene () {
-      this.$emit('FinishAddingMissionToQuene')
+    stepToFirst () {
+      this.$emit('stepToFirst')
     }
   },
   watch: {
@@ -125,7 +129,7 @@ export default {
       this.currentModelName = this.modelName
     },
     isAddMissionToQuene () {
-      this.quene = quene
+      this.getLatestQuene()
       this.checkQuene()
     }
   },

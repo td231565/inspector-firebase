@@ -4,6 +4,9 @@
       <li class="form__items__header">
         <h3 class="quene__title">待上傳清單</h3>
       </li>
+      <li class="form__items">
+        <span>無待上傳資料</span>
+      </li>
       <li class="form__items"
         v-for="(mission, index) in quene"
         :key="index+1">
@@ -15,8 +18,8 @@
         <button class="btn btn__square" @click="checkConnectionOnClick">送出</button>
         <button class="btn btn__square cancel">取消</button>
       </li>
+      <div class="btn btn__close" title="關閉"></div>
     </ul>
-    <div class="btn btn__close" title="關閉"></div>
   </div>
 </template>
 
