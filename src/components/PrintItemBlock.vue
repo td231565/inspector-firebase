@@ -17,12 +17,9 @@ export default {
   },
   computed: {
     image () {
-      // TODO 測試取消判斷後是否正常
-      // if (!this.imgAndText) return
       return (this.imgAndText.match('base64')) ? this.imgAndText : this.imgAndText.split(';')[0]
     },
     text () {
-      // if (!this.imgAndText) return
       return (this.imgAndText.match('base64')) ? '' : this.imgAndText.split(';')[1]
     }
   }

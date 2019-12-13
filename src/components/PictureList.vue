@@ -94,7 +94,10 @@ export default {
         opacity: 1
 
       &__camera
+        width: 100%
+        height: 100%
         display: block
+        cursor: pointer
         // 相機圖案
         &::after
           width: 4rem
@@ -103,4 +106,8 @@ export default {
           @extend .absolute--center
           background-image: url('~@/assets/camera.svg')
           background-size: cover
+
+#pictureUpload
+  width: 1px
+  height: 1px
 </style>

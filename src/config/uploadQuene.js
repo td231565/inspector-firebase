@@ -4,6 +4,33 @@ import { markersDB } from '../config/db'
 import store from '../store'
 
 let quene = []
+// let quene = [ // for test
+//   {
+//     name: '2-22',
+//     floor: '2F',
+//     issue: 'D區結構'
+//   },
+//   {
+//     name: '2-23',
+//     floor: '2F',
+//     issue: 'D區結構'
+//   },
+//   {
+//     name: '2-24',
+//     floor: '2F',
+//     issue: 'D區結構'
+//   },
+//   {
+//     name: '2-25',
+//     floor: '2F',
+//     issue: 'D區結構'
+//   },
+//   {
+//     name: '2-26',
+//     floor: '2F',
+//     issue: 'D區結構'
+//   },
+// ]
 
 function uploadQueneToDB () {
   function checkAllImgConvert () {
@@ -13,7 +40,7 @@ function uploadQueneToDB () {
         mission[arr].map(picture => {
           // console.log(typeof(picture))
           // console.log('before checking: ' + picture)
-          if (typeof(picture).toLowerCase() !== 'string') {
+          if (typeof(picture) !== 'string') {
             // console.log('after checking: ' + picture)
             check = false
           }
@@ -71,13 +98,12 @@ function checkPictureConvert () {
           // console.log(mission[arr][index])
         }
       })
-    })
 
-    setTimeout(() => {
-      console.log(mission)
-      uploadQueneToDB()
-    }, 2000)
+    })
   })
+  setTimeout(() => {
+    uploadQueneToDB()
+  }, 2000)
 }
 
 function checkConnection () {
@@ -91,8 +117,22 @@ function clearQuene () {
   quene = []
 }
 
-// TODO 如果是同一個mission，新的覆蓋舊的
+// 如果是同一個mission，新的覆蓋舊的
 const addMissionToQuene = (data) => {
+  function detectMission () {
+    let sameMission = false
+    quene.forEach((mission, i) => {
+      if (mission.id === data.id) {
+        sameMission = true
+        quene[i] = data
+      }
+    })
+    return sameMission
+  }
+
+  let sameMission = detectMission()
+  if (sameMission) return
+  // console.log(data)
   quene.push(data)
   checkConnection()
 }

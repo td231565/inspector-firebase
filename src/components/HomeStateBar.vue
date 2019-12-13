@@ -14,6 +14,7 @@
 
     <div class="state__column state__column__right">
       <div class="state__quene flex--right" @click="switchQuene" v-if="queneLength !== 0">
+        {{ isAddMissionToQuene }}
         <div class="state__quene__icon"
           title="待上傳清單"
           :data-quene="queneLength"></div>
@@ -28,14 +29,14 @@
     <QueneForm v-if="showQuene"
       :quene="quene"
       @closePop="switchQuene"
-      @checkQuene="checkQuene"
-      @stepToFirst="stepToFirst" />
+      @checkQuene="checkQuene" />
   </div>
 </template>
 
 <script>
+import InternetConnection from '../config/connection'
 import { db, fireAuth } from '../config/db'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import { quene } from '../config/uploadQuene'
 import QueneForm from './queneForm'
 
@@ -45,7 +46,7 @@ export default {
     QueneForm
   },
   props: {
-    getQuene: Boolean
+    isAddMissionToQuene: Boolean
   },
   data () {
     return {
@@ -67,13 +68,15 @@ export default {
     },
     queneLength () {
       return this.quene.length
-      // return 3
     }
   },
   methods: {
     ...mapMutations({
       setModelPath: 'setModelPath',
       setModelName: 'setModelName'
+    }),
+    ...mapActions({
+      getMarkerList: 'getMarkerList'
     }),
     signout () {
       if (!this.userInfo) this.$emit('signOutGuess')
@@ -96,12 +99,24 @@ export default {
       this.showQuene = !this.showQuene
     },
     checkQuene () {
+      let connection = InternetConnection()
+      if (!connection) return
+
       if (this.quene.length !== 0) {
-        setTimeout(() => this.quene = quene, 1000)
+        console.log('get quene ...')
+        setTimeout(() => {
+          this.quene = quene
+          return this.checkQuene()
+        }, 1000)
+      } else {
+        console.log('quene is empty')
+        this.quene = quene
+        this.getMarkerList()
+        this.FinishAddingMissionToQuene()
       }
     },
-    stepToFirst () {
-      this.$emit('stepToFirst')
+    FinishAddingMissionToQuene () {
+      this.$emit('FinishAddingMissionToQuene')
     }
   },
   watch: {
@@ -109,8 +124,9 @@ export default {
       // this.currentModelName = modelList.models[0]
       this.currentModelName = this.modelName
     },
-    getQuene () {
+    isAddMissionToQuene () {
       this.quene = quene
+      this.checkQuene()
     }
   },
   created () {
@@ -146,6 +162,7 @@ export default {
       color: $text_strong
       // cursor: pointer
   &__quene
+    cursor: pointer
     &__icon
       width: 1.6rem
       height: 1.6rem

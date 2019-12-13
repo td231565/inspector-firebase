@@ -1,9 +1,9 @@
 <template>
   <div class="home">
     <div class="home__top" ref="top">
-      <StateBar :getQuene="getQuene"
+      <StateBar :isAddMissionToQuene="isAddMissionToQuene"
         @signOutGuess="signOutGuess"
-        @stepToFirst="stepToFirst" />
+        @FinishAddingMissionToQuene="FinishAddingMissionToQuene" />
       <!-- <Viewer /> -->
       <PdfViewer :stepNow="stepNow" :isAddNewMarker="isAddNewMarker"
         @pdfLoaded="detectTopHeight" @stepNext="stepNext"/>
@@ -50,7 +50,7 @@ export default {
     return {
       stepNow: 1,
       steps: [Missions, Plans, Photos, Form],
-      getQuene: false
+      isAddMissionToQuene: false
     }
   },
   computed: {
@@ -78,7 +78,6 @@ export default {
     },
     stepNext () {
       if (this.stepNow === this.steps.length) return
-      // if (this.stepNow === 1) this.getMarkerDataFromDB()
       return this.stepNow++
     },
     stepToFirst () {
@@ -91,8 +90,10 @@ export default {
       this.$emit('gotoPrint')
     },
     addMissionToQuene () {
-      this.getQuene = true
-      setTimeout(() => this.getQuene = false, 1000)
+      this.isAddMissionToQuene = true
+    },
+    FinishAddingMissionToQuene () {
+      this.isAddMissionToQuene = false
     }
   }
 }

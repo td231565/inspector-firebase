@@ -144,16 +144,12 @@ export default {
     },
     checkInternetConnection (data) {
       addMissionToQuene(data)
+      this.$emit('addMissionToQuene')
 
       let icStatus = InternetConnection()
-      if (icStatus) {
-        // 連線中，上傳
-        this.setSendTextContent('上傳中... ')
-      } else {
-        // 離線，存入等待清單，增加新按鈕於連線時發送
-        this.$emit('addMissionToQuene')
-        this.setErrorTextContent('網路訊號不佳，變更已存入等待清單')
-      }
+      icStatus
+      ? this.setSendTextContent('上傳中... ')
+      : this.setErrorTextContent('網路訊號不佳，變更已存入等待清單')
     },
     updateMission () {
       this.setErrorTextContent('')
