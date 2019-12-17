@@ -64,8 +64,8 @@ export default {
       this.$emit('checkQuene')
     }
   },
-  mounted () {
-
+  beforeDestroy () {
+    this.isConnection = undefined
   }
 }
 </script>

@@ -227,7 +227,7 @@ export default {
   @include ae768
     width: 80%
   @include ae480
-    width: 100%
+    width: 70%
 
   &__items
     position: relative

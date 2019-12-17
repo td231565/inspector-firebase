@@ -189,6 +189,9 @@ export default {
 .form__items
   &__title, &__cells
     width: 50%
+  &__cells
+    @include ae480
+      width: 100%
 
 .btn
   height: auto

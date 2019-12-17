@@ -78,6 +78,10 @@ export default {
     width: 31%
     height: auto
     margin: 0 1%
+
+    @include ae480
+      width: 47.5%
+
     &__block
       width: 100%
       // height: 200px

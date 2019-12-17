@@ -101,6 +101,7 @@ function checkPictureConvert () {
 
     })
   })
+
   setTimeout(() => {
     uploadQueneToDB()
   }, 2000)
@@ -119,26 +120,8 @@ function clearQuene () {
 
 // 如果是同一個mission，新的覆蓋舊的
 const addMissionToQuene = (data) => {
-  // function detectMission () {
-  //   let sameMission = false
-  //   quene.forEach((mission, i) => {
-  //     if (mission.id === data.id) {
-  //       sameMission = true
-  //       quene[i] = data
-  //     }
-  //   })
-  //   return sameMission
-  // }
-
-  // let sameMission = detectMission()
-  // if (sameMission) return
-  // console.log(data)
   quene = quene.filter(mission => mission.id !== data.id)
-  console.log('1.')
-  console.log(quene)
   quene.push(data)
-  console.log('2.')
-  console.log(quene)
   checkConnection()
 }
 
