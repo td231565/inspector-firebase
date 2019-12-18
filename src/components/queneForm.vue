@@ -4,7 +4,7 @@
       <li class="form__items__header">
         <h3 class="quene__title">待上傳清單</h3>
       </li>
-      <li class="form__items">
+      <li class="form__items" v-if="quene.length === 0">
         <span>無待上傳資料</span>
       </li>
       <li class="form__items"
