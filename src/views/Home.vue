@@ -13,6 +13,7 @@
     </div>
 
     <div class="home__bottom" ref="bottom">
+      <Manage />
       <keep-alive :include="aliveInclude">
         <transition name="step-fade" mode="out-in">
           <component :is="steps[stepNow-1]"
@@ -37,6 +38,8 @@ import Missions from './SectionMissions.vue'
 import Plans from './SectionPlans.vue'
 import Photos from './SectionPhotos.vue'
 import Form from './SectionForm.vue'
+import Manage from './Manage.vue'
+
 
 export default {
   name: 'home',
@@ -44,7 +47,8 @@ export default {
     // Viewer,
     PdfViewer,
     StateBar,
-    StepBar
+    StepBar,
+    Manage
   },
   data () {
     return {
