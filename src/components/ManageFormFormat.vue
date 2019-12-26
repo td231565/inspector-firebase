@@ -1,36 +1,23 @@
 <template>
-  <div class="manage">
-    <div class="manage__controls">
-      <button class="btn btn__square btn__square--success" @click="backToHome">上一步</button>
-    </div>
-
-    <div class="manage__interface">
-      <ManageFormFormat />
-      <ManageModel />
-    </div>
-
+  <div class="managForm">
+    <h3>表格格式管理</h3>
+    <label class="managForm__upload" for="uploadForm">上傳表格格式</label>
+    <input type="file" accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" id="uploadForm" @change="getFile">
   </div>
 </template>
 
 <script>
-import ManageModel from '../components/ManageModel'
-import ManageFormFormat from '../components/ManageFormFormat'
 import XLSX from 'xlsx'
 import { db } from '../config/db'
 
 export default {
-  name: 'manage',
-  components: {
-    ManageModel,
-    ManageFormFormat
-  },
+  name: 'ManageFormFormat',
   data () {
     return {
 
     }
   },
   methods: {
-    /* 表格管理 */
     getFile (e) {
       const vm = this
       const file = e.target.files[0]
@@ -69,24 +56,14 @@ export default {
       .then(() => {
         console.log('good')
       }).catch(err => console.log(err))
-    },
-    backToHome () {
-      this.$emit('backToHome')
     }
   }
 }
 </script>
 
 <style lang="sass" scoped>
-.manage
-  border: 1px solid red
-  &__interface
-    display: flex
-    > div
-      flex: 1
-      border: 1px solid green
-    &__form-format
-      &__upload
-        border: 1px solid blue
-        cursor: pointer
+.managForm
+  &__upload
+    border: 1px solid blue
+    cursor: pointer
 </style>

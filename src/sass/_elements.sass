@@ -21,13 +21,17 @@
       margin: 0
       padding: 0
 
-// .list
-//   background-color: rgba(pink, 0.3)
-//   &__item
-//     padding: 5px
-//     cursor: pointer
-//     &:hover
-//       background-color: rgba(blue, 0.1)
+.list
+  &__item
+    padding: 0.6rem
+    background-color: rgba(#fff, 0.8)
+    border-bottom: 1px solid $bd_input_default
+    cursor: pointer
+    &:nth-child(even)
+      background-color: rgba($bg_list, 0.8)
+    &:hover
+      color: $text_strong
+      background-color: $bg_input_focus
 
 .flex
   &--center

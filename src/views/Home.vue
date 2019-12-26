@@ -9,11 +9,11 @@
         @pdfLoaded="detectTopHeight" @stepNext="stepNext"/>
       <StepBar :stepNow="stepNow"
         @stepPrev="stepPrev" @stepNext="stepNext" @stepToFirst="stepToFirst"
-        @gotoPrint="gotoPrint" />
+        @gotoPrint="gotoPrint"
+        @gotoManagement="gotoManagement" />
     </div>
 
     <div class="home__bottom" ref="bottom">
-      <Manage />
       <keep-alive :include="aliveInclude">
         <transition name="step-fade" mode="out-in">
           <component :is="steps[stepNow-1]"
@@ -38,8 +38,6 @@ import Missions from './SectionMissions.vue'
 import Plans from './SectionPlans.vue'
 import Photos from './SectionPhotos.vue'
 import Form from './SectionForm.vue'
-import Manage from './Manage.vue'
-
 
 export default {
   name: 'home',
@@ -47,8 +45,7 @@ export default {
     // Viewer,
     PdfViewer,
     StateBar,
-    StepBar,
-    Manage
+    StepBar
   },
   data () {
     return {
@@ -89,6 +86,9 @@ export default {
     },
     gotoPrint () {
       this.$emit('gotoPrint')
+    },
+    gotoManagement () {
+      this.$emit('gotoManagement')
     },
     addMissionToQuene () {
       this.isAddMissionToQuene = true

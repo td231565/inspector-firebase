@@ -8,7 +8,8 @@
       @guess="gotoHome"
       @signOutGuess="gotoLanding"
       @gotoPrint="gotoPrint"
-      @finishPrint="gotoHome" />
+      @gotoManagement="gotoManagement"
+      @backToHome="gotoHome" />
     <!-- <Print v-if="isPrint" v-show="true" /> -->
     <Loading v-if="isLoading"></Loading>
   </div>
@@ -21,6 +22,7 @@ import Home from './views/Home'
 import Landing from './views/Landing'
 import Loading from './views/Loading'
 import Print from './views/Print'
+import Manage from './views/Manage'
 
 export default {
   name: 'app',
@@ -31,7 +33,8 @@ export default {
     Home,
     Landing,
     Loading,
-    Print
+    Print,
+    Manage
   },
   data () {
     return {
@@ -67,6 +70,10 @@ export default {
     },
     gotoPrint () {
       this.viewPath = Print
+      this.isPrint = true
+    },
+    gotoManagement () {
+      this.viewPath = Manage
       this.isPrint = true
     },
     watchUserState () {

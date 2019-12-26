@@ -6,15 +6,15 @@
       <ul class="form">
         <li class="form__items">
           <label class="form__items__title">視點名稱</label>
-          <input class="form__items__cells" type="text" v-model="name" disabled />
+          <input class="form__items__cells" name="視點名稱" type="text" v-model="name" disabled />
         </li>
         <li class="form__items">
           <label class="form__items__title">樓層位置</label>
-          <input class="form__items__cells" type="text" v-model="floor" disabled />
+          <input class="form__items__cells" name="樓層位置" type="text" v-model="floor" disabled />
         </li>
         <li class="form__items" v-if="userInfo">
           <label class="form__items__title">查驗人員</label>
-          <select class="form__items__cells" v-model="selectedInspector" required @blur="checkValid">
+          <select class="form__items__cells" name="查驗人員" v-model="selectedInspector" required @blur="checkValid">
             <option>尚未查驗</option>
             <option>{{ inspector }}</option>
           </select>
@@ -22,19 +22,20 @@
         </li>
         <li class="form__items" v-else>
           <label class="form__items__title">查驗人員</label>
-          <input class="form__items__cells" type="text" v-model="selectedInspector" disabled />
+          <input class="form__items__cells" name="查驗人員" type="text" v-model="selectedInspector" disabled />
         </li>
         <li class="form__items">
           <label class="form__items__title">隨行人員</label>
-          <input class="form__items__cells" type="text" v-model="accompany" placeholder="以半形逗號區隔" />
+          <input class="form__items__cells" name="隨行人員" type="text" v-model="accompany" placeholder="以半形逗號區隔" />
         </li>
         <li class="form__items">
           <label class="form__items__title">查驗日期</label>
-          <input class="form__items__cells" type="date" v-model="date" placeholder="yyyy-mm-dd" required />
+          <input class="form__items__cells" name="查驗日期" type="date" v-model="date" placeholder="yyyy-mm-dd" required />
         </li>
         <li class="form__items">
           <label class="form__items__title">查驗類型</label>
-          <select class="form__items__cells" v-model="category" required>
+          <select class="form__items__cells" name="查驗類型" v-model="category" required>
+            <option value="">請選擇</option>
             <option value="建築">建築</option>
             <option value="結構">結構</option>
             <option value="MEP">MEP</option>
@@ -43,21 +44,23 @@
         </li>
         <li class="form__items">
           <label class="form__items__title">自主檢查紀錄是否提送</label>
-          <select class="form__items__cells" v-model="selfCheckState" required>
+          <select class="form__items__cells" name="自主檢查紀錄是否提送" v-model="selfCheckState" required>
+            <option value="">請選擇</option>
             <option value="符合">符合</option>
             <option value="不符合">不符合</option>
           </select>
         </li>
         <li class="form__items">
           <label class="form__items__title">圖說與模型是否一致</label>
-          <select class="form__items__cells" v-model="status" required>
+          <select class="form__items__cells" name="圖說與模型是否一致" v-model="status" required>
+            <option value="">請選擇</option>
             <option value="符合">符合</option>
             <option value="不符合">不符合</option>
           </select>
         </li>
         <li class="form__items">
           <label class="form__items__title">檢核結果說明</label>
-          <textarea class="form__items__cells log__problem" v-model="problem" required></textarea>
+          <textarea class="form__items__cells log__problem" name="檢核結果說明" v-model="problem" required></textarea>
         </li>
         <li class="form__items form__items__footer flex--right">
           <div class="form__result flex--center">
@@ -150,8 +153,10 @@ export default {
       this.errorText = content
     },
     checkInternetConnection (data) {
+      console.log(1)
       addMissionToQuene(data)
       this.$emit('addMissionToQuene')
+      console.log(2)
 
       let icStatus = InternetConnection()
       icStatus
@@ -162,24 +167,36 @@ export default {
       this.inspectorIsValid = (this.selectedInspector !== this.userInfo.name) ? false : true
       return this.inspectorIsValid
     },
-    updateMission () {
+    updateMission (e) {
+      let form = e.target.elements
+      let formData = {}
+
+      for (let i=0; i<form.length; i++) {
+        if (!form[i].name) continue
+        formData[form[i].name] = form[i].value
+      }
+
+      console.log(formData)
+
       this.setErrorTextContent('')
 
       const formIsValid = this.checkValid()
       if (!formIsValid) return
 
       let data = this.missionData
+      data = Object.assign(data, formData)
 
-      data = Object.assign(data, {
-        accompany: this.accompany || '',
-        category: this.category,
-        date: this.date,
-        inspector: this.selectedInspector,
-        problem: this.problem,
-        selfCheckState: this.selfCheckState,
-        status: this.status
-      })
+      // data = Object.assign(data, {
+      //   accompany: this.accompany || '',
+      //   category: this.category,
+      //   date: this.date,
+      //   inspector: this.selectedInspector,
+      //   problem: this.problem,
+      //   selfCheckState: this.selfCheckState,
+      //   status: this.status
+      // })
 
+      console.log(data)
       this.checkInternetConnection(data)
     },
     deleteMission () {

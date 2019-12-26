@@ -4,7 +4,7 @@
       <p v-if="errorText">{{ errorText }}</p>
       <button class="btn btn__square btn__square--success" @click="printPage">列印</button>
       <button class="btn btn__square btn__square--success" @click="exportToDoc">匯出word</button>
-      <button class="btn btn__square btn__square--success" @click="finishPrint">上一步</button>
+      <button class="btn btn__square btn__square--success" @click="backToHome">上一步</button>
     </div>
 
     <div ref="printTable">
@@ -188,8 +188,8 @@ export default {
     }
   },
   methods: {
-    finishPrint () {
-      this.$emit('finishPrint')
+    backToHome () {
+      this.$emit('backToHome')
     },
     getMissionData () {
       let vm = this
