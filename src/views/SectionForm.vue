@@ -84,6 +84,7 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 import PopWarning from '../components/FormWarning'
 import InternetConnection from '../config/connection'
 import { addMissionToQuene } from '../config/uploadQuene'
+import { db } from '../config/db'
 
 export default {
   name: 'SectionForm',
@@ -107,7 +108,8 @@ export default {
       errorText: '',
       snedText: '',
       isDeleteMission: false,
-      inspectorIsValid: true
+      inspectorIsValid: true,
+      
     }
   },
   computed: {
@@ -208,6 +210,17 @@ export default {
     },
     stepToFirst () {
       this.$emit('stepToFirst')
+    },
+    // 取得表格格式
+    getFormFormat () {
+      db.collection('formFormat').get().then(docs => {
+        docs.forEach(doc => {
+
+        })
+      })
+    },
+    selectFormFormat () {
+
     }
   },
   watch: {
