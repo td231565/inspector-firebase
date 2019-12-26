@@ -77,16 +77,15 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.manage
-  border: 1px solid red
-  &__interface
-    display: flex
-    > div
-      flex: 1
-      border: 1px solid green
-    &__form-format
-      &__upload
-        border: 1px solid blue
-        cursor: pointer
+<style lang="scss" scoped>
+.manage {
+  &__interface {
+    display: flex;
+    > div {
+      flex: 1;
+      padding: 0 1rem;
+      border: 1px solid green;
+    }
+  }
+}
 </style>

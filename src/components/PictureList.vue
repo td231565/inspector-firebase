@@ -63,59 +63,69 @@ export default {
 }
 </script>
 
-<style lang="sass">
-.photos
-  width: 100%
-  // margin: auto
-  padding: 0 2rem
-  display: flex
-  flex-wrap: wrap
+<style lang="scss">
+.photos {
+  width: 100%;
+  // margin: auto;
+  padding: 0 2rem;
+  display: flex;
+  flex-wrap: wrap;
 
-  @include ae768
-    padding: 0 1rem
+  @include ae768 {
+    padding: 0 1rem;
+  }
 
-  &__item
-    width: 31%
-    height: auto
-    margin: 0 1%
+  &__item {
+    width: 31%;
+    height: auto;
+    margin: 0 1%;
 
-    @include ae480
-      width: 47.5%
+    @include ae480 {
+      width: 47.5%;
+    }
 
-    &__block
-      width: 100%
-      // height: 200px
-      // padding: 0
-      padding-top: 75%
-      position: relative
-      background-color: rgba(#000, 0.1)
-      border: 1px solid $bd_input_default
-      border-radius: 10px
-      overflow: hidden
-      cursor: pointer
-      opacity: 0.7
-      &:hover
-        opacity: 1
+    &__block {
+      width: 100%;
+      // height: 200px;
+      // padding: 0;
+      padding-top: 75%;
+      position: relative;
+      background-color: rgba(#000, 0.1);
+      border: 1px solid $bd_input_default;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      opacity: 0.7;
+      &:hover {
+        opacity: 1;
+      }
 
-      @include ae768
-        // height: 100px
-        opacity: 1
+      @include ae768 {
+        // height: 100px;
+        opacity: 1;
+      }
 
-      &__camera
-        width: 100%
-        height: 100%
-        display: block
-        cursor: pointer
+      &__camera {
+        width: 100%;
+        height: 100%;
+        display: block;
+        cursor: pointer;
         // 相機圖案
-        &::after
-          width: 4rem
-          height: 4rem
-          @extend .pseudo
-          @extend .absolute--center
-          background-image: url('~@/assets/camera.svg')
-          background-size: cover
+        &::after {
+          width: 4rem;
+          height: 4rem;
+          @extend .pseudo;
+          @extend .absolute--center;
+          background-image: url('~@/assets/camera.svg');
+          background-size: cover;
+        }
+      }
+    }
+  }
+}
 
-#pictureUpload
-  width: 1px
-  height: 1px
+#pictureUpload {
+  width: 1px;
+  height: 1px;
+}
 </style>

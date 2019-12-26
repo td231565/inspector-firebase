@@ -234,50 +234,63 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.form
-  width: 50%
-  margin: auto
+<style lang="scss" scoped>
+.form {
+  width: 50%;
+  margin: auto;
 
-  @include ae1100
-    width: 65%
-  @include ae768
-    width: 80%
-  @include ae480
-    width: 70%
+  @include ae1100 {
+    width: 65%;
+  }
+  @include ae768 {
+    width: 80%;
+  }
+  @include ae480 {
+    width: 70%;
+  }
 
-  &__items
-    position: relative
-  &__result
-    // width: 100%
-    &__text
-      margin: 0
-      font-size: 0.8rem
-      &--danger
-        color: $text_warning
-      &--normal
-        color: $text_success
+  &__items {
+    position: relative;
+  }
+  &__result {
+    // width: 100%;
+    &__text {
+      margin: 0;
+      font-size: 0.8rem;
+      &--danger {
+        color: $text_warning;
+      }
+      &--normal {
+        color: $text_success;
+      }
+    }
+  }
+}
 
-.hint
-  margin: 0
-  padding: 0.6rem
-  display: flex
-  align-items: center
-  position: absolute
-  bottom: -2.8rem
-  right: 25%
-  font-size: 0.8rem
-  background-color: #fff
-  border: 1px solid #808080
-  border-radius: 4px
-  box-shadow: 3px 3px 6px rgba(#000, 0.2)
-  z-index: 9
-  > img
-    width: 1.6rem
-    height: 1.6rem
-    margin-right: 0.4rem
+.hint {
+  margin: 0;
+  padding: 0.6rem;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: -2.8rem;
+  right: 25%;
+  font-size: 0.8rem;
+  background-color: #fff;
+  border: 1px solid #808080;
+  border-radius: 4px;
+  box-shadow: 3px 3px 6px rgba(#000, 0.2);
+  z-index: 9;
+  > img {
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-right: 0.4rem;
+  }
+}
 
-.log
-  &__problem
-    height: 80px
+.log {
+  &__problem {
+    height: 80px;
+  }
+}
 </style>

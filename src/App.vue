@@ -149,17 +149,19 @@ export default {
 }
 </script>
 
-<style lang="sass">
-#app
-  font-family: 'Avenir', Helvetica, Arial, sans-serif
-  -webkit-font-smoothing: antialiased
-  -moz-osx-font-smoothing: grayscale
-  text-align: center
-  color: $text_defalt
-  height: 100vh
-  background-size: cover
-  background-image: url(./assets/contact_bg.jpg)
-  overflow: hidden
-  &.allowScroll
-    overflow: auto
+<style lang="scss">
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: $text_defalt;
+  height: 100vh;
+  background-size: cover;
+  background-image: url(./assets/contact_bg.jpg);
+  overflow: hidden;
+  &.allowScroll {
+    overflow: auto;
+  }
+}
 </style>

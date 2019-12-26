@@ -168,26 +168,34 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.add
-  &__img
-    width: 100%
-    display: block
-  &__cover
-    width: 100%
-    height: 100%
-    background-color: $bg_cover_layer
-    box-shadow: inset 0 0 50px #000
-  &__section
-    width: 100%
-    height: 100%
-    &__header
-      color: #fff
-  &__annotation
-    text-align: center
-    &__img
-      display: block
-    &__toolbar
-      display: flex
-      z-index: 99
+<style lang="scss" scoped>
+.add {
+  &__img {
+    width: 100%;
+    display: block;
+  }
+  &__cover {
+    width: 100%;
+    height: 100%;
+    background-color: $bg_cover_layer;
+    box-shadow: inset 0 0 50px #000;
+  }
+  &__section {
+    width: 100%;
+    height: 100%;
+    &__header {
+      color: #fff;
+    }
+  }
+  &__annotation {
+    text-align: center;
+    &__img {
+      display: block;
+    }
+    &__toolbar {
+      display: flex;
+      z-index: 99;
+    }
+  }
+}
 </style>

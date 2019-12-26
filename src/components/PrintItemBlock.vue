@@ -26,17 +26,22 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.block
-  &__imageBlock
-    width: 100%
-    padding-top: 75%
-    position: relative
-  &__image
-    width: 100%
-    display: block
+<style lang="scss" scoped>
+.block {
+  &__imageBlock {
+    width: 100%;
+    padding-top: 75%;
+    position: relative;
+  }
+  &__image {
+    width: 100%;
+    display: block;
+  }
+}
 
-@page
-  .block__image
-    width: 33%
+@page {
+  .block__image {
+    width: 33%;
+  }
+}
 </style>

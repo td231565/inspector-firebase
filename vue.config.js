@@ -7,12 +7,12 @@ module.exports = {
 
   css: {
     loaderOptions: {
-      sass: {
+      scss: {
         prependData: `
-          @import "@/sass/_variables.sass"
-          @import "@/sass/_breakpoint.sass"
-          @import "@/sass/_elements.sass"
-          @import "@/sass/_base.sass"
+          @import "@/sass/_variables.scss";
+          @import "@/sass/_breakpoint.scss";
+          @import "@/sass/_elements.scss";
+          @import "@/sass/_base.scss";
         `
       }
     }

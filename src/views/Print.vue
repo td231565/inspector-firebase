@@ -266,60 +266,77 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-table, tr
-  border-collapse: collapse
+<style lang="scss" scoped>
+table, tr {
+  border-collapse: collapse;
+}
 
-p
-  margin: 0
-  padding: 0
+p {
+  margin: 0;
+  padding: 0;
+}
 
-.print
-  width: 70%
-  margin: 1rem auto
-  padding: 1rem
-  text-align: left
-  background-color: #fff
-  border: 1px solid $bd_btn_default
-  &__column
-    padding: 4px 6px
-    flex: 1
-    border-color: #000
-    border-style: solid
-    border-width: 1px 1px 0 0
-    &--borderless
-      border: none
-  &__row
-    display: flex
-    border-left: 1px solid #000
-    &:nth-last-child(1)
-      border-bottom: 1px solid #000
-    &--block
-      display: block
+.print {
+  width: 70%;
+  margin: 1rem auto;
+  padding: 1rem;
+  text-align: left;
+  background-color: #fff;
+  border: 1px solid $bd_btn_default;
+  &__column {
+    padding: 4px 6px;
+    flex: 1;
+    border-color: #000;
+    border-style: solid;
+    border-width: 1px 1px 0 0;
+    &--borderless {
+      border: none;
+    }
+  }
+  &__row {
+    display: flex;
+    border-left: 1px solid #000;
+    &:nth-last-child(1) {
+      border-bottom: 1px solid #000;
+    }
+    &--block {
+      display: block;
+    }
+  }
+}
 
-.problem
-  display: flex
-  &__item
-    display: inline-block
-    &__text
-      margin: 0
+.problem {
+  display: flex;
+  &__item {
+    display: inline-block;
+    &__text {
+      margin: 0;
+    }
+  }
+}
 
-.signature
-  height: 70px
-  display: flex
-  flex-direction: column
-  justify-content: flex-end
+.signature {
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
 
-@media print
-  @page
-    .print
-      mso-margin: 0.2cm
+@media print {
+  @page {
+    .print {
+      mso-margin: 0.2cm;
+    }
+  }
 
-  .print
-    width: 100%
-    margin: 0
-    padding: 0
-    border: none
-    &__controls
-      display: none
+  .print {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    &__controls {
+      display: none;
+    }
+  }
+}
 </style>

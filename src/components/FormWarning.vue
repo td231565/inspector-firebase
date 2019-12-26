@@ -57,34 +57,41 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.warning
-  width: 100%
-  height: 100%
-  position: fixed
-  top: 0
-  left: 0
-  background-color: $bg_cover_layer
-  box-shadow: inset 0 0 5rem #000
-  z-index: 9
-  &__content
-    padding: 2rem 3rem
-    // color: #fff
-    background-color: #fff
-    border: 3px solid $bd_btn_default
-    display: flex
-    &__column
-      &__left
-        flex: 1
-      &__right
-        flex: 1.5
-    &__header
-      margin-top: 0
-    &__image
-      width: 100%
+<style lang="scss" scoped>
+.warning {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: $bg_cover_layer;
+  box-shadow: inset 0 0 5rem #000;
+  z-index: 9;
+  &__content {
+    padding: 2rem 3rem;
+    // color: #fff;
+    background-color: #fff;
+    border: 3px solid $bd_btn_default;
+    display: flex;
+    &__column {
+      &__left {
+        flex: 1;
+      }
+      &__right {
+        flex: 1.5;
+      }
+    }
+    &__header {
+      margin-top: 0;
+    }
+    &__image {
+      width: 100%;
+    }
+  }
+}
 
-
-.danger
-  color: red
-  font-size: 0.8rem
+.danger {
+  color: red;
+  font-size: 0.8rem;
+}
 </style>

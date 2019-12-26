@@ -149,29 +149,39 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.landing
-  height: 100vh
+<style lang="scss" scoped>
+.landing {
+  height: 100vh;
+}
 
-.form__items
-  &__title
-    width: 3.5rem
-  &__cells
-    width: 100%
-  &__footer
+.form__items {
+  &__title {
+    width: 3.5rem;
+  }
+  &__cells {
+    width: 100%;
+  }
+  // &__footer
+}
 
-.btn__square
-  &:hover
-    border-color: $bd_input_focus
+.btn__square {
+  &:hover {
+    border-color: $bd_input_focus;
+  }
+}
 
-.text
-  margin: 0
-  display: inline-block
-  font-size: 0.8rem
-  &--hint
-    cursor: pointer
-    &:hover
-      transform: translateY(-1px)
-  &--danger
-    color: $text_warning
+.text {
+  margin: 0;
+  display: inline-block;
+  font-size: 0.8rem;
+  &--hint {
+    cursor: pointer;
+    &:hover {
+      transform: translateY(-1px);
+    }
+  }
+  &--danger {
+    color: $text_warning;
+  }
+}
 </style>

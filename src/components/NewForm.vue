@@ -77,16 +77,20 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.form
-  width: 60%
-  margin: 2rem auto
-  padding: 2rem
-  background-color: $bg_default
-  &__title
-    margin-top: 0
+<style lang="scss" scoped>
+.form {
+  width: 60%;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: $bg_default;
+  &__title {
+    margin-top: 0;
+  }
+}
 
-.btn
-  &:hover
-    border-color: $bd_input_focus
+.btn {
+  &:hover {
+    border-color: $bd_input_focus;
+  }
+}
 </style>

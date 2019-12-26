@@ -62,16 +62,21 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.printItem
-  &__row
-    display: flex
-  &__col
-    flex: 1
-  &__image
-    width: 100%
-    height: auto
-  &__text
-    margin: 0
+<style lang="scss" scoped>
+.printItem {
+  &__row {
+    display: flex;
+  }
+  &__col {
+    flex: 1;
+  }
+  &__image {
+    width: 100%;
+    height: auto;
+  }
+  &__text {
+    margin: 0;
+  }
+}
 
 </style>

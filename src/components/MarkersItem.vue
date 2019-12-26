@@ -42,24 +42,27 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.markerItem
-  max-width: 100px
-  // height: auto
-  margin: 0
-  padding: 0
-  text-align: center
-  // border: 1px solid red
-  &__icon
-    width: 28px
-    height: 28px
-    margin: 0
-    cursor: pointer
-    // display: block
-  &__text
-    margin: 0
-    padding: 2px 4px
-    font-size: 0.8rem
-    background-color: rgba($bg_stepBar, 0.3)
-    cursor: pointer
+<style lang="scss" scoped>
+.markerItem {
+  max-width: 100px;
+  // height: auto;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  // border: 1px solid red;
+  &__icon {
+    width: 28px;
+    height: 28px;
+    margin: 0;
+    cursor: pointer;
+    // display: block;
+  }
+  &__text {
+    margin: 0;
+    padding: 2px 4px;
+    font-size: 0.8rem;
+    background-color: rgba($bg_stepBar, 0.3);
+    cursor: pointer;
+  }
+}
 </style>

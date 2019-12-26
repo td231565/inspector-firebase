@@ -1,30 +1,11 @@
 <template>
   <div class="manageModels">
-    <h3>模型管理</h3>
-    <!-- <div class="manageModels__table"> -->
-      <ul class="manageModels__table list">
-        <li class="manageModels__table__item list__item"
-          v-for="(model, i) in modelList" :key="i+1"
-          @click="selectModelFromDB(model)">
-          {{ i+1 }}. {{ model }}
-          <ul class="manageModels__table__item-info" v-if="!!selectModel && selectModel.id === model">
-            <li class="form__items">
-              <label class="form__items__title">模型名稱</label>
-              <input class="form__items__cells" v-model="selectModel.modelName" disabled />
-            </li>
-            <li class="form__items">
-              <label class="form__items__title">模型樓層</label>
-              <input class="form__items__cells" v-model="selectModel.modelFloor" disabled />
-            </li>
-            <li class="form__items">
-              <label class="form__items__title">模型路徑</label>
-              <input class="form__items__cells" v-model="selectModel.modelPath" disabled />
-            </li>
-          </ul>
-        </li>
-      </ul>
-    <!-- </div> -->
-    <ul class="manageModels__info form">
+    <div class="manageModels__header">
+      <h3>模型管理</h3>
+      <button class="manageModels__header__btn" @click="revealAddingForm">新增</button>
+    </div>
+
+    <ul class="manageModels__addnew form" v-if="isAddingNewModelInfo">
       <li><h3>新增模型</h3></li>
       <li class="form__items">
         <label class="form__items__title">模型名稱</label>
@@ -38,10 +19,34 @@
         <label class="form__items__title">模型路徑</label>
         <input class="form__items__cells" v-model="modelPath" />
       </li>
-      <li class="form__items">
+      <li class="form__items flex--right">
         <button @click="uploadModelToDB">上傳</button>
+        <button @click="hideAddingForm">取消</button>
       </li>
     </ul>
+
+    <ul class="manageModels__table list">
+      <li class="manageModels__table__item list__item"
+        v-for="(model, i) in modelList" :key="i+1"
+        @click="selectModelFromDB(model)">
+        {{ i+1 }}. {{ model }}
+        <ul class="manageModels__table__item-info" v-if="!!selectModel && selectModel.id === model">
+          <li class="form__items">
+            <label class="form__items__title">模型名稱</label>
+            <input class="form__items__cells" v-model="selectModel.modelName" disabled />
+          </li>
+          <li class="form__items">
+            <label class="form__items__title">模型樓層</label>
+            <input class="form__items__cells" v-model="selectModel.modelFloor" disabled />
+          </li>
+          <li class="form__items">
+            <label class="form__items__title">模型路徑</label>
+            <input class="form__items__cells" v-model="selectModel.modelPath" disabled />
+          </li>
+        </ul>
+      </li>
+    </ul>
+
   </div>
 </template>
 
@@ -52,6 +57,7 @@ export default {
   name: 'manageModel',
   data () {
     return {
+      isAddingNewModelInfo: false,
       modelList: ['讀取中，請稍等'],
       modelName: '',
       modelFloor: '',
@@ -99,6 +105,13 @@ export default {
         this.selectModel['id'] = name
       })
     },
+    // 新增模型資訊
+    revealAddingForm () {
+      this.isAddingNewModelInfo = true
+    },
+    hideAddingForm () {
+      this.isAddingNewModelInfo = false
+    }
     // deleteModelFromDB () {
     //   db.collection('markersData').doc('gugci_d').get()
     //   .then(doc => {
@@ -112,8 +125,21 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.manageModels
-  &__table
-    text-align: left
+<style lang="scss" scoped>
+.manageModels {
+  &__header {
+    position: relative;
+    &__btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+  &__addnew {
+    margin-bottom: 2rem;
+  }
+  &__table {
+    text-align: left;
+  }
+}
 </style>

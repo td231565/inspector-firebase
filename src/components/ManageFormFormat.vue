@@ -61,9 +61,11 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.managForm
-  &__upload
-    border: 1px solid blue
-    cursor: pointer
+<style lang="scss" scoped>
+.managForm {
+  &__upload {
+    border: 1px solid blue;
+    cursor: pointer;
+  }
+}
 </style>

@@ -43,58 +43,73 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.missionList
-  width: 78%
-  height: 100%
-  margin: auto
-  margin-bottom: 0
-  display: flex
-  flex-wrap: wrap
+<style lang="scss" scoped>
+.missionList {
+  width: 78%;
+  height: 100%;
+  margin: auto;
+  margin-bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
 
-  @include ae1100
-    width: 88%
-  @include ae768
-    width: 76%
-  @include ae480
-    width: 90%
+  @include ae1100 {
+    width: 88%;
+  }
+  @include ae768 {
+    width: 76%;
+  }
+  @include ae480 {
+    width: 90%;
+  }
 
-  &__item
-    width: 31%
-    margin: 1%
-    border: 1px solid $bd_input_default
-    border-radius: 10px
-    overflow: hidden
-    cursor: pointer
-    opacity: 0.7
-    &:hover
-      opacity: 1
+  &__item {
+    width: 31%;
+    margin: 1%;
+    border: 1px solid $bd_input_default;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0.7;
+    &:hover {
+      opacity: 1;
+    }
 
-    @include ae1100
-      opacity: 1
-    @include ae480
-      width: 47.5%
+    @include ae1100 {
+      opacity: 1;
+    }
+    @include ae480 {
+      width: 47.5%;
+    }
 
-    &__pic
-      width: 100%
-      padding-top: 75%
-      position: relative
-      overflow: hidden
+    &__pic {
+      width: 100%;
+      padding-top: 75%;
+      position: relative;
+      overflow: hidden;
 
-      @include ae768
-        height: 100px
+      @include ae768 {
+        height: 100px;
+      }
 
-      img
-        max-width: 100%
-        display: block // 消除 img 底部與 div 間的空白
-    &__text
-      margin: 10px
-      position: relative
-      > p
-        margin: 3px 0
-      &__name
-        color: $text_strong
-        font-weight: 900
-      &__date
-        color: $text_hint
+      img {
+        max-width: 100%;
+        display: block; // 消除 img 底部與 div 間的空白
+      }
+    }
+    &__text {
+      margin: 10px;
+      position: relative;
+      > p {
+        margin: 3px 0;
+      }
+      &__name {
+        color: $text_strong;
+        font-weight: 900;
+      }
+      &__date {
+        color: $text_hint;
+      }
+    }
+  }
+}
 </style>

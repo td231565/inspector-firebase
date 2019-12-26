@@ -70,53 +70,64 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.popframe
-  width: 100%
-  height: 100%
-  position: fixed
-  top: 0
-  left: 0
-  background-color: $bg_cover_layer
-  box-shadow: inset 0 0 50px #000
-  z-index: 9
-  .quene
-    width: 30%
-    height: 80%
-    padding: 2rem
-    background-color: #fff
-    border-radius: 10px
-    overflow: auto
+<style lang="scss" scoped>
+.popframe {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: $bg_cover_layer;
+  box-shadow: inset 0 0 50px #000;
+  z-index: 9;
+  .quene {
+    width: 30%;
+    height: 80%;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: auto;
+    @include ae768 {
+      width: 90%;
+      height: 90%;
+    }
 
-    @include ae768
-      width: 90%
-      height: 90%
+    &__title {
+      margin-top: 0;
+      text-align: center;
+    }
+  }
 
-    &__title
-      margin-top: 0
-      text-align: center
+}
 
-.form__items
-  padding: 6px 0
-  border-bottom: 1px solid $bd_input_default
-  &:nth-child(even)
-    background-color: $bg_list
-  &__title
-    width: 3rem
+.form__items {
+  padding: 6px 0;
+  border-bottom: 1px solid $bd_input_default;
+  &:nth-child(even) {
+    background-color: $bg_list;
+  }
+  &__title {
+    width: 3rem;
+  }
+}
 
-.btn__close
-  position: absolute
-  top: 10%
-  left: 90%
+.btn__close {
+  position: absolute;
+  top: 10%;
+  left: 90%;
 
-  @include ae768
-    top: 10px
-    left: calc(100vw - 30px)
+  @include ae768 {
+    top: 10px;
+    left: calc(100vw - 30px);
+  }
+}
 
-.connect
-  margin-right: 1rem
-  font-size: 0.8rem
-  color: $text_warning
-  &.success
-    color: $text_success
+.connect {
+  margin-right: 1rem;
+  font-size: 0.8rem;
+  color: $text_warning;
+  &.success {
+    color: $text_success;
+  }
+}
 </style>

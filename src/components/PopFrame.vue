@@ -22,31 +22,35 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.popframe
-  width: 100%
-  height: 100%
-  position: fixed
-  top: 0
-  left: 0
-  background-color: $bg_cover_layer
-  box-shadow: inset 0 0 50px #000
-  z-index: 9
-  &__item
-    max-width: 80%
-    max-height: 80%
-    overflow: auto
+<style lang="scss" scoped>
+.popframe {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: $bg_cover_layer;
+  box-shadow: inset 0 0 50px #000;
+  z-index: 9;
+  &__item {
+    max-width: 80%;
+    max-height: 80%;
+    overflow: auto;
+    @include ae768 {
+      max-width: 100vw;
+      max-height: 90vh;
+    }
+  }
+}
 
-    @include ae768
-      max-width: 100vw
-      max-height: 90vh
+.btn__close {
+  position: absolute;
+  top: 10%;
+  left: 90%;
 
-.btn__close
-  position: absolute
-  top: 10%
-  left: 90%
-
-  @include ae768
-    top: 10px
-    left: calc(100vw - 30px)
+  @include ae768 {
+    top: 10px;
+    left: calc(100vw - 30px);
+  }
+}
 </style>

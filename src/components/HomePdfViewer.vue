@@ -96,25 +96,30 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.pdfviewer
-  max-height: 45vh
-  position: relative
-  overflow: auto
-  z-index: -1
-  &__pdf
-    width: 100%
-    // max-height: 45vh
-
-    @include ae768
-      max-height: 40vh
-  &__imgLayer
-    position: relative
-    &__img
-      width: 100%
-      display: block
-    &__markersLayer
-      width: 100%
-      height: 100%
-      background-color: rgba(orange, 0.1)
+<style lang="scss" scoped>
+.pdfviewer {
+  max-height: 45vh;
+  position: relative;
+  overflow: auto;
+  z-index: -1;
+  &__pdf {
+    width: 100%;
+    // max-height: 45vh;
+    @include ae768 {
+      max-height: 40vh;
+    }
+  }
+  &__imgLayer {
+    position: relative;
+    &__img {
+      width: 100%;
+      display: block;
+    }
+    &__markersLayer {
+      width: 100%;
+      height: 100%;
+      background-color: rgba(orange, 0.1);
+    }
+  }
+}
 </style>

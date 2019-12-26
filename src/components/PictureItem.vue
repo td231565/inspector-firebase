@@ -82,31 +82,37 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.photos
-  &__item
-    margin: 0 1%
-    &__block
-      img
-        max-width: 100%
-        display: block // 消除 img 底部與 div 間的空白
-      .btn__delete
-        position: absolute
-        top: 5px
-        right: 5px
-    &__text
-      position: relative
-      &__textarea
-        width: 100%
-        height: 60px
-        margin-top: 8px
-        padding: 6px
-        border-radius: 10px
-      &__control
-        position: absolute
-        bottom: 7px
-        right: 15px
-        cursor: pointer
-
-
+<style lang="scss" scoped>
+.photos {
+  &__item {
+    margin: 0 1%;
+    &__block {
+      img {
+        max-width: 100%;
+        display: block; // 消除 img 底部與 div 間的空白
+      }
+      .btn__delete {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+      }
+    }
+    &__text {
+      position: relative;
+      &__textarea {
+        width: 100%;
+        height: 60px;
+        margin-top: 8px;
+        padding: 6px;
+        border-radius: 10px;
+      }
+      &__control {
+        position: absolute;
+        bottom: 7px;
+        right: 15px;
+        cursor: pointer;
+      }
+    }
+  }
+}
 </style>

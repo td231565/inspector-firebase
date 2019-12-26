@@ -60,10 +60,12 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.missions__header
-  &__icon
-    width: 1.5rem
-    height: 1.5rem
-    transform: translate(3px,5px)
+<style lang="scss" scoped>
+.missions__header {
+  &__icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    transform: translate(3px,5px);
+  }
+}
 </style>

@@ -74,28 +74,34 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.step
-  width: 100%
-  height: 50px
-  display: flex
-  background-color: $bg_stepBar
+<style lang="scss" scoped>
+.step {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  background-color: $bg_stepBar;
 
-  @include ae768
-    font-size: 0.8rem
+  @include ae768 {
+    font-size: 0.8rem;
+  }
 
-  &__column
-    flex: 1
-    padding: 10px
-    display: flex
-    align-items: center
-    &__controls
-      font-weight: 600
-      color: #fff
-      background-color: transparent
-      border-color: #fff
-      &:hover
-        background-color: rgba(#000, 0.2)
-      &:active
-        color: rgba(#000, 0.6)
+  &__column {
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    &__controls {
+      font-weight: 600;
+      color: #fff;
+      background-color: transparent;
+      border-color: #fff;
+      &:hover {
+        background-color: rgba(#000, 0.2);
+      }
+      &:active {
+        color: rgba(#000, 0.6);
+      }
+    }
+  }
+}
 </style>

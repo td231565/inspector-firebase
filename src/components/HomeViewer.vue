@@ -205,14 +205,17 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.viewer
-  overflow: hidden
+<style lang="scss" scoped>
+.viewer {
+  overflow: hidden;
+}
 
-#viewerIframe
-  width: 100%
-  height: 50vh
+#viewerIframe {
+  width: 100%;
+  height: 50vh;
 
-  @include ae768
-    height: 40vh
+  @include ae768 {
+    height: 40vh;
+  }
+}
 </style>

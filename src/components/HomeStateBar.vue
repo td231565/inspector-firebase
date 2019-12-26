@@ -2,7 +2,7 @@
   <div class="state">
     <div class="state__column state__column__left"></div>
 
-    <div class="state__column state__column__middle state__model">
+    <div class="state__column state__column__middle state__model flex--left">
       <label class="form__items__title" v-if="!isSmallScreen">請選擇查驗目標</label>
       <select class="form__items__cells" @change="selectModel" v-model="currentModelName">
         <option :value="model"
@@ -12,7 +12,7 @@
       </select>
     </div>
 
-    <div class="state__column state__column__right">
+    <div class="state__column state__column__right flex--right">
       <div class="state__quene flex--right" @click="switchQuene" v-if="queneLength !== 0">
         <div class="state__quene__icon"
           title="待上傳清單"
@@ -139,65 +139,76 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.state
-  padding: 4px
-  display: flex
+<style lang="scss" scoped>
+.state {
+  padding: 4px;
+  display: flex;
 
-  @include ae768
-    font-size: 0.8rem
+  @include ae768 {
+    font-size: 0.8rem;
+  }
 
-  &__column
-    flex: 1
-    display: flex
-    align-items: center
-    &__left
-      @include ae768
-        flex: 0
-    &__middle
-      @include ae768
-        justify-content: flex-start
-    &__right
-      justify-content: flex-end
-  &__user
-    &__name
-      font-weight: 600
-      color: $text_strong
-      // cursor: pointer
-  &__quene
-    cursor: pointer
-    &__icon
-      width: 1.6rem
-      height: 1.6rem
-      position: relative
-      background-image: url(../assets/document.svg)
-      background-size: cover
-      &::after
-        @extend .pseudo
-        width: 15px
-        height: 15px
-        padding-top: 2px
-        position: absolute
-        top: -1px
-        left: -2px
-        content: attr(data-quene)
-        font-size: 0.6rem
-        color: #fff
-        background-color: red
-        border-radius: 99rem
+  &__column {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    &__left{
+      @include ae768 {
+        flex: 0;
+      }
+    }
+  }
+  &__user {
+    &__name {
+      font-weight: 600;
+      color: $text_strong;
+      // cursor: pointer;
+    }
+  }
+  &__quene {
+    cursor: pointer;
+    &__icon {
+      width: 1.6rem;
+      height: 1.6rem;
+      position: relative;
+      background-image: url(../assets/document.svg);
+      background-size: cover;
+      &::after {
+        @extend .pseudo;
+        width: 15px;
+        height: 15px;
+        padding-top: 2px;
+        position: absolute;
+        top: -1px;
+        left: -2px;
+        content: attr(data-quene);
+        font-size: 0.6rem;
+        color: #fff;
+        background-color: red;
+        border-radius: 99rem;
+      }
+    }
+  }
+}
 
-.form__items
-  &__title, &__cells
-    width: 50%
-  &__cells
-    @include ae480
-      width: 100%
+.form__items {
+  &__title, &__cells {
+    width: 50%;
+  }
+  &__cells {
+    @include ae480 {
+      width: 100%;
+    }
+  }
+}
 
-.btn
-  height: auto
-  padding: 0 4px
-  border: none
-  &:hover
-    color: #fff
-    background-color: $bg_cover_layer
+.btn {
+  height: auto;
+  padding: 0 4px;
+  border: none;
+  &:hover {
+    color: #fff;
+    background-color: $bg_cover_layer;
+  }
+}
 </style>

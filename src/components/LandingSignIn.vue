@@ -78,23 +78,30 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-.form__items
-  &__title
-    width: 3.5rem
-  &__cells
-    width: 100%
-  &__footer
+<style scoped lang="scss">
+.form__items {
+  &__title {
+    width: 3.5rem;
+  }
+  &__cells {
+    width: 100%;
+  }
+  // &__footer
+}
 
-.btn__square
-  &:hover
-    border-color: $bd_input_focus
+.btn__square {
+  &:hover {
+    border-color: $bd_input_focus;
+  }
+}
 
-.text--hint
-  margin: 0
-  display: inline-block
-  font-size: 0.8rem
-  cursor: pointer
-  &:hover
-    transform: translateY(-1px)
+.text--hint {
+  margin: 0;
+  display: inline-block;
+  font-size: 0.8rem;
+  cursor: pointer;
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
 </style>

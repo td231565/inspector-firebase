@@ -103,42 +103,50 @@ export default {
 }
 </script>
 
-<style lang="sass">
-.home
-  width: 60%
-  height: 100%
-  margin: auto
-  padding: 0
-  position: relative
-  background-color: $bg_default
-  box-shadow: 0 0 1rem #000
-  // overflow: auto
+<style lang="scss">
+.home {
+  width: 60%;
+  height: 100%;
+  margin: auto;
+  padding: 0;
+  position: relative;
+  background-color: $bg_default;
+  box-shadow: 0 0 1rem #000;
+  // overflow: auto;
 
-  @include ae1100
-    width: 75%
-  @include ae768
-    width: 100%
+  @include ae1100 {
+    width: 75%;
+  }
+  @include ae768 {
+    width: 100%;
+  }
 
   // TODO: 手機版面，改成兩個頁面切換？
-  &__top
-    width: 100%
-    min-height: 40vh
-    position: absolute
-    top: 0
-    left: 0
-    background-color: $bg_default
-    z-index: 1
-  &__bottom
-    height: 100%
-    padding-top: 10px
-    overflow: auto
+  &__top {
+    width: 100%;
+    min-height: 40vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: $bg_default;
+    z-index: 1;
+  }
+  &__bottom {
+    height: 100%;
+    padding-top: 10px;
+    overflow: auto;
+  }
+}
 
-.viewerLayer
-  position: relative
+.viewerLayer {
+  position: relative;
+}
 
-.step-fade-enter-active, .step-fade-leave-active
-  transition: opacity .15s ease
+.step-fade-enter-active, .step-fade-leave-active {
+  transition: opacity .15s ease;
+}
 
-.step-fade-enter, .step-fade-leave-to
-  opacity: 0
+.step-fade-enter, .step-fade-leave-to {
+  opacity: 0;
+}
 </style>
