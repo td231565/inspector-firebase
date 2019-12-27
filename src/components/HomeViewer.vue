@@ -8,20 +8,20 @@
 </template>
 
 <script>
+import BIM from '../config/bimviewer'
+
 export default {
   name: 'viewer',
   data () {
     return {
       viewerServerHost: 'https://viewer.ctc.com.tw',
+      modelPath: 'dxbim/c1dc089c88dd4185a5d5b68ec1dfcfd5/1b5aaf8838dc4b3b9c0f424300eaf252/338b9ec428874dff9ae85f0a3426f47a.rvt',
       selectionId: '',
       selectionBBox: [],
       toggleDisplayModeFlag: false
     }
   },
   computed: {
-    modelPath () {
-      return this.$store.state.modelState.modelPath
-    },
     viewerSrc () {
       return this.viewerServerHost + '/viewer.html?path=' + this.modelPath
     },
@@ -30,6 +30,14 @@ export default {
     }
   },
   methods: {
+    setupViewer () {
+      let data = {
+        viewerServerHost: this.viewerServerHost,
+        modelPath: this.modelPath,
+        iframeWindow: this.$refs.iframe.contentWindow
+      }
+      BIM.initialize(data)
+    },
     postMsgToViewer (msg) {
       let vm = this
       vm.iframeWindow.postMessage(JSON.stringify(msg), vm.viewerServerHost)
@@ -201,6 +209,9 @@ export default {
         }
       }
     }, false)
+  },
+  mounted () {
+    this.setupViewer()
   }
 }
 </script>

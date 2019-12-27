@@ -13,6 +13,7 @@
       </ul>
     </div>
 
+    <!-- 必要內容 -->
     <ul class="form">
       <li class="form__items">
         <label class="form__items__title">查驗項目</label>

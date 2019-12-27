@@ -4,7 +4,7 @@
       <StateBar :isAddMissionToQuene="isAddMissionToQuene"
         @signOutGuess="signOutGuess"
         @stepToFirst="stepToFirst" />
-      <!-- <Viewer /> -->
+      <Viewer />
       <PdfViewer :stepNow="stepNow" :isAddNewMarker="isAddNewMarker"
         @pdfLoaded="detectTopHeight" @stepNext="stepNext"/>
       <StepBar :stepNow="stepNow"
@@ -29,7 +29,7 @@
 
 <script>
 import { mapState /*, mapActions */ } from 'vuex'
-// import Viewer from '../components/HomeViewer.vue'
+import Viewer from '../components/HomeViewer.vue'
 import PdfViewer from '../components/HomePdfViewer.vue'
 import StateBar from '../components/HomeStateBar.vue'
 import StepBar from '../components/HomeStepBar.vue'
@@ -42,7 +42,7 @@ import Form from './SectionForm.vue'
 export default {
   name: 'home',
   components: {
-    // Viewer,
+    Viewer,
     PdfViewer,
     StateBar,
     StepBar
