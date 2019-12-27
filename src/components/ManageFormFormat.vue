@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { format } from 'date-fns'
 import XLSX from 'xlsx'
 import { db } from '../config/db'
 
@@ -18,6 +19,12 @@ export default {
     }
   },
   methods: {
+    createNewId () {
+      const date = format(new Date(), 'yyyyMMdd')
+      const time = format(new Date(), 'HH:mm:ss')
+      const stamp = new Date().valueOf()
+      return `${date}-${time}-${stamp}`
+    },
     getFile (e) {
       const vm = this
       const file = e.target.files[0]
@@ -41,20 +48,22 @@ export default {
             result.map((item, i) => {
               format[i+1] = item
             })
-            console.log(result)
+            // console.log(result)
             setTimeout(() => vm.uploadFormFormatToDB(format), 1)
-          } else {
-            console.log('只讀取第一張工作表單')
           }
+          //  else {
+          //   console.log('只讀取第一張工作表單')
+          // }
         }
       }
       fileReader.readAsBinaryString(file)
     },
     uploadFormFormatToDB (formFormat) {
       // console.log(formFormat)
-      return db.collection('formFormat').add(formFormat)
+      const newId = this.createNewId()
+      return db.collection('formFormat').doc(newId).set(formFormat)
       .then(() => {
-        console.log('good')
+        console.log('上傳表單格式成功')
       }).catch(err => console.log(err))
     }
   }

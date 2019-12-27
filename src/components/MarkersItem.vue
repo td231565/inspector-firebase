@@ -2,6 +2,7 @@
   <div class="markerItem absolute--top" ref="mark" @click="selectMission(mark)">
     <img class="markerItem__icon" src="../assets/camera_marker.png" alt="">
     <p class="markerItem__text">{{ mark.name }}</p>
+    <p class="markerItem__text">{{ name }}</p>
   </div>
 </template>
 
@@ -17,6 +18,9 @@ export default {
   computed: {
     elementWidth () {
       return this.mark.elementWidth
+    },
+    name () {
+      return this.mark[1].value
     }
   },
   methods: {

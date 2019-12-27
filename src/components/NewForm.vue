@@ -4,16 +4,20 @@
       <h4 class="form__title">新查驗點資訊</h4>
 
       <li class="form__items">
-        <label class="form__items__title">查驗點名稱</label>
-        <input type="text" class="form__items__cells" v-model="name" required />
-      </li>
-      <li class="form__items">
-        <label class="form__items__title">樓層</label>
-        <input type="text" class="form__items__cells" v-model="floor" required />
-      </li>
-      <li class="form__items">
         <label class="form__items__title">查驗項目</label>
-        <input type="text" class="form__items__cells" v-model="issue" required />
+        <input type="text" name="查驗項目" class="form__items__cells" required />
+      </li>
+      <li class="form__items">
+        <label class="form__items__title">樓層位置</label>
+        <input type="text" name="樓層位置" class="form__items__cells" required />
+      </li>
+      <li class="form__items">
+        <label class="form__items__title">建立人員</label>
+        <input type="text" name="建立人員" class="form__items__cells" v-model="creator" disabled required />
+      </li>
+      <li class="form__items">
+        <label class="form__items__title">建立日期</label>
+        <input type="date" name="建立日期" class="form__items__cells" v-model="createDate" disabled required />
       </li>
       <li class="form__items__footer flex--center">
         <button type="submit" class="btn btn__square">確定</button>
@@ -31,9 +35,6 @@ export default {
   name: 'NewMarkerForm',
   data () {
     return {
-      name: '',
-      floor: '',
-      issue: '',
       createDate: format(new Date, 'yyyy-MM-dd')
     }
   },
@@ -49,26 +50,44 @@ export default {
     ...mapMutations({
       addingNewMarker: 'addingNewMarker'
     }),
-    setMarkerInfo () {
-      let info = {
-        name: this.name,
-        floor: this.floor,
-        issue: this.issue,
-        createDate: this.createDate,
-        creator: this.creator,
-        accompany: '',
-        category: '',
-        date: '',
-        image: '',
-        inspector: '尚未查驗',
-        photos: [],
-        plans: [],
-        point: [],
-        problem: '',
-        selfCheckState: '',
-        status: ''
+    setMarkerInfo (e) {
+      let form = e.target.elements
+      let formData = {}
+
+      for (let i=0; i<form.length; i++) {
+        if (!form[i].name) continue
+        formData[i+1] = {
+          name: form[i].name,
+          type: form[i].type,
+          value: form[i].value
+        }
       }
-      this.$emit('addMarkerInfo', info)
+
+      formData = Object.assign(formData, {
+        plans: [],
+        photos: []
+      })
+
+      // console.log(formData)
+      // let info = {
+      //   name: this.name,
+      //   floor: this.floor,
+      //   issue: this.issue,
+      //   createDate: this.createDate,
+      //   creator: this.creator,
+      //   accompany: '',
+      //   category: '',
+      //   date: '',
+      //   image: '',
+      //   inspector: '尚未查驗',
+      //   photos: [],
+      //   plans: [],
+      //   point: [],
+      //   problem: '',
+      //   selfCheckState: '',
+      //   status: ''
+      // }
+      this.$emit('addMarkerInfo', formData)
     },
     cancelAddNewMarker () {
       this.addingNewMarker(false)

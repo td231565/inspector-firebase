@@ -5,11 +5,11 @@
       :key="index+1"
       @click="selectMission(mission)">
       <div class="missionList__item__pic">
-        <img class="absolute--center" :src="mission.image" :alt="mission.name">
+        <img class="absolute--center" :src="mission.image" :alt="mission[1].value">
       </div>
       <div class="missionList__item__text">
         <p class="missionList__item__text__date">{{ mission.date }}</p>
-        <p class="missionList__item__text__name">{{ mission.floor }}_{{ mission.issue }}_{{ mission.name }}</p>
+        <p class="missionList__item__text__name">{{ mission[2].value }}_{{ mission[1].value }}</p>
       </div>
     </li>
   </ul>

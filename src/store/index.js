@@ -34,7 +34,7 @@ const userState = {
 const modelState = {
   state: {
     modelPath: 'https://firebasestorage.googleapis.com/v0/b/sme-markers-data-demo.appspot.com/o/test_plan_C.pdf?alt=media&token=8b074837-e93b-4cc2-8a3e-0a6dadc8e9aa',
-    modelName: 'gugci_d_22f_flat',
+    modelName: 'gugci_d_t_flat',
     modelImage: '',
     selectedMarkerData: null,
     // 依 Firestore 回傳值，確定上傳成功/失敗

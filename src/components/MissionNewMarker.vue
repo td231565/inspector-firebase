@@ -72,12 +72,9 @@ export default {
     },
     createNewId () {
       const date = format(new Date(), 'yyyyMMdd')
-      const time = format(new Date(), 'HH-mm-ss').split('-')
-      const hour = time[0]
-      const min = time[1]
-      const sec = time[2]
+      const time = format(new Date(), 'HH:mm:ss')
       const stamp = new Date().valueOf()
-      return `${date}h${hour}m${min}s${sec}-${stamp}`
+      return `${date}-${time}-${stamp}`
     },
     addMarkerDataToDB (info) {
       const modelName = this.modelName
@@ -91,7 +88,10 @@ export default {
       })
 
       markersDB.collection(modelName).doc(id).set(info)
-      .then(() => this.addStep = 3)
+      .then(() => {
+        this.addStep = 3
+        this.addAnnotationOnImage()
+      })
       .catch(err => {
         console.log(err)
       })
@@ -117,7 +117,11 @@ export default {
         left: toolbar.offsetLeft,
         top: toolbar.offsetTop + 25,
       }
-      toolbar.style.cssText = `position: absolute; left: ${position.left}px; top: ${position.top}px; z-index: 9;`
+      toolbar.style.cssText = `
+      position: absolute;
+      left: ${position.left}px;
+      top: ${position.top}px;
+      z-index: 9;`
     },
     convertBase64ToPng (dataUrl) {
       let vm = this
@@ -144,7 +148,7 @@ export default {
       markersDB.collection(modelName).doc(id).set({ image }, { merge: true })
       .catch(err => console.log(err))
       .then(() => {
-        console.log('new image')
+        // console.log('new image')
         this.getMarkerList().then(() => {
           this.selectCurrentMarker(id)
         })
@@ -155,9 +159,9 @@ export default {
     }
   },
   watch: {
-    addStep (val) {
-      if (val === 3) this.addAnnotationOnImage()
-    }
+    // addStep (val) {
+    //   if (val === 3) this.addAnnotationOnImage()
+    // }
   },
   mounted () {
     console.log(this.elementWidth)

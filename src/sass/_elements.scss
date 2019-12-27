@@ -1,3 +1,4 @@
+@import '_breakpoint.scss';
 @import '_variables.scss';
 
 .form {
@@ -5,14 +6,20 @@
     padding: 3px 0;
     display: flex;
     &__title {
-      width: 7rem;
+      width: 40%;
       padding-right: 0.8rem;
       text-align: right;
+      @include ae480 {
+        width: 7rem;
+      }
     }
     &__cells {
-      width: calc(100% - 8rem);
+      width: 55%;
       padding: 3px 6px;
       font-size: 0.8rem;
+      @include ae480 {
+        width: calc(100% - 8rem);
+      }
       &:focus {
         border-color: $bd_input_focus;
         background-color: $bg_input_focus;

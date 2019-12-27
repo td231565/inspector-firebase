@@ -1,67 +1,104 @@
 <template>
   <section class="home__bottom__section home__bottom__section__form">
     <h3>步驟4：建立 BIM 自主查驗表</h3>
-    <form @submit.prevent="updateMission">
 
+    <div class="form-format-area">
+      <ul>
+        <li class="form-format-area__item"
+          v-for="(form, i) in allFormFormat"
+          :key="i+1"
+          @click="selectFormFormat(form.formName)"
+          >{{ form.formName }}
+        </li>
+      </ul>
+    </div>
+
+    <ul class="form">
+      <li class="form__items">
+        <label class="form__items__title">查驗項目</label>
+        <input class="form__items__cells" name="查驗項目" type="text" v-model="name" disabled />
+      </li>
+      <li class="form__items">
+        <label class="form__items__title">樓層位置</label>
+        <input class="form__items__cells" name="樓層位置" type="text" v-model="floor" disabled />
+      </li>
+      <li class="form__items">
+        <label class="form__items__title">建立人員</label>
+        <input class="form__items__cells" name="建立人員" type="text" v-model="creator" disabled />
+      </li>
+      <li class="form__items">
+        <label class="form__items__title">建立日期</label>
+        <input class="form__items__cells" name="建立日期" type="date" v-model="createDate" disabled />
+      </li>
+    </ul>
+
+    <form @submit.prevent="updateMission" ref="form">
       <ul class="form">
-        <li class="form__items">
-          <label class="form__items__title">視點名稱</label>
-          <input class="form__items__cells" name="視點名稱" type="text" v-model="name" disabled />
+        <!-- 客製表格內容 -->
+        <li class=""
+          v-for="(column, i) in selectedFormFormat"
+          :key="i+1">
+
+          <!-- 下拉選單 -->
+          <div class="form__items" v-if="column.type === 'select'">
+            <label class="form__items__title">{{ column.name }}</label>
+            <select class="form__items__cells" :name="column.name" required>
+              <option>請選擇</option>
+              <option class=""
+                :type="column.type"
+                v-for="(option, index) in JSON.parse(column.content)"
+                :key="index+10"
+                :value="option">
+                {{ option }}
+              </option>
+            </select>
+          </div>
+
+          <!-- 單選框 -->
+          <div class="form__items" v-else-if="column.type === 'radio'">
+            <label class="form__items__title">{{ column.name }}</label>
+            <div class="form__items__cells">
+              <div class="choice"
+                v-for="(radio, index) in JSON.parse(column.content)"
+                :key="index+20">
+                <label>{{ radio }}</label>
+                <input :name="column.name" :type="column.type" required />
+              </div>
+            </div>
+          </div>
+
+          <!-- 多選框 -->
+          <div class="form__items" v-else-if="column.type === 'checkbox'">
+            <label class="form__items__title">{{ column.name }}</label>
+            <div class="form__items__cells">
+              <div class="choice"
+                v-for="(checkbox, index) in JSON.parse(column.content)"
+                :key="index+30">
+                <label>{{ checkbox }}</label>
+                <input :name="column.name" :type="column.type" required />
+              </div>
+            </div>
+          </div>
+
+          <!-- 多行文字 -->
+          <div class="form__items" v-else-if="column.type === 'textarea'">
+            <label class="form__items__title">{{ column.name }}</label>
+            <textarea class="form__items__cells" :name="column.name" required></textarea>
+          </div>
+
+          <!-- 單行文字 -->
+          <div class="form__items" v-else-if="column.type === 'text'">
+            <label class="form__items__title">{{ column.name }}</label>
+            <input class="form__items__cells" :name="column.name" :type="column.type" required />
+          </div>
+
+          <!-- 日期 -->
+          <div class="form__items" v-else-if="column.type === 'date'">
+            <label class="form__items__title">{{ column.name }}</label>
+            <input class="form__items__cells" :name="column.name" :type="column.type" required />
+          </div>
         </li>
-        <li class="form__items">
-          <label class="form__items__title">樓層位置</label>
-          <input class="form__items__cells" name="樓層位置" type="text" v-model="floor" disabled />
-        </li>
-        <li class="form__items" v-if="userInfo">
-          <label class="form__items__title">查驗人員</label>
-          <select class="form__items__cells" name="查驗人員" v-model="selectedInspector" required @blur="checkValid">
-            <option>尚未查驗</option>
-            <option>{{ inspector }}</option>
-          </select>
-          <p class="hint" v-if="!inspectorIsValid"><img src="../assets/shock.png">查驗人員需為本人。</p>
-        </li>
-        <li class="form__items" v-else>
-          <label class="form__items__title">查驗人員</label>
-          <input class="form__items__cells" name="查驗人員" type="text" v-model="selectedInspector" disabled />
-        </li>
-        <li class="form__items">
-          <label class="form__items__title">隨行人員</label>
-          <input class="form__items__cells" name="隨行人員" type="text" v-model="accompany" placeholder="以半形逗號區隔" />
-        </li>
-        <li class="form__items">
-          <label class="form__items__title">查驗日期</label>
-          <input class="form__items__cells" name="查驗日期" type="date" v-model="date" placeholder="yyyy-mm-dd" required />
-        </li>
-        <li class="form__items">
-          <label class="form__items__title">查驗類型</label>
-          <select class="form__items__cells" name="查驗類型" v-model="category" required>
-            <option value="">請選擇</option>
-            <option value="建築">建築</option>
-            <option value="結構">結構</option>
-            <option value="MEP">MEP</option>
-            <option value="ICT">ICT</option>
-          </select>
-        </li>
-        <li class="form__items">
-          <label class="form__items__title">自主檢查紀錄是否提送</label>
-          <select class="form__items__cells" name="自主檢查紀錄是否提送" v-model="selfCheckState" required>
-            <option value="">請選擇</option>
-            <option value="符合">符合</option>
-            <option value="不符合">不符合</option>
-          </select>
-        </li>
-        <li class="form__items">
-          <label class="form__items__title">圖說與模型是否一致</label>
-          <select class="form__items__cells" name="圖說與模型是否一致" v-model="status" required>
-            <option value="">請選擇</option>
-            <option value="符合">符合</option>
-            <option value="不符合">不符合</option>
-          </select>
-        </li>
-        <li class="form__items">
-          <label class="form__items__title">檢核結果說明</label>
-          <textarea class="form__items__cells log__problem" name="檢核結果說明" v-model="problem" required></textarea>
-        </li>
+
         <li class="form__items form__items__footer flex--right">
           <div class="form__result flex--center">
             <p class="form__result__text form__result__text--danger" v-if="errorText">{{ errorText }}</p>
@@ -93,23 +130,15 @@ export default {
   },
   data () {
     return {
-      name: '名稱',
-      floor: '樓層',
-      // inspector: '',
-      selectedInspector: '尚未查驗',
-      accompany: '',
       date: format(new Date(), 'yyyy-MM-dd'),
-      category: 'MEP',
-      selfCheckState: '符合',
-      status: '符合',
-      problem: 'OK',
       isUploadSuccess: null,
       isAdmin: false,
       errorText: '',
       snedText: '',
       isDeleteMission: false,
       inspectorIsValid: true,
-      
+      allFormFormat: [],
+      selectedFormFormat: {}
     }
   },
   computed: {
@@ -118,11 +147,18 @@ export default {
       userInfo: state => state.userState.userInfo,
       isMarkerUpdated: state => state.modelState.isMarkerUpdated,
     }),
-    inspector () {
-      let name = ''
-      if (this.userInfo) name = this.userInfo.name
-      return name
-    }
+    name () {
+      return this.missionData[1].value
+    },
+    floor () {
+      return this.missionData[2].value
+    },
+    creator () {
+      return this.missionData[3].value
+    },
+    createDate () {
+      return this.missionData[4].value
+    },
   },
   methods: {
     ...mapMutations({
@@ -132,17 +168,6 @@ export default {
     ...mapActions({
       updateMissionData: 'updateFromQueneToDB',
     }),
-    getMissionData () {
-      this.name = this.missionData.name
-      this.floor = this.missionData.floor
-      this.selectedInspector = this.missionData.inspector
-      this.accompany = this.missionData.accompany
-      this.date = this.missionData.date
-      this.category = this.missionData.category
-      this.selfCheckState = this.missionData.selfCheckState
-      this.status = this.missionData.status
-      this.problem = this.missionData.problem
-    },
     isAdminGroup () {
       let userInfo = this.userInfo
       if (!userInfo) return
@@ -174,31 +199,28 @@ export default {
       let formData = {}
 
       for (let i=0; i<form.length; i++) {
-        if (!form[i].name) continue
-        formData[form[i].name] = form[i].value
-      }
+        if (form[i].name === '查驗人員') {
+          if (form[i].value !== this.userInfo.name) {
+            this.setErrorTextContent('查驗人員須為本人')
+            return
+          }
+        }
 
-      console.log(formData)
+        if (!form[i].name) continue
+        // 索引從5開始，才不會覆蓋資料庫中前面4項查驗點基礎資訊
+        formData[i+5] = {
+          name: form[i].name,
+          type: form[i].type,
+          value: form[i].value
+        }
+      }
+      // console.log(formData)
 
       this.setErrorTextContent('')
 
-      const formIsValid = this.checkValid()
-      if (!formIsValid) return
-
       let data = this.missionData
       data = Object.assign(data, formData)
-
-      // data = Object.assign(data, {
-      //   accompany: this.accompany || '',
-      //   category: this.category,
-      //   date: this.date,
-      //   inspector: this.selectedInspector,
-      //   problem: this.problem,
-      //   selfCheckState: this.selfCheckState,
-      //   status: this.status
-      // })
-
-      console.log(data)
+      // console.log(data)
       this.checkInternetConnection(data)
     },
     deleteMission () {
@@ -215,11 +237,19 @@ export default {
     getFormFormat () {
       db.collection('formFormat').get().then(docs => {
         docs.forEach(doc => {
-
+          this.allFormFormat.push(doc.data())
         })
       })
     },
-    selectFormFormat () {
+    selectFormFormat (formName) {
+      this.allFormFormat.filter(item => {
+        item.formName === formName ? this.selectedFormFormat = item : ''
+      })
+    },
+    // 如果是已經填好的表單，資料從 missionData 抓
+    // 還未填寫，則從 form列表 挑選表格樣式
+    // 依'查驗人員'是否有值判斷
+    getData () {
 
     }
   },
@@ -237,9 +267,10 @@ export default {
   },
   created () {
     this.isAdminGroup()
+    this.getFormFormat()
   },
   mounted () {
-    this.getMissionData()
+    this.getData()
   },
   destroyed () {
     this.setSendTextContent('')
@@ -253,17 +284,20 @@ export default {
   margin: auto;
 
   @include ae1100 {
-    width: 65%;
+    width: 70%;
   }
   @include ae768 {
     width: 80%;
   }
-  @include ae480 {
-    width: 70%;
-  }
+  // @include ae480 {
+  //   width: 70%;
+  // }
 
   &__items {
     position: relative;
+    &__cells {
+      display: flex;
+    }
   }
   &__result {
     // width: 100%;
@@ -276,6 +310,21 @@ export default {
       &--normal {
         color: $text_success;
       }
+    }
+  }
+}
+
+.form-format-area {
+  margin: 1rem;
+  display: flex;
+  &__item {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+    border: 1px solid $bd_input_focus;
+    border-radius: 10px;
+    cursor: pointer;
+    &:hover {
+      background-color: rgba(#000, 0.1);
     }
   }
 }
