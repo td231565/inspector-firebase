@@ -64,6 +64,7 @@ function uploadQueneToDB () {
     .set(mission, { merge: true }).then(() => {
       // console.log('update data to DB success')
       store.commit('setMarkerUpdated', true)
+      store.commit('setLoading', false)
       clearQuene()
       console.log('upload data success' + quene)
     }).catch(err => {

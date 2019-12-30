@@ -13,7 +13,7 @@
       </ul>
     </div>
 
-    <!-- 必要內容 -->
+    <!-- 固定內容 -->
     <ul class="form">
       <li class="form__items">
         <label class="form__items__title">查驗項目</label>
@@ -41,17 +41,33 @@
           :key="i+1">
 
           <!-- 下拉選單 -->
-          <div class="form__items" v-if="column.type === 'select'">
+          <div class="form__items" v-if="column.type === 'select' && column.name !== '查驗人員'">
             <label class="form__items__title">{{ column.name }}</label>
             <select class="form__items__cells" :name="column.name" required>
               <option>請選擇</option>
-              <option class=""
+              <option
                 :type="column.type"
                 v-for="(option, index) in JSON.parse(column.content)"
                 :key="index+10"
                 :value="option">
                 {{ option }}
               </option>
+            </select>
+          </div>
+
+          <div class="form__items" v-else-if="column.name === '查驗人員'">
+            <label class="form__items__title">{{ column.name }}</label>
+            <select class="form__items__cells" :name="column.name" required>
+              <option>請選擇</option>
+              <option
+                :type="column.type"
+                v-for="(option, index) in JSON.parse(column.content)"
+                :key="index+10"
+                :value="option">
+                {{ option }}
+              </option>
+              <option v-if="column.value !== userInfo.name"
+                :value="userInfo.name">{{ userInfo.name }}</option>
             </select>
           </div>
 
@@ -164,7 +180,8 @@ export default {
   methods: {
     ...mapMutations({
       setSelectedMarkerData: 'setSelectedMarkerData',
-      setMarkerUpdated: 'setMarkerUpdated'
+      setMarkerUpdated: 'setMarkerUpdated',
+      setLoading: 'setLoading'
     }),
     ...mapActions({
       updateMissionData: 'updateFromQueneToDB',
@@ -180,15 +197,20 @@ export default {
     setErrorTextContent (content) {
       this.errorText = content
     },
+    uploadDataToQuene () {
+      this.setSendTextContent('上傳中... ')
+      this.setLoading(true)
+    },
     checkInternetConnection (data) {
-      console.log(1)
+      // console.log(1)
       addMissionToQuene(data)
       this.$emit('addMissionToQuene')
-      console.log(2)
+      // console.log(2)
 
       let icStatus = InternetConnection()
       icStatus
-      ? this.setSendTextContent('上傳中... ')
+      // ? this.setSendTextContent('上傳中... ')
+      ? this.uploadDataToQuene()
       : this.setErrorTextContent('網路訊號不佳，變更已存入等待清單')
     },
     checkValid () {

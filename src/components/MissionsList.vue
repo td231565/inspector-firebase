@@ -8,7 +8,8 @@
         <img class="absolute--center" :src="mission.image" :alt="mission[1].value">
       </div>
       <div class="missionList__item__text">
-        <p class="missionList__item__text__date">{{ mission.date }}</p>
+        <p class="missionList__item__text__date" v-if="!!mission[6]">{{ mission[6].value }}</p>
+        <p class="missionList__item__text__date" v-else>尚未查驗</p>
         <p class="missionList__item__text__name">{{ mission[2].value }}_{{ mission[1].value }}</p>
       </div>
     </li>
@@ -39,6 +40,9 @@ export default {
       this.setSelectedMarkerData(mission)
       this.$emit('stepNext')
     }
+  },
+  created () {
+    this.setSelectedMarkerData(undefined)
   }
 }
 </script>

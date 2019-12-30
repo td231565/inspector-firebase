@@ -49,6 +49,7 @@ export default {
       addingNewMarker: 'addingNewMarker'
     }),
     gotoAddNewMarker () {
+      // this.$emit('gotoAddNewMarker')
       this.addingNewMarker(true)
     },
     gotoPrint () {

@@ -1,21 +1,32 @@
 <template>
   <div class="viewer">
+
+    <NewMarker v-if="isShowNewMarkerForm"
+      :viewerServerHost="viewerServerHost"
+      :image="capturedSnapImage"
+      :status="capturedSnapStatus"
+      @hideNewMarkForm="hideNewMarkForm"
+      @setNewMarker="setNewMarker" />
+
     <iframe frameborder="0" id="viewerIframe"
       :src="viewerSrc"
       ref="iframe"
+      v-if="!selectedMarkerData"
       ></iframe>
-    <button @click="toggleDisplay">隔離</button>
-    <button @click="createNewSnapshotAndMarker">建新視點</button>
+    <!-- <button @click="toggleDisplay">隔離</button>
+    <button @click="createNewSnapshotAndMarker">建新視點</button> -->
 
-    <NewMarker v-if="isAddingNewMarker" class="view__new-mark-form"
-      @hideNewMarkForm="hideNewMarkForm" />
+    <div v-else>
+      <img class="viewer__image" :src="selectedMarkerData.image" alt="目標查驗點擷取畫面">
+    </div>
   </div>
 </template>
 
 <script>
 import BIM from '../config/bimviewer'
+import { format } from 'date-fns'
 import { markersDB } from '../config/db'
-import { mapState } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import NewMarker from '../components/ViewerNewMarker'
 
 export default {
@@ -31,14 +42,15 @@ export default {
       selectionBBox: [],
       capturedSnapImage: undefined,
       capturedSnapStatus: undefined,
-      isAddingNewMarker: false
-      // toggleDisplayModeFlag: false
+      isShowNewMarkerForm: false
     }
   },
   computed: {
     ...mapState({
       modelPath: state => state.modelState.modelPath,
       modelName: state => state.modelState.modelName,
+      selectedMarkerData: state => state.modelState.selectedMarkerData,
+      isAddNewMarker: state => state.systemState.isAddNewMarker,
     }),
     viewerSrc () {
       return this.viewerServerHost + '/viewer.html?path=' + this.modelPath
@@ -48,6 +60,14 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      addingNewMarker: 'addingNewMarker',
+      setSelectedMarkerData: 'setSelectedMarkerData',
+      setLoading: 'setLoading'
+    }),
+    ...mapActions({
+      getMarkerList: 'getMarkerList'
+    }),
     setupViewer () {
       let modelData = {
         viewerServerHost: this.viewerServerHost,
@@ -74,22 +94,36 @@ export default {
       })
     },
     hideNewMarkForm () {
-      this.isAddingNewMarker = false
+      this.isShowNewMarkerForm = false
+      this.addingNewMarker(false)
     },
     revealNewMarkForm () {
-      this.isAddingNewMarker = true
+      this.isShowNewMarkerForm = true
     },
-  },
-  watch: {
-    modelPath () {
-      this.setupViewer()
-    }
-  },
-  created () {
-    const vm = this
+    createNewId () {
+      const date = format(new Date(), 'yyyyMMdd')
+      const time = format(new Date(), 'HH:mm:ss')
+      const stamp = new Date().valueOf()
+      return `${date}-${time}-${stamp}`
+    },
+    setNewMarker (infoData) {
+      this.setLoading(true)
+      let newId = this.createNewId()
+      const vm = this
 
-    window.addEventListener('message', (e) => {
+      infoData['id'] = newId
+      markersDB.collection(vm.modelName).doc(newId).set(infoData).then(() => {
+        console.log('ok')
+        vm.setLoading(false)
+        vm.getMarkerList()
+        vm.setSelectedMarkerData(infoData)
+        vm.$emit('stepNext')
+      })
+    },
+    viewerMessageHandler (e) {
+      const vm = this
       if (e.origin !== vm.viewerServerHost) return
+
       let dataObj = (typeof e.data === 'object') ? e.data : JSON.parse(e.data)
       switch (dataObj.type) {
         // 回傳模型範圍 bbox
@@ -132,10 +166,25 @@ export default {
           break
         }
       }
-    }, false)
+    }
+  },
+  watch: {
+    modelPath () {
+      this.setupViewer()
+    },
+    isAddNewMarker (val) {
+      if (val) this.createNewSnapshotAndMarker()
+    }
+  },
+  created () {
+    /* 監聽 BIM viewer 回傳資訊 */
+    window.addEventListener('message', this.viewerMessageHandler, false)
   },
   mounted () {
     this.setupViewer()
+  },
+  beforeDestroy () {
+    window.removeEventListener('message', this.viewerMessageHandler, false)
   }
 }
 </script>
@@ -144,11 +193,16 @@ export default {
 .viewer {
   position: relative;
   overflow: hidden;
+  &__image {
+    width: 100%;
+    display: block;
+  }
 }
 
 #viewerIframe {
   width: 100%;
   height: 50vh;
+  display: block;
 
   @include ae768 {
     height: 40vh;

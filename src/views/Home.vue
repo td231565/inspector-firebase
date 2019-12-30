@@ -4,7 +4,8 @@
       <StateBar :isAddMissionToQuene="isAddMissionToQuene"
         @signOutGuess="signOutGuess"
         @stepToFirst="stepToFirst" />
-      <Viewer />
+      <Viewer
+        @stepNext="stepNext" />
       <!-- <PdfViewer :stepNow="stepNow" :isAddNewMarker="isAddNewMarker"
         @pdfLoaded="detectTopHeight" @stepNext="stepNext"/> -->
       <StepBar :stepNow="stepNow"
@@ -64,12 +65,12 @@ export default {
     })
   },
   methods: {
-    detectTopHeight () {
-      let topHeight = this.$refs.top.offsetHeight
-      let bottom = this.$refs.bottom
-      // console.log(topHeight)
-      bottom.style.paddingTop = topHeight + 'px'
-    },
+    // detectTopHeight () {
+    //   let topHeight = this.$refs.top.offsetHeight
+    //   let bottom = this.$refs.bottom
+    //   // console.log(topHeight)
+    //   bottom.style.paddingTop = topHeight + 'px'
+    // },
     stepPrev () {
       if (this.stepNow === 1) return
       return this.stepNow--
@@ -125,16 +126,18 @@ export default {
   &__top {
     width: 100%;
     min-height: 40vh;
-    position: absolute;
-    top: 0;
-    left: 0;
     background-color: $bg_default;
     z-index: 1;
   }
   &__bottom {
-    height: 100%;
-    padding-top: 10px;
+    height: 41vh;
     overflow: auto;
+    @include ae768 {
+      height: 52vh;
+    }
+    @include ae480 {
+      height: 48vh;
+    }
   }
 }
 
