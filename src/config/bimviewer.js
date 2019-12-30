@@ -8,9 +8,6 @@ const BIM = {
     _iframeWindow = data.iframeWindow
     viewerServerHost = data.viewerServerHost
     modelPath = data.modelPath
-    console.log(_iframeWindow)
-    console.log(viewerServerHost)
-    console.log(modelPath)
   },
 
   // 選中物件實體，呼叫屬性查詢
@@ -37,7 +34,7 @@ const BIM = {
   // 隔離選取物件
   toggleDisplayMode: {
     toggleFlag: 0,
-    switch: function (btn) {
+    switch: function () {
       let msg =  {
         type: 'MSG_SET_SELECTION_DISPLAY_MODE',
         data: {
@@ -45,7 +42,7 @@ const BIM = {
         }
       }
       _iframeWindow.postMessage(JSON.stringify(msg), viewerServerHost)
-      btn.textContent = (this.toggleFlag % 2 === 1) ? '隔離模式(On)' : '隔離模式(Off)'
+      // btn.textContent = (this.toggleFlag % 2 === 1) ? '隔離模式(On)' : '隔離模式(Off)'
     }
   },
   
@@ -141,7 +138,6 @@ const BIM = {
 
 window.addEventListener('message', (e) => {
   if (e.origin !== viewerServerHost) return
-  console.log(e.data)
   let dataObj = (typeof e.data === 'object') ? e.data : JSON.parse(e.data)
   switch (dataObj.type) {
     // 回傳模型範圍 bbox
@@ -149,16 +145,16 @@ window.addEventListener('message', (e) => {
       // console.log(dataObj.data)
       break
     }
-    // 無回傳
+    // 無回傳值
     case 'MSG_MODEL_TREE_READY':{
-      console.log('tree ready')
+      // console.log('tree ready')
       break
     }
     // 回傳選取物件 id、bbox
     case 'MSG_ENTITY_SELECTED': {
-      // console.log(dataObj.data)
-      let selectedData = dataObj.data
-      this.viewerSelectionChangeHandler(selectedData)
+      console.log(dataObj.data)
+      // let selectedData = dataObj.data
+      // BIM.viewerSelectionChangeHandler(selectedData)
       break
     }
     // 回傳選取物件屬性
@@ -176,6 +172,7 @@ window.addEventListener('message', (e) => {
       console.log(dataObj.data)
       break
     }
+    // 回傳擷取視點的視點資訊及畫面截圖
     case 'MSG_SNAPSHOT_CAPTURED': {
       console.log(dataObj.data)
       break

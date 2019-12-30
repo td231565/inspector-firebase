@@ -33,8 +33,8 @@ const userState = {
 
 const modelState = {
   state: {
-    modelPath: 'https://firebasestorage.googleapis.com/v0/b/sme-markers-data-demo.appspot.com/o/test_plan_C.pdf?alt=media&token=8b074837-e93b-4cc2-8a3e-0a6dadc8e9aa',
-    modelName: 'gugci_d_t_flat',
+    modelPath: 'dxbim/c1dc089c88dd4185a5d5b68ec1dfcfd5/1b5aaf8838dc4b3b9c0f424300eaf252/338b9ec428874dff9ae85f0a3426f47a.rvt',
+    modelName: 'Revit_Sample',
     modelImage: '',
     selectedMarkerData: null,
     // 依 Firestore 回傳值，確定上傳成功/失敗
