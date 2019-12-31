@@ -46,7 +46,7 @@ export default {
               formName: firstRow.name
             })
             result.map((item, i) => {
-              format[i+1] = item
+              format[i+5] = item
             })
             // console.log(result)
             setTimeout(() => vm.uploadFormFormatToDB(format), 1)

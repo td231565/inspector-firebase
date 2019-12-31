@@ -16,9 +16,9 @@
     <!-- <button @click="toggleDisplay">隔離</button>
     <button @click="createNewSnapshotAndMarker">建新視點</button> -->
 
-    <div v-else>
-      <img class="viewer__image" :src="selectedMarkerData.image" alt="目標查驗點擷取畫面">
-    </div>
+    <section class="viewer__image-block" v-else>
+      <img class="viewer__image-block__image" :src="selectedMarkerData.image" alt="目標查驗點擷取畫面">
+    </section>
   </div>
 </template>
 
@@ -50,6 +50,7 @@ export default {
       modelPath: state => state.modelState.modelPath,
       modelName: state => state.modelState.modelName,
       selectedMarkerData: state => state.modelState.selectedMarkerData,
+      markerList: state => state.modelState.markerList,
       isAddNewMarker: state => state.systemState.isAddNewMarker,
     }),
     viewerSrc () {
@@ -79,6 +80,10 @@ export default {
     toggleDisplay () {
       BIM.toggleDisplayMode.switch()
     },
+    createMarkers () {
+      // if (!this.markerList) return
+      this.markerList.map(item => BIM.createMarkers(item))
+    },
     createNewSnapshotAndMarker () {
       const vm = this
       let markers = []
@@ -91,6 +96,15 @@ export default {
         BIM.removeMarker(markers)
         BIM.createSnapshotCallback()
         vm.revealNewMarkForm()
+      })
+    },
+    selectMarkerFromViewer (id) {
+      const vm = this
+
+      markersDB.collection(vm.modelName).doc(id).get().then(doc => {
+        const docData = doc.data()
+        vm.setSelectedMarkerData(docData)
+        vm.$emit('stepNext')
       })
     },
     hideNewMarkForm () {
@@ -129,11 +143,13 @@ export default {
         // 回傳模型範圍 bbox
         case 'MSG_MODEL_READY':{
           // console.log(dataObj.data)
+          vm.setupViewer() // 每次回初始視點要重新定義 Viewer
           break
         }
         // 無回傳值
         case 'MSG_MODEL_TREE_READY':{
           // console.log('tree ready')
+          vm.createMarkers()
           break
         }
         // 回傳選取物件 id、bbox
@@ -156,6 +172,7 @@ export default {
         // 回傳選取 marker id
         case 'MSG_MARKER_SELECTED': {
           // console.log(dataObj.data)
+          vm.selectMarkerFromViewer(dataObj.data.id)
           break
         }
         // 回傳擷取視點的視點資訊及畫面截圖
@@ -174,6 +191,11 @@ export default {
     },
     isAddNewMarker (val) {
       if (val) this.createNewSnapshotAndMarker()
+    },
+    markerList () {
+      // 原本在 MODEL_READY 時呼叫
+      // 但 markList 還沒從 DB 載入，因此等載入後再呼叫
+      this.createMarkers()
     }
   },
   created () {
@@ -193,9 +215,27 @@ export default {
 .viewer {
   position: relative;
   overflow: hidden;
-  &__image {
+  &__image-block {
     width: 100%;
-    display: block;
+    height: 50vh;
+    overflow: auto;
+    @include ae768 {
+      // height: 45vh;
+      height: auto;
+    }
+    // @include ae480 {
+    //   height: 40vh;
+    // }
+    &__image {
+      // width: 100%;
+      height: 100%;
+      margin: auto;
+      display: block;
+      @include ae768 {
+        width: 100%;
+        height: auto;
+      }
+    }
   }
 }
 
@@ -205,6 +245,7 @@ export default {
   display: block;
 
   @include ae768 {
+    // width: 100%;
     height: 40vh;
   }
 }

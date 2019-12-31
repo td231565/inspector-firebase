@@ -2,7 +2,8 @@
   <section class="home__bottom__section home__bottom__section__form">
     <h3>步驟4：建立 BIM 自主查驗表</h3>
 
-    <div class="form-format-area">
+    <div class="form-format-area" v-if="!inspector">
+    <!-- <div class="form-format-area"> -->
       <ul>
         <li class="form-format-area__item"
           v-for="(form, i) in allFormFormat"
@@ -49,7 +50,8 @@
                 :type="column.type"
                 v-for="(option, index) in JSON.parse(column.content)"
                 :key="index+10"
-                :value="option">
+                :value="option"
+                :selected="option === column.value">
                 {{ option }}
               </option>
             </select>
@@ -63,38 +65,13 @@
                 :type="column.type"
                 v-for="(option, index) in JSON.parse(column.content)"
                 :key="index+10"
-                :value="option">
+                :value="option"
+                :selected="option === column.value">
                 {{ option }}
               </option>
               <option v-if="column.value !== userInfo.name"
                 :value="userInfo.name">{{ userInfo.name }}</option>
             </select>
-          </div>
-
-          <!-- 單選框 -->
-          <div class="form__items" v-else-if="column.type === 'radio'">
-            <label class="form__items__title">{{ column.name }}</label>
-            <div class="form__items__cells">
-              <div class="choice"
-                v-for="(radio, index) in JSON.parse(column.content)"
-                :key="index+20">
-                <label>{{ radio }}</label>
-                <input :name="column.name" :type="column.type" required />
-              </div>
-            </div>
-          </div>
-
-          <!-- 多選框 -->
-          <div class="form__items" v-else-if="column.type === 'checkbox'">
-            <label class="form__items__title">{{ column.name }}</label>
-            <div class="form__items__cells">
-              <div class="choice"
-                v-for="(checkbox, index) in JSON.parse(column.content)"
-                :key="index+30">
-                <label>{{ checkbox }}</label>
-                <input :name="column.name" :type="column.type" required />
-              </div>
-            </div>
           </div>
 
           <!-- 多行文字 -->
@@ -176,6 +153,10 @@ export default {
     createDate () {
       return this.missionData[4].value
     },
+    inspector () {
+      let t = (this.missionData[5]) ? this.missionData[5].value : undefined
+      return t
+    }
   },
   methods: {
     ...mapMutations({
@@ -219,7 +200,7 @@ export default {
     },
     updateMission (e) {
       let form = e.target.elements
-      let formData = {}
+      let formData = this.selectedFormFormat
 
       for (let i=0; i<form.length; i++) {
         if (form[i].name === '查驗人員') {
@@ -231,11 +212,12 @@ export default {
 
         if (!form[i].name) continue
         // 索引從5開始，才不會覆蓋資料庫中前面4項查驗點基礎資訊
-        formData[i+5] = {
-          name: form[i].name,
-          type: form[i].type,
-          value: form[i].value
-        }
+        // formData[i+5] = {
+        //   name: form[i].name,
+        //   type: form[i].type,
+        //   value: form[i].value
+        // }
+        formData[i+5].value = form[i].value
       }
       // console.log(formData)
 
@@ -258,6 +240,7 @@ export default {
     },
     // 取得表格格式
     getFormFormat () {
+      if (this.inspector) return
       db.collection('formFormat').get().then(docs => {
         docs.forEach(doc => {
           this.allFormFormat.push(doc.data())
@@ -273,7 +256,15 @@ export default {
     // 還未填寫，則從 form列表 挑選表格樣式
     // 依'查驗人員'是否有值判斷
     getData () {
+      if (!this.inspector) return
 
+      let data = {}
+      let formKeys = Object.keys(this.missionData).filter(k => parseInt(k).toString() !== 'NaN')
+      formKeys.map(k => {
+        if (k < 5) return
+        data[k] = this.missionData[k]
+      })
+      this.selectedFormFormat = data
     }
   },
   watch: {
@@ -290,10 +281,11 @@ export default {
   },
   created () {
     this.isAdminGroup()
+    this.getData()
     this.getFormFormat()
   },
   mounted () {
-    this.getData()
+
   },
   destroyed () {
     this.setSendTextContent('')
