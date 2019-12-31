@@ -33,29 +33,6 @@ let quene = []
 // ]
 
 function uploadQueneToDB () {
-  function checkAllImgConvert () {
-    let check = true
-    quene.forEach(mission => {
-      ['plans', 'photos'].forEach(arr => {
-        mission[arr].map(picture => {
-          // console.log(typeof(picture))
-          // console.log('before checking: ' + picture)
-          if (typeof(picture) !== 'string') {
-            // console.log('after checking: ' + picture)
-            check = false
-          }
-        })
-      })
-    })
-    return check
-  }
-  
-  let isAllImgConverted = checkAllImgConvert()
-  if (!isAllImgConverted) {
-    console.log('picture not convert')
-    return
-  }
-
   quene.map(mission => {
     let id = mission.id
     let modelName = store.getters.modelName
@@ -66,13 +43,35 @@ function uploadQueneToDB () {
       store.commit('setMarkerUpdated', true)
       store.commit('setLoading', false)
       clearQuene()
-      console.log('upload data success' + quene)
+      console.log('quene 上傳成功')
     }).catch(err => {
       console.log(err.code)
       store.commit('setMarkerUpdated', false)
       console.log(quene)
     })
   })
+}
+
+function checkAllImgConvert () {
+  let check = true
+  quene.forEach(mission => {
+    ['plans', 'photos'].forEach(arr => {
+      mission[arr].map(picture => {
+        if (typeof(picture) !== 'string') {
+          check = false
+        }
+      })
+    })
+  })
+
+  if (!check) {
+    console.log('圖片尚未取得url')
+    setTimeout(() => {
+      checkAllImgConvert()
+    }, 2000)
+  } else {
+    uploadQueneToDB()
+  }
 }
 
 function checkPictureConvert () {
@@ -103,9 +102,7 @@ function checkPictureConvert () {
     })
   })
 
-  setTimeout(() => {
-    uploadQueneToDB()
-  }, 2000)
+  checkAllImgConvert()
 }
 
 function checkConnection () {
