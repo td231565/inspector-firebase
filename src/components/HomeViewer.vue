@@ -99,12 +99,11 @@ export default {
       })
     },
     selectMarkerFromViewer (id) {
-      const vm = this
-
-      markersDB.collection(vm.modelName).doc(id).get().then(doc => {
-        const docData = doc.data()
-        vm.setSelectedMarkerData(docData)
-        vm.$emit('stepNext')
+      this.markerList.filter(item => {
+        if (item.id === id) {
+          this.setSelectedMarkerData(item)
+          this.$emit('stepNext')
+        }
       })
     },
     hideNewMarkForm () {
@@ -127,7 +126,7 @@ export default {
 
       infoData['id'] = newId
       markersDB.collection(vm.modelName).doc(newId).set(infoData).then(() => {
-        console.log('ok')
+        console.log('新視點建立成功')
         vm.setLoading(false)
         vm.getMarkerList()
         vm.setSelectedMarkerData(infoData)

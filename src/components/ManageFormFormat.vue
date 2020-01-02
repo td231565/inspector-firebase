@@ -45,9 +45,14 @@ export default {
             let format = Object.assign({}, {
               formName: firstRow.name
             })
-            result.map((item, i) => {
-              format[i+5] = item
-            })
+            // result.map((item, i) => {
+            //   
+            //   format[i+5] = item
+            // })
+            for (let i=0; i<result.length; i++) {
+              if (i === 0) continue
+              format[i+4] = result[i]
+            }
             // console.log(result)
             setTimeout(() => vm.uploadFormFormatToDB(format), 1)
           }

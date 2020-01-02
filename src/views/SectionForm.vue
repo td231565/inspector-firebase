@@ -61,14 +61,10 @@
             <label class="form__items__title">{{ column.name }}</label>
             <select class="form__items__cells" :name="column.name" required>
               <option>請選擇</option>
-              <option
-                :type="column.type"
-                v-for="(option, index) in JSON.parse(column.content)"
-                :key="index+10"
-                :value="option"
-                :selected="option === column.value">
-                {{ option }}
-              </option>
+              <option>尚未查驗</option>
+              <option v-if="!!column.value"
+                :value="column.value"
+                selected>{{ column.value }}</option>
               <option v-if="column.value !== userInfo.name"
                 :value="userInfo.name">{{ userInfo.name }}</option>
             </select>
@@ -77,19 +73,22 @@
           <!-- 多行文字 -->
           <div class="form__items" v-else-if="column.type === 'textarea'">
             <label class="form__items__title">{{ column.name }}</label>
-            <textarea class="form__items__cells" :name="column.name" required></textarea>
+            <textarea class="form__items__cells"
+              :name="column.name" :value="column.value" required></textarea>
           </div>
 
           <!-- 單行文字 -->
           <div class="form__items" v-else-if="column.type === 'text'">
             <label class="form__items__title">{{ column.name }}</label>
-            <input class="form__items__cells" :name="column.name" :type="column.type" required />
+            <input class="form__items__cells"
+              :name="column.name" :type="column.type" :value="column.value" required />
           </div>
 
           <!-- 日期 -->
           <div class="form__items" v-else-if="column.type === 'date'">
             <label class="form__items__title">{{ column.name }}</label>
-            <input class="form__items__cells" :name="column.name" :type="column.type" required />
+            <input class="form__items__cells"
+              :name="column.name" :type="column.type" :value="column.value" required />
           </div>
         </li>
 
@@ -130,7 +129,7 @@ export default {
       errorText: '',
       snedText: '',
       isDeleteMission: false,
-      inspectorIsValid: true,
+      // inspectorIsValid: true,
       allFormFormat: [],
       selectedFormFormat: {}
     }
@@ -194,13 +193,14 @@ export default {
       ? this.uploadDataToQuene()
       : this.setErrorTextContent('網路訊號不佳，變更已存入等待清單')
     },
-    checkValid () {
-      this.inspectorIsValid = (this.selectedInspector !== this.userInfo.name) ? false : true
-      return this.inspectorIsValid
-    },
+    // checkValid () {
+    //   this.inspectorIsValid = (this.selectedInspector !== this.userInfo.name) ? false : true
+    //   return this.inspectorIsValid
+    // },
     updateMission (e) {
       let form = e.target.elements
       let formData = this.selectedFormFormat
+      let data = this.missionData
 
       for (let i=0; i<form.length; i++) {
         if (form[i].name === '查驗人員') {
@@ -210,22 +210,16 @@ export default {
           }
         }
 
-        if (!form[i].name) continue
+        if (!form[i].name) break
         // 索引從5開始，才不會覆蓋資料庫中前面4項查驗點基礎資訊
-        // formData[i+5] = {
-        //   name: form[i].name,
-        //   type: form[i].type,
-        //   value: form[i].value
-        // }
         formData[i+5].value = form[i].value
+        // console.log('name: ' + form[i].name + ' , value: ' + form[i].value)
       }
-      // console.log(formData)
 
-      this.setErrorTextContent('')
-
-      let data = this.missionData
       data = Object.assign(data, formData)
       // console.log(data)
+
+      this.setErrorTextContent('')
       this.checkInternetConnection(data)
     },
     deleteMission () {
@@ -264,6 +258,7 @@ export default {
         if (k < 5) return
         data[k] = this.missionData[k]
       })
+      // console.log(data)
       this.selectedFormFormat = data
     }
   },
