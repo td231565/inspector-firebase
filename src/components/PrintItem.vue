@@ -38,8 +38,6 @@ export default {
       imageInlineCss: '',
       imageWidth: 250,
       imageHeight: 187
-      // imageWidth: '',
-      // imageHeight: ''
     }
   },
   computed: {

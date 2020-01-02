@@ -92,8 +92,9 @@ export default {
           if (doc.id !== 'modelInfo') markers.push(doc.id)
         })
       }).then(() => {
-        // 移除 markers 後才擷取視點
+        // 1. 移除 markers
         BIM.removeMarker(markers)
+        // 2. 擷取視點
         BIM.createSnapshotCallback()
         vm.revealNewMarkForm()
       })
@@ -193,7 +194,7 @@ export default {
     },
     markerList () {
       // 原本在 MODEL_READY 時呼叫
-      // 但 markList 還沒從 DB 載入，因此等載入後再呼叫
+      // 但第一次載入時，markList 還沒從 DB 載入，因此等載入後再呼叫
       this.createMarkers()
     }
   },

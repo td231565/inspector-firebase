@@ -1,12 +1,22 @@
 <template>
   <div class="manage">
     <div class="manage__controls">
+      <button class="btn btn__square" @click="toggleMenu">&#9776;</button>
       <button class="btn btn__square btn__square--success" @click="backToHome">上一步</button>
+
+      <transition name="step-fade" mode="out-in">
+        <ul class="manage__controls__menu" v-show="isMenuActive">
+          <li class="manage__controls__menu__item"
+            v-for="(f, i) in manageFunctions"
+            :key="i+1"
+            @click="chooseFunction(i)">{{ f }}
+          </li>
+        </ul>
+      </transition>
     </div>
 
-    <div class="manage__interface">
-      <ManageFormFormat />
-      <ManageModel />
+    <div class="manage__main">
+      <component :is="managePath" />
     </div>
 
   </div>
@@ -15,8 +25,6 @@
 <script>
 import ManageModel from '../components/ManageModel'
 import ManageFormFormat from '../components/ManageFormFormat'
-import XLSX from 'xlsx'
-import { db } from '../config/db'
 
 export default {
   name: 'manage',
@@ -26,49 +34,22 @@ export default {
   },
   data () {
     return {
-
+      managePath: ManageModel,
+      manageComponents: [ManageModel, ManageFormFormat],
+      manageFunctions: ['模型管理', '表格樣式管理'],
+      isMenuActive: false
     }
   },
+  computed: {
+
+  },
   methods: {
-    /* 表格管理 */
-    getFile (e) {
-      const vm = this
-      const file = e.target.files[0]
-      const fileReader = new FileReader()
-
-      fileReader.onload = function (ev) {
-        const data = ev.target.result
-        let workbook = XLSX.read(data, {
-          type: 'binary' // 以二進制讀取 xls 檔案
-        })
-        let wbList = Object.keys(workbook.Sheets)
-
-        for (let sheet in workbook.Sheets) {
-          vm.newFormFormat = {}
-          if (sheet === wbList[0]) {
-            let result = XLSX.utils.sheet_to_json(workbook.Sheets[sheet])
-            let firstRow = result[0]
-            let format = Object.assign({}, {
-              formName: firstRow.name
-            })
-            result.map((item, i) => {
-              format[i+1] = item
-            })
-            console.log(result)
-            setTimeout(() => vm.uploadFormFormatToDB(format), 1)
-          } else {
-            console.log('只讀取第一張工作表單')
-          }
-        }
-      }
-      fileReader.readAsBinaryString(file)
+    toggleMenu () {
+      this.isMenuActive = !this.isMenuActive
     },
-    uploadFormFormatToDB (formFormat) {
-      // console.log(formFormat)
-      return db.collection('formFormat').add(formFormat)
-      .then(() => {
-        console.log('good')
-      }).catch(err => console.log(err))
+    chooseFunction (i) {
+      this.managePath = this.manageComponents[i]
+      this.toggleMenu()
     },
     backToHome () {
       this.$emit('backToHome')
@@ -79,13 +60,55 @@ export default {
 
 <style lang="scss" scoped>
 .manage {
-  &__interface {
+  width: 70%;
+  margin: auto;
+
+  @include ae1100 {
+    width: 75%;
+  }
+  @include ae768 {
+    width: 100%;
+  }
+
+  &__controls {
+    width: 100%;
+    height: 50px;
     display: flex;
-    > div {
-      flex: 1;
-      padding: 0 1rem;
-      border: 1px solid green;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    background-color: $bg_stepBar;
+    &__menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #fff;
+      box-shadow: 2px 2px 4px #808080;
+      overflow: hidden;
+      z-index: 9;
+      &__item {
+        padding: 0.5rem 1rem;
+        display: flex;
+        cursor: pointer;
+        &:hover {
+          color: #fff;
+          background-color: rgba(#000, 0.3);
+        }
+      }
     }
   }
+
+  // &__main {
+  //   margin: 2rem;
+  // }
+}
+
+.step-fade-enter-active, .step-fade-leave-active {
+  height: 100%;
+  transition: all .3s;
+}
+
+.step-fade-enter, .step-fade-leave-to {
+  height: 0;
 }
 </style>

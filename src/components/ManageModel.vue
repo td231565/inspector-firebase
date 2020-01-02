@@ -2,11 +2,13 @@
   <div class="manageModels">
     <div class="manageModels__header">
       <h3>模型管理</h3>
-      <button class="manageModels__header__btn" @click="revealAddingForm">新增</button>
+      <button class="manageModels__header__btn btn btn__square" @click="revealAddingForm">新增</button>
     </div>
 
     <ul class="manageModels__addnew form" v-if="isAddingNewModelInfo">
-      <li><h3>新增模型</h3></li>
+      <li>
+        <h3>新增模型</h3>
+      </li>
       <li class="form__items">
         <label class="form__items__title">模型名稱</label>
         <input class="form__items__cells" v-model="modelName" />

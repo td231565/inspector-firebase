@@ -2,17 +2,14 @@
   <section class="home__bottom__section home__bottom__section__form">
     <h3>步驟4：建立 BIM 自主查驗表</h3>
 
-    <div class="form-format-area" v-if="!inspector">
-    <!-- <div class="form-format-area"> -->
-      <ul>
-        <li class="form-format-area__item"
-          v-for="(form, i) in allFormFormat"
-          :key="i+1"
-          @click="selectFormFormat(form.formName)"
-          >{{ form.formName }}
-        </li>
-      </ul>
-    </div>
+    <ul class="form-format-area" v-if="!inspector">
+      <li class="form-format-area__item"
+        v-for="(form, i) in allFormFormat"
+        :key="i+1"
+        @click="selectFormFormat(form.formName)"
+        >{{ form.formName }}
+      </li>
+    </ul>
 
     <!-- 固定內容 -->
     <ul class="form">
@@ -153,8 +150,7 @@ export default {
       return this.missionData[4].value
     },
     inspector () {
-      let t = (this.missionData[5]) ? this.missionData[5].value : undefined
-      return t
+      return (this.missionData[5]) ? this.missionData[5].value : undefined
     }
   },
   methods: {
@@ -328,6 +324,7 @@ export default {
   margin: 1rem;
   display: flex;
   &__item {
+    margin: 0 3px;
     padding: 0.2rem 0.5rem;
     font-size: 0.8rem;
     border: 1px solid $bd_input_focus;

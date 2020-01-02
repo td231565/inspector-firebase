@@ -16,20 +16,19 @@
           <td class="print__column" colspan="6">工程名稱：{{ projectName }}</td>
         </tr>
         <tr class="print__row" :style="style_rowspan">
-          <td class="print__column" colspan="6">查驗日期：{{ date }}</td>
-          <!-- <td class="print__column" colspan="3" :style="style_width_col_2">編號：</td> -->
+          <td class="print__column" colspan="3" :style="style_width_col_2">查驗日期：{{ date }}</td>
+          <td class="print__column" colspan="3" :style="style_width_col_2">編號：</td>
         </tr>
         <tr class="print__row">
-          <td class="print__column" colspan="6">查驗項目：{{ modelName }}</td>
+          <td class="print__column" colspan="6">查驗項目：{{ modelInfo.modelName }}</td>
         </tr>
-        <!-- 客製內容 -->
         <tr class="print__row">
           <td class="print__column" colspan="6">
-            <!-- <span>查驗類型：</span>
+            <span>查驗類型：</span>
             <input type="checkbox" v-model="checkboxAr" disabled /><label>建築</label>
             <input type="checkbox" v-model="checkboxSt" disabled /><label>結構</label>
             <input type="checkbox" v-model="checkboxMep" disabled /><label>MEP</label>
-            <input type="checkbox" v-model="checkboxIct" disabled /><label>ICT</label> -->
+            <input type="checkbox" v-model="checkboxIct" disabled /><label>ICT</label>
           </td>
         </tr>
         <tr class="print__row">
@@ -120,7 +119,7 @@
 
 <script>
 import { mapState } from 'vuex'
-// import { db } from '../config/db'
+import { db } from '../config/db'
 import PrintItem from '../components/PrintItem'
 import saveDoc from '../config/saveDoc'
 // import html2Doc from '../config/html2doc'
@@ -132,8 +131,18 @@ export default {
   },
   data () {
     return {
-      // modelInfo: {},
-      // allMissionsData: [],
+      modelInfo: {},
+      missionsData: [],
+      projectName: 'P開發計畫 統包工程',
+      checkboxAr: false,
+      checkboxSt: false,
+      checkboxMep: false,
+      checkboxIct: false,
+      selfCheckNo: false,
+      selfCheckYes: true,
+      statusNo: false,
+      statusYes: true,
+      errorText: '',
       // 表格在 Word 中以'文繞圖'排列
       style_insideTable: 'mso-table-overlap:never;mso-table-lspace:9pt;\
         margin-left:3pt;mso-table-rspace:9pt;margin-right:0;\
@@ -142,58 +151,118 @@ export default {
       // 表格中 row span
       style_rowspan: 'mso-yfti-irow:2;',
       style_width_col_3: 'width: 33%;',
-      style_width_col_2: 'width: 50%;',
-      // 查驗資料
-      projectName: 'OO工程',
+      style_width_col_2: 'width: 50%;'
     }
   },
   computed: {
     ...mapState({
       modelName: state => state.modelState.modelName,
-      markerList: state => state.modelState.markerList
     }),
+    missionsWithStatusYes () {
+      if (!this.missionsData || this.missionsData.length === 0) return
+      return this.missionsData.filter(mission => mission.status === '符合')
+    },
+    missionsWithStatusNo () {
+      if (!this.missionsData || this.missionsData.length === 0) return
+      return this.missionsData.filter(mission => mission.status === '不符合')
+    },
     date () {
-      return this.markerList.map(item => {
-        if (item.name === '查驗日期') return item.value
-      })
+      if (!this.missionsData || this.missionsData.length === 0) return
+      return this.missionsData[0].date.replace('-', '年').replace('-', '月').concat('日')
+    },
+    checkboxType () {
+      if (!this.missionsData || this.missionsData.length === 0) return
+      return this.missionsData[0].category
+    },
+    issue () {
+      if (!this.missionsData || this.missionsData.length === 0) return
+      return this.missionsData[0].issue
+    },
+    inspector () {
+      if (!this.missionsData || this.missionsData.length === 0) return
+      return this.missionsData[0].inspector
+    },
+    accompany () {
+      if (!this.missionsData || this.missionsData.length === 0) return
+      return this.missionsData[0].accompany.replace(/,/g, '、')
     }
   },
   methods: {
     backToHome () {
       this.$emit('backToHome')
     },
-    // getMissionData () {
-    //   let vm = this
-    //   db.collection('markersData').doc('gugci_d')
-    //     .collection(this.modelName).get().then(docs => {
-    //       vm.allMissionsData = []
-    //       docs.forEach(doc => {
-    //         let docData = doc.data()
-    //         doc.id === 'modelInfo'
-    //         ? this.modelInfo = docData
-    //         : vm.allMissionsData.push(docData)
-    //       })
-    //     })
-    //     .catch(err => this.errorText = err)
-    // },
+    getMissionData () {
+      let vm = this
+      db.collection('markersData').doc('gugci_d')
+        .collection(this.modelName).get().then(docs => {
+          vm.missionsData = []
+          docs.forEach(doc => {
+            let docData = doc.data()
+            doc.id === 'modelInfo'
+            ? this.modelInfo = docData
+            : vm.missionsData.push(docData)
+          })
+        })
+        .catch(err => this.errorText = err)
+    },
+    selectCheckboxByType (val) {
+      switch (val) {
+        case '結構':
+          this.checkboxSt = true
+          break
+        case '建築':
+          this.checkboxAr = true
+          break
+        case 'MEP':
+          this.checkboxMep = true
+          break
+        case 'ICT':
+          this.checkboxIct = true
+          break
+      }
+    },
+    checkStatusByType () {
+      if (this.statusNo === true) return
+
+      this.missionsData.map(mission => {
+        if (mission.status === '不符合') {
+          this.statusNo = true
+          this.statusYes = false
+        }
+      })
+    },
+    checkSelfStateByType () {
+      if (this.selfCheckNo === true) return
+
+      this.missionsData.map(mission => {
+        if (mission.selfCheckState === '不符合') {
+          this.selfCheckNo = true
+          this.selfCheckYes = false
+        }
+      })
+    },
     printPage () {
       window.print()
     },
     exportToDoc () {
+      // let table = document.getElementById('printTable')
       let table = this.$refs.printTable
+      // html2Doc(table, 'BIM自主查驗報表')
       saveDoc(table, 'BIM自主查驗報表')
     }
   },
   watch: {
-
+    checkboxType (val) {
+      this.selectCheckboxByType(val)
+    }
   },
   created () {
-    // this.getMissionData()
+    this.getMissionData()
   },
-  // updated () {
-  //   this.checkStatusByType()
-  //   this.checkSelfStateByType()
-  // }
+  updated () {
+    this.checkStatusByType()
+    this.checkSelfStateByType()
+  }
 }
 </script>
 
