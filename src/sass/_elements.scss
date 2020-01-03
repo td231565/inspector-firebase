@@ -146,9 +146,19 @@
         background-color: $bg_btn_danger;
         border-color: $bg_btn_danger;
       }
+      @include ae768 {
+        color: #fff;
+        background-color: $bg_btn_danger;
+        border-color: $bg_btn_danger;
+      }
     }
     &--success {
       &:hover {
+        color: #fff;
+        background-color: $bg_btn_success;
+        border-color: $bg_btn_success;
+      }
+      @include ae768 {
         color: #fff;
         background-color: $bg_btn_success;
         border-color: $bg_btn_success;

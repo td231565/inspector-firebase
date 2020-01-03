@@ -25,15 +25,11 @@
 
 <script>
 import { mapMutations } from 'vuex'
-// import { markersDB } from '../config/db'
 
 export default {
   name: 'PopWarning',
   computed: {
-    // ...mapState({
-    //   modelName: state => state.modelState.modelName,
-    //   selectedMarkerData: state => state.modelState.selectedMarkerData
-    // })
+
   },
   methods: {
     ...mapMutations({

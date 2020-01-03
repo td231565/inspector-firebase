@@ -5,33 +5,39 @@
       <button class="manageModels__header__btn btn btn__square" @click="revealAddingForm">新增</button>
     </div>
 
-    <ul class="manageModels__addnew form" v-if="isAddingNewModelInfo">
-      <li>
-        <h3>新增模型</h3>
-      </li>
-      <li class="form__items">
-        <label class="form__items__title">模型名稱</label>
-        <input class="form__items__cells" v-model="modelName" />
-      </li>
-      <li class="form__items">
-        <label class="form__items__title">模型樓層</label>
-        <input class="form__items__cells" v-model="modelFloor" />
-      </li>
-      <li class="form__items">
-        <label class="form__items__title">模型路徑</label>
-        <input class="form__items__cells" v-model="modelPath" />
-      </li>
-      <li class="form__items flex--right">
-        <button @click="uploadModelToDB">上傳</button>
-        <button @click="hideAddingForm">取消</button>
-      </li>
-    </ul>
+    <!-- 新增模型資訊 -->
+    <div class="manageModels__addnew" v-if="isAddingNewModelInfo">
+      <ul class="form">
+        <li>
+          <h3>新增模型</h3>
+        </li>
+        <li class="form__items">
+          <label class="form__items__title">模型名稱</label>
+          <input class="form__items__cells" v-model="modelName" />
+        </li>
+        <li class="form__items">
+          <label class="form__items__title">模型樓層</label>
+          <input class="form__items__cells" v-model="modelFloor" />
+        </li>
+        <li class="form__items">
+          <label class="form__items__title">模型路徑</label>
+          <input class="form__items__cells" v-model="modelPath" />
+        </li>
+        <li class="form__items flex--center">
+          <button class="btn btn__square btn__square--success" @click="uploadModelToDB">上傳</button>
+          <button class="btn btn__square" @click="hideAddingForm">取消</button>
+        </li>
+      </ul>
+    </div>
 
+    <!-- 模型列表 -->
     <ul class="manageModels__table list">
       <li class="manageModels__table__item list__item"
         v-for="(model, i) in modelList" :key="i+1"
         @click="selectModelFromDB(model)">
         {{ i+1 }}. {{ model }}
+
+        <!-- 選取模型詳細資訊 -->
         <ul class="manageModels__table__item-info" v-if="!!selectModel && selectModel.id === model">
           <li class="form__items">
             <label class="form__items__title">模型名稱</label>
@@ -46,6 +52,7 @@
             <input class="form__items__cells" v-model="selectModel.modelPath" disabled />
           </li>
         </ul>
+
       </li>
     </ul>
 
@@ -138,7 +145,42 @@ export default {
     }
   }
   &__addnew {
-    margin-bottom: 2rem;
+    width: 100%;
+    height: 100%;
+    padding-top: 6rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    color: #fff;
+    background-color: rgba(#000, 0.7);
+    .form {
+      width: 30%;
+      &__items {
+        &__title {
+          width: 7rem;
+          @include ae480 {
+            width: 20%;
+          }
+        }
+        &__cells {
+          width: calc(100% - 7rem);
+          @include ae480 {
+            width: 80%;
+          }
+        }
+        &:nth-last-child(1) {
+          margin-top: 2rem;
+        }
+      }
+      @include ae768 {
+        width: 70%;
+      }
+      @include ae480 {
+        width: 90%;
+      }
+    }
   }
   &__table {
     text-align: left;

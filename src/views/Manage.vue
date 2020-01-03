@@ -1,8 +1,8 @@
 <template>
   <div class="manage">
     <div class="manage__controls">
-      <button class="btn btn__square" @click="toggleMenu">&#9776;</button>
-      <button class="btn btn__square btn__square--success" @click="backToHome">上一步</button>
+      <button class="manage__controls__toggle btn" @click="toggleMenu"></button>
+      <button class="btn btn__square btn__square" @click="backToHome">上一步</button>
 
       <transition name="step-fade" mode="out-in">
         <ul class="manage__controls__menu" v-show="isMenuActive">
@@ -78,9 +78,16 @@ export default {
     justify-content: space-between;
     align-items: center;
     position: relative;
-    // top: 0;
     background-color: $bg_stepBar;
-    // overflow: hidden;
+    &__toggle {
+      width: 2.2rem;
+      height: 2.2rem;
+      margin: 0 0 0 1rem;
+      padding: 0;
+      background-color: transparent;
+      background-image: url(../assets/menu.svg);
+      border: none;
+    }
     &__menu {
       position: absolute;
       top: 100%;
@@ -103,7 +110,6 @@ export default {
 
   &__main {
     height: calc(100% - 50px);
-    // margin-top: 50px;
     overflow: auto;
   }
 }
