@@ -9,7 +9,7 @@
         <h2 class="warning__content__header">警告</h2>
 
         <div class="warning__content__text">
-          <p>確定要刪除此查驗點嗎？</p>
+          <p><slot></slot></p>
           <p class="danger">注意：此動作無法回復</p>
         </div>
 
@@ -24,34 +24,27 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { markersDB } from '../config/db'
+import { mapMutations } from 'vuex'
+// import { markersDB } from '../config/db'
 
 export default {
   name: 'PopWarning',
   computed: {
-    ...mapState({
-      modelName: state => state.modelState.modelName,
-      selectedMarkerData: state => state.modelState.selectedMarkerData
-    })
+    // ...mapState({
+    //   modelName: state => state.modelState.modelName,
+    //   selectedMarkerData: state => state.modelState.selectedMarkerData
+    // })
   },
   methods: {
+    ...mapMutations({
+      setLoading: 'setLoading'
+    }),
     doDelete () {
-      let id = this.selectedMarkerData.id
-      let modelName = this.modelName
-
-      markersDB.collection(modelName).doc(id).delete()
-      .then(() => {
-        console.log('delete data successful')
-        this.$emit('revealWarning', null)
-        this.$emit('stepToFirst')
-      }).catch(err => {
-        console.log(err.code)
-        this.$emit('revealWarning', '刪除失敗')
-      })
+      this.$emit('doDelete')
+      this.setLoading(true)
     },
     cancelDelete () {
-      this.$emit('revealWarning', null)
+      this.$emit('hideWarning', null)
     }
   }
 }

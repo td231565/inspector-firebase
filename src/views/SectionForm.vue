@@ -32,75 +32,22 @@
     </ul>
 
     <form @submit.prevent="updateMission" ref="form">
-      <ul class="form">
-        <!-- 客製表格內容 -->
-        <li class=""
-          v-for="(column, i) in selectedFormFormat"
-          :key="i+1">
+      <FormFormat :selectedFormFormat="selectedFormFormat" />
 
-          <!-- 下拉選單 -->
-          <div class="form__items" v-if="column.type === 'select' && column.name !== '查驗人員'">
-            <label class="form__items__title">{{ column.name }}</label>
-            <select class="form__items__cells" :name="column.name" required>
-              <option>請選擇</option>
-              <option
-                :type="column.type"
-                v-for="(option, index) in JSON.parse(column.content)"
-                :key="index+10"
-                :value="option"
-                :selected="option === column.value">
-                {{ option }}
-              </option>
-            </select>
-          </div>
+      <li class="form__items form__items__footer flex--right">
+        <div class="form__result flex--center">
+          <p class="form__result__text form__result__text--danger" v-if="errorText">{{ errorText }}</p>
+          <p class="form__result__text form__result__text--normal" v-if="snedText">{{ snedText }}</p>
+        </div>
+        <button type="submit" class="btn btn__square btn__square--success" v-if="userInfo">送出表單</button>
+        <button type="button" class="btn btn__square btn__square--danger" v-if="isAdmin" @click="deleteMission">刪除表單</button>
+      </li>
 
-          <div class="form__items" v-else-if="column.name === '查驗人員'">
-            <label class="form__items__title">{{ column.name }}</label>
-            <select class="form__items__cells" :name="column.name" required>
-              <option>請選擇</option>
-              <option>尚未查驗</option>
-              <option v-if="!!column.value"
-                :value="column.value"
-                selected>{{ column.value }}</option>
-              <option v-if="column.value !== userInfo.name"
-                :value="userInfo.name">{{ userInfo.name }}</option>
-            </select>
-          </div>
-
-          <!-- 多行文字 -->
-          <div class="form__items" v-else-if="column.type === 'textarea'">
-            <label class="form__items__title">{{ column.name }}</label>
-            <textarea class="form__items__cells"
-              :name="column.name" :value="column.value" required></textarea>
-          </div>
-
-          <!-- 單行文字 -->
-          <div class="form__items" v-else-if="column.type === 'text'">
-            <label class="form__items__title">{{ column.name }}</label>
-            <input class="form__items__cells"
-              :name="column.name" :type="column.type" :value="column.value" required />
-          </div>
-
-          <!-- 日期 -->
-          <div class="form__items" v-else-if="column.type === 'date'">
-            <label class="form__items__title">{{ column.name }}</label>
-            <input class="form__items__cells"
-              :name="column.name" :type="column.type" :value="column.value" required />
-          </div>
-        </li>
-
-        <li class="form__items form__items__footer flex--right">
-          <div class="form__result flex--center">
-            <p class="form__result__text form__result__text--danger" v-if="errorText">{{ errorText }}</p>
-            <p class="form__result__text form__result__text--normal" v-if="snedText">{{ snedText }}</p>
-          </div>
-          <button type="submit" class="btn btn__square btn__square--success" v-if="userInfo">送出表單</button>
-          <button type="button" class="btn btn__square btn__square--danger" v-if="isAdmin" @click="deleteMission">刪除表單</button>
-        </li>
-      </ul>
     </form>
 
-    <PopWarning v-if="isDeleteMission" @revealWarning="revealWarning" @stepToFirst="stepToFirst"/>
+    <PopWarning v-if="isDeleteMission"
+      @hideWarning="hideWarning"
+      @doDelete="doDelete">確定要刪除此查驗點嗎？</PopWarning>
 
   </section>
 </template>
@@ -108,14 +55,16 @@
 <script>
 import { format } from 'date-fns'
 import { mapState, mapActions, mapMutations } from 'vuex'
-import PopWarning from '../components/FormWarning'
+import FormFormat from '../components/FormFormat'
+import PopWarning from '../components/PopWarning'
 import InternetConnection from '../config/connection'
 import { addMissionToQuene } from '../config/uploadQuene'
-import { db } from '../config/db'
+import { db, markersDB } from '../config/db'
 
 export default {
   name: 'SectionForm',
   components: {
+    FormFormat,
     PopWarning
   },
   data () {
@@ -136,6 +85,8 @@ export default {
       missionData: state => state.modelState.selectedMarkerData,
       userInfo: state => state.userState.userInfo,
       isMarkerUpdated: state => state.modelState.isMarkerUpdated,
+      modelName: state => state.modelState.modelName,
+      selectedMarkerData: state => state.modelState.selectedMarkerData
     }),
     name () {
       return this.missionData[1].value
@@ -218,10 +169,26 @@ export default {
       this.setErrorTextContent('')
       this.checkInternetConnection(data)
     },
+    doDelete () {
+      let id = this.selectedMarkerData.id
+      let modelName = this.modelName
+
+      markersDB.collection(modelName).doc(id).delete()
+      .then(() => {
+        // console.log('刪除成功')
+        this.hideWarning('刪除成功')
+        this.setLoading(false)
+        this.$emit('stepToFirst')
+      }).catch(err => {
+        console.log(err.code)
+        this.hideWarning('刪除失敗')
+        this.setLoading(false)
+      })
+    },
     deleteMission () {
       this.isDeleteMission = true
     },
-    revealWarning (errMsg) {
+    hideWarning (errMsg) {
       this.isDeleteMission = false
       if (errMsg) this.setErrorTextContent(errMsg)
     },

@@ -74,7 +74,7 @@ export default {
     },
     gotoManagement () {
       this.viewPath = Manage
-      this.isPrint = true
+      // this.isPrint = true
     },
     watchUserState () {
       let vm = this

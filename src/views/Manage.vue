@@ -61,6 +61,7 @@ export default {
 <style lang="scss" scoped>
 .manage {
   width: 70%;
+  height: 100%;
   margin: auto;
 
   @include ae1100 {
@@ -77,7 +78,9 @@ export default {
     justify-content: space-between;
     align-items: center;
     position: relative;
+    // top: 0;
     background-color: $bg_stepBar;
+    // overflow: hidden;
     &__menu {
       position: absolute;
       top: 100%;
@@ -98,9 +101,11 @@ export default {
     }
   }
 
-  // &__main {
-  //   margin: 2rem;
-  // }
+  &__main {
+    height: calc(100% - 50px);
+    // margin-top: 50px;
+    overflow: auto;
+  }
 }
 
 .step-fade-enter-active, .step-fade-leave-active {
