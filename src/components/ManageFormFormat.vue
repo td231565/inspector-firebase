@@ -123,6 +123,32 @@ export default {
       const stamp = new Date().valueOf()
       return `${date}-${time}-${stamp}`
     },
+    parseXlsFile (data) {
+      const vm = this
+
+      let workbook = XLSX.read(data, {
+        type: 'binary' // 以二進制讀取 xls 檔案
+      })
+      let wbList = Object.keys(workbook.Sheets)
+
+      for (let sheet in workbook.Sheets) {
+        vm.newFormFormat = {}
+        if (sheet === wbList[0]) {
+          let result = XLSX.utils.sheet_to_json(workbook.Sheets[sheet])
+          let firstRow = result[0]
+          let format = { formName: firstRow.name }
+          for (let i=0; i<result.length; i++) {
+            if (i === 0) continue
+            format[i+4] = result[i]
+          }
+          // console.log(result)
+          setTimeout(() => vm.uploadFormFormatToDB(format), 1)
+        }
+        //  else {
+        //   console.log('只讀取第一張工作表單')
+        // }
+      }
+    },
     getFile (e) {
       const vm = this
       const file = e.target.files[0]
@@ -130,28 +156,7 @@ export default {
 
       fileReader.onload = function (ev) {
         const data = ev.target.result
-        let workbook = XLSX.read(data, {
-          type: 'binary' // 以二進制讀取 xls 檔案
-        })
-        let wbList = Object.keys(workbook.Sheets)
-
-        for (let sheet in workbook.Sheets) {
-          vm.newFormFormat = {}
-          if (sheet === wbList[0]) {
-            let result = XLSX.utils.sheet_to_json(workbook.Sheets[sheet])
-            let firstRow = result[0]
-            let format = { formName: firstRow.name }
-            for (let i=0; i<result.length; i++) {
-              if (i === 0) continue
-              format[i+4] = result[i]
-            }
-            // console.log(result)
-            setTimeout(() => vm.uploadFormFormatToDB(format), 1)
-          }
-          //  else {
-          //   console.log('只讀取第一張工作表單')
-          // }
-        }
+        vm.parseXlsFile(data)
       }
       fileReader.readAsBinaryString(file)
     },

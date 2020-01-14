@@ -54,7 +54,7 @@ export default {
       isAddNewMarker: state => state.systemState.isAddNewMarker,
     }),
     viewerSrc () {
-      return this.viewerServerHost + '/viewer.html?path=' + this.modelPath
+      return this.viewerServerHost + '/viewer.html?path=' + this.modelPath + '&language=zh-TW'
     },
     iframeWindow () {
       return this.$refs.iframe.contentWindow
@@ -172,7 +172,7 @@ export default {
         // 回傳選取 marker id
         case 'MSG_MARKER_SELECTED': {
           // console.log(dataObj.data)
-          vm.selectMarkerFromViewer(dataObj.data.id)
+          vm.selectMarkerFromViewer(dataObj.data)
           break
         }
         // 回傳擷取視點的視點資訊及畫面截圖

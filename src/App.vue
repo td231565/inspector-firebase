@@ -22,6 +22,7 @@ import Home from './views/Home'
 import Landing from './views/Landing'
 import Loading from './views/Loading'
 import Print from './views/Print'
+import testPrint from './views/testPrint'
 import Manage from './views/Manage'
 
 export default {
@@ -34,7 +35,8 @@ export default {
     Landing,
     Loading,
     Print,
-    Manage
+    Manage,
+    testPrint
   },
   data () {
     return {
@@ -69,7 +71,8 @@ export default {
       // this.setLoading(true)
     },
     gotoPrint () {
-      this.viewPath = Print
+      // this.viewPath = Print
+      this.viewPath = testPrint
       this.isPrint = true
     },
     gotoManagement () {

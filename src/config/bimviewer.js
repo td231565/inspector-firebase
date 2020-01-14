@@ -122,18 +122,17 @@ const BIM = {
     let msg = {
       type: 'MSG_SET_VIEW',
       data: {
-        view: view
+        view
       }
     }
     _iframeWindow.postMessage(JSON.stringify(msg), viewerServerHost)
   },
-  
   //
   removeMarker: function (markers) {
     let msg = {
       type: 'MSG_REMOVE_MARKER',
       data: {
-        markers // ['id']
+        markers // ['id1', 'id2']
       }
     }
     _iframeWindow.postMessage(JSON.stringify(msg), viewerServerHost)
@@ -173,7 +172,7 @@ window.addEventListener('message', (e) => {
     }
     // 回傳選取 marker id
     case 'MSG_MARKER_SELECTED': {
-      console.log(dataObj.data)
+      // console.log(dataObj.data)
       break
     }
     // 回傳擷取視點的視點資訊及畫面截圖

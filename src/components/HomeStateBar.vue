@@ -3,7 +3,7 @@
     <div class="state__column state__column__left"></div>
 
     <div class="state__column state__column__middle state__model flex--left">
-      <label class="form__items__title" v-if="!isSmallScreen">請選擇查驗目標</label>
+      <label class="form__items__title" v-if="!isSmallScreen">查驗目標</label>
       <select class="form__items__cells" @change="selectModel" v-model="currentModelName">
         <option :value="model"
           v-for="(model, index) in modelList.models"

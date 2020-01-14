@@ -4,9 +4,10 @@
       v-for="(mission, index) in missionList"
       :key="index+1"
       @click="selectMission(mission)">
-      <div class="missionList__item__pic">
+      <!-- <div class="missionList__item__pic">
         <img class="absolute--center" :src="mission.image" :alt="mission[1].value">
-      </div>
+      </div> -->
+      <div class="missionList__item__pic" :style="{ 'background-image': 'url(' + mission.image + ')' }" :title="mission[1].value"></div>
       <div class="missionList__item__text">
         <p class="missionList__item__text__date" v-if="!!mission[6]">{{ mission[6].value }}</p>
         <p class="missionList__item__text__date" v-else>尚未查驗</p>
@@ -76,10 +77,19 @@ export default {
     opacity: 0.7;
     &:hover {
       opacity: 1;
+      .missionList__item__pic {
+        background-size: 120% auto;
+      }
     }
 
-    @include ae1100 {
+    @include ae768 {
+      border-color: $bd_viewer;
       opacity: 1;
+      &:hover {
+        .missionList__item__pic {
+          background-size: 100% auto;
+        }
+      }
     }
     @include ae480 {
       width: 47.5%;
@@ -89,15 +99,14 @@ export default {
       width: 100%;
       padding-top: 75%;
       position: relative;
+      background-size: 100% auto;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: all ease 0.3s;
       overflow: hidden;
 
       @include ae768 {
         height: 100px;
-      }
-
-      img {
-        max-width: 100%;
-        display: block; // 消除 img 底部與 div 間的空白
       }
     }
     &__text {
