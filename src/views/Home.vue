@@ -5,16 +5,17 @@
         @signOutGuess="signOutGuess"
         @stepToFirst="stepToFirst" />
       <Viewer
+        :stepNow="stepNow"
         @stepNext="stepNext" />
       <!-- <PdfViewer :stepNow="stepNow" :isAddNewMarker="isAddNewMarker"
         @pdfLoaded="detectTopHeight" @stepNext="stepNext"/> -->
+    </div>
+
+    <div class="home__bottom" ref="bottom">
       <StepBar :stepNow="stepNow"
         @stepPrev="stepPrev" @stepNext="stepNext" @stepToFirst="stepToFirst"
         @gotoPrint="gotoPrint"
         @gotoManagement="gotoManagement" />
-    </div>
-
-    <div class="home__bottom" ref="bottom">
       <keep-alive :include="aliveInclude">
         <transition name="step-fade" mode="out-in">
           <component :is="steps[stepNow-1]"
@@ -106,11 +107,12 @@ export default {
 
 <style lang="scss">
 .home {
-  width: 60%;
+  width: 90%;
   height: 100%;
   margin: auto;
   padding: 0;
   position: relative;
+  display: flex;
   background-color: $bg_default;
   box-shadow: 0 0 1rem #000;
   // overflow: auto;
@@ -120,17 +122,24 @@ export default {
   }
   @include ae768 {
     width: 100%;
+    display: block;
   }
 
   // TODO: 手機版面，改成兩個頁面切換？
   &__top {
-    width: 100%;
-    min-height: 40vh;
+    flex: 1;
+    // width: 100%;
+    min-height: 100vh;
     background-color: $bg_default;
     z-index: 1;
+    @include ae768 {
+      min-height: 40vh;
+    }
   }
   &__bottom {
-    height: 41vh;
+    flex: 1;
+    height: 100%;
+    border-left: 1px solid $bd_viewer;
     overflow: auto;
     @include ae768 {
       height: 52vh;

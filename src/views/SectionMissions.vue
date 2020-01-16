@@ -43,7 +43,10 @@ export default {
     }),
     clearMarkerData () {
       this.setSelectedMarkerData(null)
-    }
+    },
+    // resetBimViewerSnapshot () {
+    //   this.$emit('resetBimViewer')
+    // }
   },
   watch: {
     modelName: {
@@ -56,6 +59,7 @@ export default {
   },
   created () {
     this.clearMarkerData()
+    // this.resetBimViewerSnapshot()
   }
 }
 </script>

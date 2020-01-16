@@ -8,17 +8,23 @@
       @hideNewMarkForm="hideNewMarkForm"
       @setNewMarker="setNewMarker" />
 
-    <iframe frameborder="0" id="viewerIframe"
+    <!-- <iframe frameborder="0" id="viewerIframe"
       :src="viewerSrc"
       ref="iframe"
       v-if="!selectedMarkerData"
+      ></iframe> -->
+
+    <iframe frameborder="0" id="viewerIframe"
+      :src="viewerSrc"
+      ref="iframe"
       ></iframe>
+
     <!-- <button @click="toggleDisplay">隔離</button>
     <button @click="createNewSnapshotAndMarker">建新視點</button> -->
 
-    <section class="viewer__image-block" v-else>
+    <!-- <section class="viewer__image-block" v-else>
       <img class="viewer__image-block__image" :src="selectedMarkerData.image" alt="目標查驗點擷取畫面">
-    </section>
+    </section> -->
   </div>
 </template>
 
@@ -33,6 +39,9 @@ export default {
   name: 'viewer',
   components: {
     NewMarker
+  },
+  props: {
+    stepNow: Number
   },
   data () {
     return {
@@ -134,6 +143,12 @@ export default {
         vm.$emit('stepNext')
       })
     },
+    getSnapshot () {
+      if (this.selectedMarkerData) BIM.gotoSnapshot(this.selectedMarkerData.cameraStatus)
+    },
+    setFirstView () {
+      BIM.setView('home')
+    },
     viewerMessageHandler (e) {
       const vm = this
       if (e.origin !== vm.viewerServerHost) return
@@ -196,6 +211,13 @@ export default {
       // 原本在 MODEL_READY 時呼叫
       // 但第一次載入時，markList 還沒從 DB 載入，因此等載入後再呼叫
       this.createMarkers()
+    },
+    selectedMarkerData (val) {
+      if (!val) return
+      this.getSnapshot()
+    },
+    stepNow (val) {
+      if (val === 1) this.setFirstView()
     }
   },
   created () {
@@ -241,7 +263,7 @@ export default {
 
 #viewerIframe {
   width: 100%;
-  height: 50vh;
+  height: calc(100vh - 83px);
   display: block;
 
   @include ae768 {

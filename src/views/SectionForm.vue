@@ -34,13 +34,16 @@
     <form @submit.prevent="updateMission" ref="form">
       <FormFormat :selectedFormFormat="selectedFormFormat" />
 
-      <li class="form__items form__items__footer flex--right">
-        <div class="form__result flex--center">
-          <p class="form__result__text form__result__text--danger" v-if="errorText">{{ errorText }}</p>
-          <p class="form__result__text form__result__text--normal" v-if="snedText">{{ snedText }}</p>
+      <li class="form__items form__items__footer">
+        <div class="form__items__title"></div>
+        <div class="form__items__cells flex--right">
+          <div class="form__result flex--center">
+            <p class="form__result__text form__result__text--danger" v-if="errorText">{{ errorText }}</p>
+            <p class="form__result__text form__result__text--normal" v-if="snedText">{{ snedText }}</p>
+          </div>
+          <button type="submit" class="btn btn__square btn__square--success" v-if="userInfo">送出表單</button>
+          <button type="button" class="btn btn__square btn__square--danger" v-if="isAdmin" @click="deleteMission">刪除表單</button>
         </div>
-        <button type="submit" class="btn btn__square btn__square--success" v-if="userInfo">送出表單</button>
-        <button type="button" class="btn btn__square btn__square--danger" v-if="isAdmin" @click="deleteMission">刪除表單</button>
       </li>
 
     </form>
@@ -253,7 +256,7 @@ export default {
 
 <style lang="scss" scoped>
 .form {
-  width: 50%;
+  width: 90%;
   margin: auto;
 
   @include ae1100 {
@@ -262,12 +265,15 @@ export default {
   @include ae768 {
     width: 80%;
   }
-  // @include ae480 {
-  //   width: 70%;
-  // }
+  @include ae480 {
+    width: 90%;
+  }
 
   &__items {
     position: relative;
+    // &__title {
+    //   width: 30%;
+    // }
     &__cells {
       display: flex;
     }

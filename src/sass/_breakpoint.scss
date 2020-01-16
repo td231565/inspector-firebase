@@ -12,6 +12,13 @@
   }
 }
 
+// iphoneX 橫
+@mixin ae812 {
+  @media (max-width: 812px) {
+    @content;
+  }
+}
+
 // 手機直
 @mixin ae480 {
   @media (max-width: 480px) {
