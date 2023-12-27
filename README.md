@@ -1,4 +1,5 @@
-# newp
+# Inspector
+Vue2 project, with Firebase OAuth.
 
 ## Project setup
 ```
